@@ -1,0 +1,201 @@
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:p="http://primefaces.org/ui"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+       xmlns:pt="http://java.sun.com/jsf/passthrough"
+       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+       >
+    <h:head>
+        <title>Consulta de facturas</title>
+    </h:head>
+    <h:body>
+        <h:form id="FRMFactu">
+
+            <table border="0" cellspacing="3" cellpadding="3">  
+                <tr>
+                    <td>
+                        <p:outputPanel autoUpdate="true">
+                            <table border="0" cellspacing="4" cellpadding="4" style="width: 970px;">
+                                <tr>
+                                    <td >
+                                        <big><p:outputLabel value="Consultas - Envio"  style="font-size:18px;font-weight: bold;"/></big><br/>
+                                    </td>                   
+                                </tr><tr>
+                                    <td colspan="3">
+                                        <p:separator/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:outputPanel>
+                    </td></tr>
+            </table>
+            <br/>
+            <p:outputPanel id="PNLConsul">
+
+                <p:outputPanel id="panel">
+                    <center>
+                        <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="3" cellspacing="3">
+                            <tr>
+                                <td>
+                                    <center>
+                                        <p:outputLabel value="Seleccione los filtros que considere necesarios para realizar la consulta" style="font-weight: bold;"/>
+                                    </center>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>                                                    
+                                    <p:separator/>                                                    
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="font-family: Arial;font-size: 12px; " border="0" cellpadding="3" cellspacing="3" >
+                            <tr>
+                                <td><p:outputLabel value="Fecha de envio" for="OpcFecEnvio" style="font-weight: bold;"/></td>
+                                <td>
+                                    <p:selectBooleanCheckbox value="#{MBEnvio.opcFechaEnvi}" id="OpcFecEnvio" >
+                                        <p:ajax update="PNLFecEnvi" event="change" />
+                                    </p:selectBooleanCheckbox>
+                                </td>
+                                <td>
+                                    <p:outputPanel id="PNLFecEnvi" >
+                                        <c:choose>
+                                            <c:when test="#{MBEnvio.opcFechaEnvi==true}" >
+                                                <table style="font-family: Arial;font-size: 12px;">
+                                                    <tr>
+
+                                                        <td><p:calendar id="FecFacIni" value="#{MBEnvio.fechaEnvio}" pt:placeholder="AAAA/MM/DD" locale="es" mindate="2010-01-01"
+                                                                        maxdate="#{MBSeguimiento.fecha_actual}" pattern="yyyy-MM-dd" mask="true"/></td>
+                                                    </tr>
+                                                </table>
+                                            </c:when>
+                                        </c:choose>
+                                    </p:outputPanel>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><p:outputLabel value="Tipo de envio:" style="font-weight: bold;"/></td>
+                                <td></td>
+                                <td> <p:selectOneMenu id="SoliPor"  style="width:135px;font-size: 12px;" value="#{MBEnvio.tipo}" >
+                                        <f:selectItem itemLabel="Seleccione.." itemValue="" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="Factura" itemValue="2" />
+                                        <f:selectItem itemLabel="Avalúo" itemValue="1"  />
+                                        <f:selectItem itemLabel="Remision" itemValue="3"  />
+                                    </p:selectOneMenu></td>
+                            </tr>     
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="Número asociado:" style="font-weight: bold;"/>
+                                </td>
+                                <td>
+                                    <p:selectBooleanCheckbox value="#{MBEnvio.opcNumAso}">
+                                        <p:ajax update="PNLNumAva" event="change" />
+                                    </p:selectBooleanCheckbox>
+                                </td>
+                                <td>
+                                    <p:outputPanel id="PNLNumAva" >
+                                        <c:choose>
+                                            <c:when test="#{MBEnvio.opcNumAso==true}" >
+                                                <table style="font-family: Arial;font-size: 12px;">
+                                                    <tr>
+                                                        <td><p:inputText value="#{MBEnvio.numAso}"  style=" width: 70px"  /></td>                                                                     
+                                                    </tr>
+                                                </table>
+                                            </c:when>
+                                        </c:choose>
+                                    </p:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Estado:" style="font-weight: bold;"/></td>
+                                <td></td>
+                                <td> 
+                                    <p:selectOneMenu id="Estado"  style="width:135px;font-size: 12px;" value="#{MBEnvio.estado}" >
+                                        <f:selectItem itemLabel="Seleccione.." itemValue="" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="Enviado" itemValue="Enviado" />
+                                        <f:selectItem itemLabel="Pendiente de envio" itemValue="Pendiente"  />
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>    
+                        </table>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td colspan="6">
+                                    <center><p:commandButton value="Consultar" icon="ui-icon-search" iconPos="left"  action="#{MBEnvio.OpcionesEnvio('consulta')}"  ajax="true" update=":contenedorGeneral:Contenedor:growl_General,PNLTableConsult"  style="font-family: Arial;font-size: 12px;" /></center>
+                                </td>
+                            </tr>   
+                        </table>
+                    </center>
+                </p:outputPanel>
+                <p:outputPanel id="PNLTableConsult">
+                    <c:choose>
+                        <c:when test="#{MBEnvio.listConsultaEnvio.size()>0}">
+                            <br/>
+                            <table style="font-family: Arial;font-size: 12px;" >
+
+                                <tr>
+                                    <td>
+                                        <p:outputLabel value="» Resultados de búsqueda" style="font-weight: bold;font-size: 14px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><p:separator/></td>
+                                </tr>
+                                <tr>
+                                    <td>                                                    
+                                        <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBEnvio.listConsultaEnvio)} " style="font-family: Arial;font-size: 13px;" /></b>
+                                    </td>
+                                </tr>
+                                <tr><td>
+                                        <p:spacer height="10"/>
+                                    </td></tr>
+                                <tr>
+                                    <td>
+                                        <p:dataTable id="ConsulPRTable" widgetVar="DatTabPR" value="#{MBEnvio.listConsultaEnvio}" 
+                                                     selection="#{MBEnvio.envio}"   var="Con"  scrollable="true" rowKey="#{Con.codEnvi}" 
+                                                     selectionMode="single"   style="font-family: Arial;font-size: 12px; width: 1010px; height: 300px"   scrollHeight="100%;"   >        
+                                            <p:column headerText="Codigo Envio"   filterBy="#{Con.codEnvi}"   filterStyle="width:70px;" filterMatchMode="contains" style="font-family: Arial;font-size: 12px;">
+                                                <h:outputText value="#{Con.codEnvi}"/>
+                                            </p:column>
+                                            <p:column headerText="Tipo envio"   filterBy="#{Con.tipEnv}"  filterStyle="width:70px;" filterMatchMode="contains" style=" font-family: Arial;font-size: 12px;">
+                                                <h:outputText value="#{Con.tipEnv}"/>
+                                            </p:column>
+                                            <p:column headerText="N° asociado"  filterBy="#{Con.asociado}" filterStyle="width:70px;"  filterMatchMode="contains" style="font-family: Arial;font-size: 12px;">
+                                                <h:outputText value="#{Con.asociado}"/>
+                                            </p:column>
+                                            <p:column headerText="Fecha de entrega"  filterBy="#{Con.estado}"  filterMatchMode="contains" style="font-family: Arial;font-size: 12px;">
+                                                <h:outputText value="#{Con.estado}"/>
+                                            </p:column>
+                                            <p:column headerText="Observación"  filterBy="#{Con.observacion}"  filterMatchMode="contains" style="width:400px ;font-family: Arial;font-size: 12px;">
+                                                <h:outputText value="#{Con.observacion}"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </td>
+                                </tr>   
+                            </table>
+
+                            <br/>
+                            <center>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <p:commandButton value="Exportar información a excel" action="#{MBEnvio.OpcionesEnvio('Expor')}" ajax="false" update=":contenedorGeneral:Contenedor:growl_General" icon="ui-icon-arrowstop-1-s" style="font-family: Arial;font-size: 13px;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </center>
+                        </c:when>
+                    </c:choose>
+                </p:outputPanel>
+
+
+            </p:outputPanel>
+        </h:form>
+    </h:body>
+</html>
+

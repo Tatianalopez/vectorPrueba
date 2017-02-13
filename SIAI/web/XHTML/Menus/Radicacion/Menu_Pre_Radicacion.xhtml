@@ -1,0 +1,162 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Pre-radicación</title> 
+
+        <style type="text/css">
+            .ui-commandButton:hover{
+                text-align: left;
+                background: #f4f4f4;
+                border: none;
+                border-bottom: 2px solid #CECECE;
+                width: 100%; 
+                border-radius: 0px;;
+                font-family: Arial;
+                color: #00427f;
+                font-family: Arial;
+                font-size: 12px;                                              
+                height: 2.75em;
+            }
+
+            #wrapper {  
+                width: 220px;
+                font-size: 0.8125em;
+            }
+
+        </style>
+    </h:head> 
+    <h:body> 
+
+        <h:form id="Menu_Pre_Radica">
+
+
+
+            <p:growl id="growl" life="2000" />
+            <div id="wrapper">
+
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Registro" action="#{beanDireccionar.url_Menu_prRadica('Registro')}" icon="ui-icon-disk" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Mis asignados (#{MBPreRadicacion.numeroRegistrosAsig})" action="#{beanDireccionar.url_Menu_prRadica('MisAsignados')}" icon="ui-icon-tag" /> 
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Mis pre-radicaciones (#{MBPreRadicacion.numeroMisPreradicaciones})" action="#{beanDireccionar.url_Menu_prRadica('MisPreRadicados')}" icon="ui-icon-battery-3" /> 
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Cambio de analistas" action="#{beanDireccionar.url_Menu_prRadica('Reasignar')}" icon="ui-icon-arrowrefresh-1-e" rendered="#{beanDireccionar.estadoActivacionGestor}"/> 
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Todas los pre-radicaciones (#{MBPreRadicacion.numeroTotalPreRadicaciones})" action="#{beanDireccionar.url_Menu_prRadica('TotalPreRadicaciones')}" icon="ui-icon-battery-3"/> 
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Consulta" action="#{beanDireccionar.url_Menu_prRadica('ConsultaPreRad')}" icon="ui-icon-search" />                
+            
+                <p:commandButton 
+                     style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;"
+                    value="Bitacora de proceso" action="#{beanDireccionar.url_MenusInternos('BitacoraPreRadicacion')}" ajax="false" icon="ui-icon-folder-open"/>
+
+
+
+            </div>    
+
+            <!--       <p:panel id="menu_preradi" style="background: #e9e9e9">
+                        <center>
+                            <h:panelGroup rendered="{beanDireccionar.estadoActivacionGestor}" >
+                                <center>
+                                    <h:commandButton value="Registro" action="{beanDireccionar.url_Menu_prRadica('Registro')}" class="Menus-internos"/>
+                                </center>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <center>
+                                    <h:commandButton value="Mis Asignados" action="{beanDireccionar.url_Menu_prRadica('MisAsignados')}" class="Menus-internos"/>
+                                </center>
+                            </h:panelGroup>               
+                            <h:panelGroup rendered="{beanDireccionar.estadoActivacionGestor}" id="GestrorReasigna">
+                                <center>
+                                    <h:commandButton value="Cambio - registros" action="{beanDireccionar.url_Menu_prRadica('Reasignar')}" class="Menus-internos"/>
+                                </center>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="{beanDireccionar.estadoActivacionGestor}" id="Gestrorprera">
+                                <center>
+                                    <h:commandButton value="Todos los Pre-Radicados" action="{beanDireccionar.url_Menu_prRadica('TotalPreRadicaciones')}" class="Menus-internos"/>
+                                </center>
+                            </h:panelGroup>
+                        </center>
+                    </p:panel>-->  
+        </h:form>
+    </h:body>
+</html>

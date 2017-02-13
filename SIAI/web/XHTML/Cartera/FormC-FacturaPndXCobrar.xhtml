@@ -1,0 +1,162 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Facturas pendientes por cobrar</title>
+        <style>
+            .ui-breadcrumb{
+                background: white !important;
+                color:blue !important;
+                text-decoration-color: #F9AE6C !important;}
+
+            .ui-breadcrumb ul{
+                background: blue !important;
+                color: blue !important;
+                margin: 0;
+                padding: 0;
+                height: 21px;
+                display: block;
+                width: auto;
+            }
+
+            .ui-breadcrumb ul li{
+                background: yellow !important;
+                color: blue !important;
+                margin: 0;
+                padding: 0;
+                height: 21px;
+                display: block;
+                width: auto;
+            }
+
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+
+        </style>
+    </h:head>
+    <h:body >
+        <h:form id="FormMisAsignados"> 
+            <center>
+                <p:panel>
+                    <p:outputPanel id="MisAsignadosInfoSegCita">
+                        <table cellpadding="4" cellspacing="4" border="0" style="width: auto;">
+                            <tr> 
+                                <td style="width: 850px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Facturas pendientes por cobrar</font></big></big></b></td>
+                                <td>
+                                    <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                                </td>
+                                <td style="width: 100px;">
+                                    <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="#{MBCartera.cobrar} " ajax="false" 
+                                                     actionListener="#{MBRadicacion.seleccionarAvaluo(2,MBRadicacion.radi.codAvaluo,MBRadicacion.radi.codSeguimiento)}" action="#{beanDireccionar.url_Menu_Cartera('SegxAval')}"/>
+                                </td>
+                                <td style="width: 350px;">
+                                    <table border="0" style="float: left;">
+                                        <tr>
+                                            <td style="background: #dcf2dc !important;" >
+                                                <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #dcf2dc !important;"/>
+                                            </td>
+                                            <td>
+                                                <p:outputLabel  value="30 dias" style="font-size: 12px;font-family: Arial;"/>
+                                            </td>
+                                            <td style="background: #F9E6E6 !important;" >
+                                                <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F9E6E6 !important;"/>
+                                            </td>
+                                            <td>
+                                                <p:outputLabel  value="60 dias " style="font-size: 12px;font-family: Arial;"/>
+                                            </td>
+                                            <td style="background: #fff7ef !important;" >
+                                                <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color:#fff7ef  !important;"/>
+                                            </td>
+                                            <td>
+                                                <p:outputLabel  value="90 dias " style="font-size: 12px;font-family: Arial;"/>
+                                            </td>
+                                            <td style="background: #dddddd !important;" >
+                                                <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #dddddd !important;"/>
+                                            </td>
+                                            <td>
+                                                <p:outputLabel  value="+90 dias " style="font-size: 12px;font-family: Arial;"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+                        </table>
+                        <table cellpadding="5" cellspacing="5" border="0">
+                            <tr>
+                                <td colspan="3"><p:separator /></td>
+                            </tr>                  
+
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBCartera.listaPendientesPorCobrar)}" style="font-family: Arial;font-size: 13px;" /></b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br/>                      
+                                    <p:dataTable id="PendXCobrarTable" widgetVar="Pendiente" var="Carte" value="#{MBCartera.listaPendientesPorCobrar}" style="width: auto;"  selection="#{MBCartera.selectPendiXCobrar}" 
+                                                 rowKey="#{Carte.codFactura}" scrollable="true" scrollWidth="1010"  emptyMessage="No hay pendientes por cobrar"
+                                                 rowStyleClass="#{Carte.estadoDias eq '30' ? 'EstadoRadicadoOK':
+                                                                  Carte.estadoDias eq '60' ? 'FaltaInforma':   
+                                                                  Carte.estadoDias eq '90' ? 'EstadoTiemposAvaluo':
+                                                                  Carte.estadoDias eq '91+' ? 'EstadoAnulado':     
+                                                                  null}">
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                        <p:column headerText="Factura N°"  filterBy="#{Carte.codFactura}"  filterStyle="width: 60px;" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                            <h:outputText value="#{Carte.codFactura}" />
+                                        </p:column>
+                                           <p:column headerText="N° Avaluo"  filterBy="#{Carte.num_Fac}"  filterStyle="width: 60px;" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                               <h:outputText value="#{Carte.num_Fac}" />
+                                        </p:column>
+                                        <p:column headerText="Tipo"  filterBy="#{Carte.tipoFactura}" filterMatchMode="contains"  filterStyle="width: 60px;" style="font-family:Arial;font-size: 12px;width: 70px;">
+                                            <h:outputText value="#{Carte.tipoFactura}" />
+                                        </p:column>
+                                        <p:column headerText="Estado Pago"  filterBy="#{Carte.estadoFact}" filterMatchMode="contains"  filterStyle="width: 60px;" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.estadoFact}" />
+                                        </p:column>
+                                        <p:column headerText="Cliente"  filterBy="#{Carte.nombreEntidad} #{Carte.nombrecliente}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;" filterStyle="width: 90px;" >
+                                            <h:outputText value="#{Carte.nombreEntidad} #{Carte.nombrecliente}" />
+                                        </p:column>
+                                        <p:column headerText="Fecha Facturación"  filterBy="#{Carte.fechaFacturacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.fechaFacturacion}" />
+                                        </p:column>      
+                                        <p:column headerText="Abono"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="Abonos..." />
+                                        </p:column>     
+                                        <p:column headerText="Notas Credito"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="Abonos..." />
+                                        </p:column>   
+                                        <p:column headerText="Valor Factura"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.valorFactura}" >
+                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                            </h:outputText>
+                                        </p:column>  
+                                        <p:column headerText="Fecha Seguimiento"  filterBy="#{Carte.fechaFacturacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.fechaFacturacion}" />
+                                        </p:column>    
+                                        <p:column headerText="Observaciones"  filterBy="#{Carte.observacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;" rendered="false" >
+                                            <h:outputText value="#{Carte.observacion}" />
+                                        </p:column>   
+                                    </p:dataTable>
+                                </td>
+                            </tr>                      
+                        </table>
+                    </p:outputPanel>   
+                </p:panel>
+            </center>
+        </h:form>
+    </h:body>
+</html>
+

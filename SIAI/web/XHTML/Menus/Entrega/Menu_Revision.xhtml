@@ -1,0 +1,276 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="./css/estilo.css"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/iconos/logo.ico"/>
+        <h:outputStylesheet name="./css/estilo.css"/>
+        <style type="text/css">
+            #wrapper {  
+                width: 220px;
+                font-size: 0.8125em;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMMenu_Entrega" >
+
+            <div id="wrapper">
+                <c:choose>
+                    <c:when test="#{beanDireccionar.opcionPNLRevGen==true}">
+                        <p:commandButton
+                            style="text-align: left;
+                            background: #f4f4f4;
+                            border: none;
+                            border-bottom: 2px solid #CECECE;
+                            width: 100%; 
+                            border-radius: 0px;;
+                            font-family: Arial;
+                            color: #00427f;
+                            font-family: Arial;
+                            font-size: 12px;                                              
+                            height: 2.75em;" value="Mis asignados (#{MBEntregaYRevision.numeroMisAsignadosRevGeneral})"   action="#{beanDireccionar.url_Menu_Revision('MisAsignadosGen')}" icon="ui-icon-tag" ajax="false" />
+
+                        <c:choose>
+                            <c:when test="#{beanDireccionar.activacionAprobacionRevision==true}">
+                                <p:commandButton
+                                    style="text-align: left;
+                                    background: #f4f4f4;
+                                    border: none;
+                                    border-bottom: 2px solid #CECECE;
+                                    width: 100%; 
+                                    border-radius: 0px;;
+                                    font-family: Arial;
+                                    color: #00427f;
+                                    font-family: Arial;
+                                    font-size: 12px;                                              
+                                    height: 2.75em;" value="Pendiente por aprobar (#{MBEntregaYRevision.numeroPendientesAprobar})" action="#{beanDireccionar.url_Menu_Revision('PendientAprobar')}" icon="ui-icon-tag" ajax="false" />
+                            </c:when>
+                        </c:choose>
+
+                        <p:commandButton
+                            style="text-align: left;
+                            background: #f4f4f4;
+                            border: none;
+                            border-bottom: 2px solid #CECECE;
+                            width: 100%; 
+                            border-radius: 0px;;
+                            font-family: Arial;
+                            color: #00427f;
+                            font-family: Arial;
+                            font-size: 12px;                                              
+                            height: 2.75em;" value="Cambio R. Jurídico" action="#{beanDireccionar.url_Menu_Revision('CambioAnalistaJ')}" icon="ui-icon-refresh"  ajax="false" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+
+                        <p:commandButton
+                            style="text-align: left;
+                            background: #f4f4f4;
+                            border: none;
+                            border-bottom: 2px solid #CECECE;
+                            width: 100%; 
+                            border-radius: 0px;;
+                            font-family: Arial;
+                            color: #00427f;
+                            font-family: Arial;
+                            font-size: 12px;                                              
+                            height: 2.75em;" value="Cambio R. Técnico" action="#{beanDireccionar.url_Menu_Revision('CambioAnalistaT')}" icon="ui-icon-refresh"  ajax="false" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+                        <p:commandButton
+                            style="text-align: left;
+                            background: #f4f4f4;
+                            border: none;
+                            border-bottom: 2px solid #CECECE;
+                            width: 100%; 
+                            border-radius: 0px;;
+                            font-family: Arial;
+                            color: #00427f;
+                            font-family: Arial;
+                            font-size: 12px;                                              
+                            height: 2.75em;" value="Devoluciones (#{MBEntregaYRevision.numeroDevolucionesReviGeneral})" action="#{beanDireccionar.url_Menu_Revision('DevolucionRevision')}" icon="ui-icon-refresh"  ajax="false" />
+
+
+                    </c:when>
+                    <c:otherwise>
+                        <c:choose>
+                            <!-- Panel de Revision JURIDICA -->
+
+                            <c:when test="#{beanDireccionar.opcionPNLRevJur ==true}">
+                                <p:commandButton
+                                    style="text-align: left;
+                                    background: #f4f4f4;
+                                    border: none;
+                                    border-bottom: 2px solid #CECECE;
+                                    width: 100%; 
+                                    border-radius: 0px;;
+                                    font-family: Arial;
+                                    color: #00427f;
+                                    font-family: Arial;
+                                    font-size: 12px;                                              
+                                    height: 2.75em;" value="Mis Asignados - R. Juridica (#{MBEntregaYRevision.numeroMisAsignadosRevJurid})" action="#{beanDireccionar.url_Menu_Revision('MisAsignadosJur')}" icon="ui-icon-tag" ajax="false" />
+
+                                <p:commandButton
+                                    style="text-align: left;
+                                    background: #f4f4f4;
+                                    border: none;
+                                    border-bottom: 2px solid #CECECE;
+                                    width: 100%; 
+                                    border-radius: 0px;;
+                                    font-family: Arial;
+                                    color: #00427f;
+                                    font-family: Arial;
+                                    font-size: 12px;                                              
+                                    height: 2.75em;" value="Cambio R. Jurídico" action="#{beanDireccionar.url_Menu_Revision('CambioAnalistaJ')}" icon="ui-icon-refresh"  ajax="false" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+
+                                <p:commandButton
+                                    style="text-align: left;
+                                    background: #f4f4f4;
+                                    border: none;
+                                    border-bottom: 2px solid #CECECE;
+                                    width: 100%; 
+                                    border-radius: 0px;;
+                                    font-family: Arial;
+                                    color: #00427f;
+                                    font-family: Arial;
+                                    font-size: 12px;                                              
+                                    height: 2.75em;" value="Cambio R. Técnico" action="#{beanDireccionar.url_Menu_Revision('CambioAnalistaT')}" icon="ui-icon-refresh"  ajax="false" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+
+
+                                <p:commandButton
+                                    style="text-align: left;
+                                    background: #f4f4f4;
+                                    border: none;
+                                    border-bottom: 2px solid #CECECE;
+                                    width: 100%; 
+                                    border-radius: 0px;;
+                                    font-family: Arial;
+                                    color: #00427f;
+                                    font-family: Arial;
+                                    font-size: 12px;                                              
+                                    height: 2.75em;" value="Devoluciones R. Jurídica (#{MBEntregaYRevision.numeroDevolucionesReviJurid})" action="#{beanDireccionar.url_Menu_Revision('DevolucionRevision')}" icon="ui-icon-refresh"  ajax="false" />
+
+                            </c:when>
+                            <c:otherwise>
+                                <c:when test="#{beanDireccionar.opcionPNLRevTec == true}">
+                                    <p:commandButton
+                                        style="text-align: left;
+                                        background: #f4f4f4;
+                                        border: none;
+                                        border-bottom: 2px solid #CECECE;
+                                        width: 100%; 
+                                        border-radius: 0px;;
+                                        font-family: Arial;
+                                        color: #00427f;
+                                        font-family: Arial;
+                                        font-size: 12px;                                              
+                                        height: 2.75em;" value="Mis Asignados - R. Tecnica (#{MBEntregaYRevision.numeroMisAsignadosRevTecnic})" action="#{beanDireccionar.url_Menu_Revision('MisAsignadosTec')}" icon="ui-icon-tag" ajax="false" />
+
+                                    <p:commandButton
+                                        style="text-align: left;
+                                        background: #f4f4f4;
+                                        border: none;
+                                        border-bottom: 2px solid #CECECE;
+                                        width: 100%; 
+                                        border-radius: 0px;;
+                                        font-family: Arial;
+                                        color: #00427f;
+                                        font-family: Arial;
+                                        font-size: 12px;                                              
+                                        height: 2.75em;" value="Cambio R. Jurídico" action="#{beanDireccionar.url_Menu_Revision('CambioAnalistaJ')}" icon="ui-icon-refresh"  ajax="false" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+
+                                    <p:commandButton
+                                        style="text-align: left;
+                                        background: #f4f4f4;
+                                        border: none;
+                                        border-bottom: 2px solid #CECECE;
+                                        width: 100%; 
+                                        border-radius: 0px;;
+                                        font-family: Arial;
+                                        color: #00427f;
+                                        font-family: Arial;
+                                        font-size: 12px;                                              
+                                        height: 2.75em;" value="Cambio R. Técnico" action="#{beanDireccionar.url_Menu_Revision('CambioAnalistaT')}" icon="ui-icon-refresh"  ajax="false" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+
+
+                                    <p:commandButton
+                                        style="text-align: left;
+                                        background: #f4f4f4;
+                                        border: none;
+                                        border-bottom: 2px solid #CECECE;
+                                        width: 100%; 
+                                        border-radius: 0px;;
+                                        font-family: Arial;
+                                        color: #00427f;
+                                        font-family: Arial;
+                                        font-size: 12px;                                              
+                                        height: 2.75em;" value="Devoluciones R. Técnica (#{MBEntregaYRevision.numeroDevolucionesReviTecnic})" action="#{beanDireccionar.url_Menu_Revision('DevolucionRevision')}" icon="ui-icon-refresh"  ajax="false" />
+
+
+                                    <c:choose>
+                                        <c:when test="#{beanDireccionar.activacionAprobacionRevision==true}">
+                                            <p:commandButton
+                                                style="text-align: left;
+                                                background: #f4f4f4;
+                                                border: none;
+                                                border-bottom: 2px solid #CECECE;
+                                                width: 100%; 
+                                                border-radius: 0px;;
+                                                font-family: Arial;
+                                                color: #00427f;
+                                                font-family: Arial;
+                                                font-size: 12px;                                              
+                                                height: 2.75em;" value="Pendientes por aprobar (#{MBEntregaYRevision.numeroPendientesAprobar})" action="#{beanDireccionar.url_Menu_Revision('PendientAprobar')}" icon="ui-icon-tag" ajax="false" />
+                                        </c:when>
+                                    </c:choose>
+
+                                </c:when>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:otherwise>
+                </c:choose>
+
+
+
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Mis actividades (#{MBEntregaYRevision.numeroActividades})"  icon="ui-icon-suitcase" ajax="false" action="#{beanDireccionar.url_Menu_Revision('MisActividades')}"/>
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;"
+                    value="Bitacora de proceso" action="#{beanDireccionar.url_MenusInternos('BitacoraRadicacion')}" ajax="false" icon="ui-icon-folder-open"/>
+
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Mis Devoluciones (#{MBEntregaYRevision.numeroDevolucionesReviGeneral})" action="#{beanDireccionar.url_Menu_Revision('MisDevoluciones')}" icon="ui-icon-refresh"  ajax="false" />
+
+            </div>
+        </h:form>
+    </h:body>
+</html>

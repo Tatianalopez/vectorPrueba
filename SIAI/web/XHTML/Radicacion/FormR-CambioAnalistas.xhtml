@@ -1,0 +1,276 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Reasignacion de las Radicaciones </title>
+        <style type="text/css">
+            .ui-datatable .ui-state-highlight { 
+                border: 2px inset  #e3a1a1 !important ;
+            }
+            
+             .FirstCol td:nth-child(1) {
+                width: 130px !important  ;
+                height: 50px !important ;
+            }
+            
+              .FirstColu td:nth-child(1) {
+                width: 170px !important  ;
+                height: 50px !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMAsigRadic">
+
+            <p:outputPanel id="PNLAsignadosRad" >
+                <table border="0" cellspacing="3" cellpadding="3" style="font-family:Arial;font-size: 13px;width: 100%">
+                    <tr>
+                        <td><big><big><big><b><p class="Title">#{beanDireccionar.tituloMenu} > Cambio de analistas</p></b></big></big></big></td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" > <p:separator /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b><p:outputLabel value="Seleccione el tipo de cambio " style="font-family:Arial;font-size: 13px;"/></b>
+                            <br/>
+                            <p:selectOneRadio id="opcionesCambioAnalistaRadica" value="#{MBRadicacion.opcionesCambioAnalistaRadica}" style="font-family:Arial;font-size: 12px;">
+                                <f:selectItem itemLabel="Cambio de analistas de avalúos" itemValue="Avaluos" />
+                                <f:selectItem itemLabel="Cambio de analistas de pre-radicación" itemValue="Pre-radicacion" />
+                                <p:ajax event="change" listener="#{MBRadicacion.onChangeCambioAnalista()}"
+                                        update="PNLAsignadosRad"/>
+                            </p:selectOneRadio>
+                        </td>
+                    </tr>
+                    <!-- Opciones para cambio de analistas de avaluos-->
+                    <c:choose>
+                        <c:when test="#{MBRadicacion.opcionesCambioAnalistaRadica == 'Avaluos' }">
+                            <!-- Combo para cargar los avaluos por el producto entidad de avaluos-->
+                            <tr>
+                                <td>
+                                    <table >
+                                        <tr>
+                                            <td><p:outputLabel for="CMBPE" value="Seleccione el producto entidad al que pertenece el avalúo:" style="font-family: Arial;font-size: 12px;"/></td>
+                                            <td>
+                                                <p:selectOneMenu  style="font-family: Arial;font-size: 12px; width:210px;" value="#{MBRadicacion.codProEnt}" id="CMBPE">
+                                                    <p:ajax listener="#{MBRadicacion.consultaReasignaAvaluo()}" update="PNLAsignadosRad"/>
+                                                    <f:selectItem id="PrEnt" itemValue="" itemLabel="--Seleccione--"/>
+                                                    <f:selectItems id="SelItemTDoc"  value="#{MBAdministacion.proEntAll}" />
+                                                </p:selectOneMenu> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <!-- Tabla que carga los avaluos por el producto entidad de avaluos seleccionado-->
+                            <tr>
+                                <td>
+                                    <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBRadicacion.listRadicaAsignados)}" rendered="#{MBRadicacion.estadoOpcionAsignado}" style="font-family: Arial;font-size: 13px;" /></b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">                           
+                                    <p:outputPanel rendered="#{MBRadicacion.estadoOpcionAsignado}" style="border:none;" autoUpdate="true">
+                                        <p:dataTable id="RadicaAsigTable" var="AsigRad" widgetVar="AsignaRadic" 
+                                                     value="#{MBRadicacion.listRadicaAsignados}" style="height:300px;"
+                                                     selection="#{MBRadicacion.listRadicaSeleccAsignados}"  rowKey="#{AsigRad.codSeguimiento}" 
+                                                     emptyMessage="No se encontraron registros" scrollable="true" scrollHeight="100%;" frozenColumns="2" styleClass="FirstCol" ><!--GCH 20ENE2017-->
+                                            <p:column  selectionMode="multiple" style="width:16px;text-align:center"/>
+                                            <p:column headerText="N* de avalúo" filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{AsigRad.codAvaluo}" style="font-family:Arial;font-size: 12px;width: 75px;">
+                                                <h:outputText value="#{AsigRad.codAvaluo}" />
+                                            </p:column>
+                                             <p:column headerText="Cod de seguimiento"  filterBy="#{AsigRad.codSeguimiento}" style="font-family:Arial;font-size: 12px;width: 150px;" rendered="#{MBTodero.estadoColumnaTabla}">
+                                                <h:outputText value="#{AsigRad.codSeguimiento}" />
+                                            </p:column>
+                                            <p:column headerText="N* de bien"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{AsigRad.NBien}" style="font-family:Arial;font-size: 12px;width: 70px;">
+                                                <h:outputText value="#{AsigRad.NBien}" />
+                                            </p:column>
+                                            <p:column headerText="Producto entidad"  filterBy="#{AsigRad.tipProducEnti}" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                                <h:outputText value="#{AsigRad.tipProducEnti}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de radicado" filterBy="#{AsigRad.fechaRadica}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{AsigRad.fechaRadica}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de solicitud"  filterBy="#{AsigRad.fechaSolicitud}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{AsigRad.fechaSolicitud}" />
+                                            </p:column>
+                                            <p:column headerText="Estado"  filterStyle="font-family:Arial;font-size: 12px;width:80px;"  filterBy="#{AsigRad.estadoAvaluo}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                                <h:outputText value="#{AsigRad.estadoAvaluo}" />
+                                            </p:column>
+                                            <p:column headerText="Radicador asignado" filterBy="#{AsigRad.radicadoPor}" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                                <h:outputText value="#{AsigRad.radicadoPor}" />
+                                            </p:column>
+                                            <p:column headerText="Analista segumiento" filterBy="#{AsigRad.asignado}" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                                <h:outputText value="#{AsigRad.asignado}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                        
+                                    </p:outputPanel>
+                                </td>
+                            </tr>
+                            <tr> <!--GCH 20ENE2017-->
+                                <td>
+                                    <br/>
+                                    <center>
+                                        <center><p:commandButton id="BTN1"  style="font-family:Arial;font-size: 12px" value="Seleccionar"  icon="ui-icon-check" 
+                                                                 action="#{MBRadicacion.seleccionListaReAsignacion()}"  rendered="#{MBRadicacion.estadoOpcionAsignado}"
+                                                                 update=":contenedorGeneral:Contenedor:growl_General,:contenedorGeneral:Contenedor:FRMAsigRadic:PNLReasignar"  /></center>
+                                    </center>
+                                    <br/>
+                                </td>
+                            </tr>
+                        </c:when>                        
+                        <c:otherwise>
+                            <!-- Opciones para cambio de analistas de pre-radicaciones (estado: En proceso o pendiente por radicar)-->
+                            <c:choose>
+                                <c:when test="#{MBRadicacion.opcionesCambioAnalistaRadica == 'Pre-radicacion' }">
+                                    <!-- Combo para cargar las pre-radicaciones por el producto entidad-->
+                                    <tr>                    
+                                        <td>
+                                            <table cellspacing="3" cellpadding="3" >
+                                                <tr>
+                                                    <td colspan="1" >
+                                                        <p:outputLabel for="combo1" value="Seleccione el producto entidad al que pertenece la pre-radicación: " style="font-family: Arial;font-size: 12px;"/>
+                                                    </td>
+                                                    <td colspan="1">
+                                                        <p:selectOneMenu  style="width:200px;font-size: 12px;" value="#{MBAdministacion.adm.codProEnt}" id="combo1">
+                                                            <p:ajax listener="#{MBPreRadicacion.onSelectTipoProReasigna(2)}" update="PnlTabAsignados,PreRadicaAsignadosTable,PNLAsignadosRad"/>
+                                                            <f:selectItem  itemValue="0" itemLabel="--Seleccione--" noSelectionOption="true"/>
+                                                            <f:selectItems value="#{MBAdministacion.proEntAll}"/>
+                                                        </p:selectOneMenu> 
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+
+
+                                    </tr>
+                                    <!-- Tabla que carga las pre-radicaciones por el producto entidad seleccionado-->
+                                    <tr>
+                                        <td>
+                                            <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBPreRadicacion.listPreRadicaAsignados)}" rendered="#{MBPreRadicacion.estadoOpcionAsignado}" style="font-family: Arial;font-size: 13px;" /></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <p:outputPanel id="PnlTabAsignados" autoUpdate="true">
+                                                <p:panel rendered="#{MBPreRadicacion.estadoOpcionAsignado}" style="border: none;">
+                                                        <p:dataTable id="PreRadicaAsignadosTable" widgetVar="AsignadosPreRad" var="PRAsig" value="#{MBPreRadicacion.listPreRadicaAsignados}" 
+                                                                     selection="#{MBPreRadicacion.listPreRadicaSeleccAsignados}" rowKey="#{PRAsig.codPreRadica}"  style="height:300px;"
+                                                                     emptyMessage="No se encontraron registros" scrollable="true" scrollHeight="100%;" frozenColumns="2" styleClass="FirstColu" ><!--GCH 20ENE2017-->
+                                                            <p:column  selectionMode="multiple" style="width:16px;text-align:center"/>
+                                                            <p:column headerText="N* pre-radicación"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{PRAsig.codPreRadica}" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                                <h:outputText value="#{PRAsig.codPreRadica}" />
+                                                            </p:column>
+                                                            <p:column headerText="Nombre del analista" filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterBy="#{PRAsig.nomEmpleados}" style="font-family:Arial;font-size: 12px;width: 330px;">
+                                                                <h:outputText value="#{PRAsig.nomEmpleados}" />
+                                                            </p:column>
+                                                            <p:column headerText="Producto entidad" filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterBy="#{PRAsig.nomProEnt}" style="font-family:Arial;font-size: 12px;width: 270px;">
+                                                                <h:outputText value="#{PRAsig.nomProEnt}" />
+                                                            </p:column>                                 
+                                                            <p:column headerText="Fecha de solicitud" filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterMatchMode="contains" filterBy="#{PRAsig.fechaSolicitud}" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                                <h:outputText value="#{PRAsig.fechaSolicitud}" />
+                                                            </p:column>
+                                                            <p:column headerText="Fecha de registro" filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterMatchMode="contains" filterBy="#{PRAsig.fechaRegistro }" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                                                <h:outputText value="#{PRAsig.fechaRegistro}" />
+                                                            </p:column>
+                                                            <p:column headerText="Fecha de pre-radicación" filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterMatchMode="contains" filterBy="#{PRAsig.fechaPreRadica }" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                                                <h:outputText value="#{PRAsig.fechaPreRadica}" />
+                                                            </p:column>
+                                                            <p:column headerText="Solicitante"  filterBy="#{PRAsig.solicitante}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                                <h:outputText value="#{PRAsig.solicitante}" />
+                                                            </p:column>
+                                                            <p:column headerText="Estado" filterBy="#{PRAsig.estado}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                                <h:outputText value="#{PRAsig.estado}" />
+                                                            </p:column>                                    
+                                                        </p:dataTable>                                                        
+                                                </p:panel>
+                                            </p:outputPanel>
+                                        </td>
+                                    </tr>
+                                    <tr><!--GCH 20ENE2017 -->
+                                        <td>
+                                            <br/>
+                                            <center><p:commandButton id="Sel" value="Seleccionar" icon="ui-icon-check" style="font-family:Arial;font-size: 13px;" 
+                                                                     action="#{MBPreRadicacion.seleccionListaReAsignacion(2)}" rendered="#{MBPreRadicacion.estadoOpcionAsignado}"
+                                                                     update=":contenedorGeneral:Contenedor:growl_General,:contenedorGeneral:Contenedor:FRMAsigRadic:PNLReasignarPreRad" /></center>
+                                            <br/>
+                                        </td>    
+                                    </tr>
+                                </c:when>
+
+                            </c:choose>
+
+                        </c:otherwise>
+                    </c:choose>
+
+                </table>
+
+            </p:outputPanel>
+
+            <!-- DIALOG DE INFORMACION DE LAS REASIGNACIONES QUE SE LE VAN A REALIZAR A OTRO ANALISTA DE INFORMACION EN EL PROCESO DE RADICACION DE AVALUOS-->
+            <p:outputPanel id="PNLReasignar">
+                <p:dialog id="DLGAsigRadica" widgetVar="DlgReAsigRadica" header="Seleccione un empleado" position="center" modal="false" width="650" height="450" showEffect="fade" hideEffect="fade">
+
+                    <br/>
+                    <p:dataTable id="EmpAsignadosTable" widgetVar="EmpAsignadosPR" var="EmpAsig" value="#{MBRadicacion.listEmpAsignaciones}" 
+                                 selection="#{MBRadicacion.rad}" selectionMode="single"  rowKey="#{EmpAsig.codigo}"  emptyMessage="No se encontraron registros">
+
+                        <p:column headerText="CodEmp"  filterBy="#{EmpAsig.codigo}" style="font-family:Arial;font-size: 12px;width: 150px;" rendered="#{MBTodero.estadoColumnaTabla}" >
+                            <h:outputText value="#{EmpAsig.codigo}" />
+                        </p:column>
+                        <p:column headerText="Nombre Analista"  filterBy="#{EmpAsig.nombre}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                            <h:outputText value="#{EmpAsig.nombre}" />
+                        </p:column>
+                        <p:column headerText="Total Hoy" filterBy="#{EmpAsig.hoy}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                            <h:outputText value="#{EmpAsig.hoy}" />
+                        </p:column>
+                        <p:column headerText="Total Asignados" filterBy="#{EmpAsig.total}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                            <h:outputText value="#{EmpAsig.total}" />
+                        </p:column>                    
+                    </p:dataTable>
+                    <br/>
+                    <center>
+                        <center><p:commandButton icon="ui-icon-arrowrefresh-1-e" id="ReAsig"   value="Realizar cambio" action="#{MBRadicacion.generarReAsignacion()}" update=":contenedorGeneral:Contenedor:growl_General,:contenedorGeneral:Contenedor:FRMAsigRadic:PNLAsignadosRad" /></center>
+                    </center>
+                    <br/>
+
+
+                </p:dialog>
+            </p:outputPanel> 
+
+            <!-- DIALOG DE INFORMACION DE LAS REASIGNACIONES QUE SE LE VAN A REALIZAR A OTRO ANALISTA DE INFORMACION EN EL PROCESO DE PRE-RADICACION -->
+            <p:outputPanel id="PNLReasignarPreRad">
+                <p:dialog id="DlgReAsigPerson" widgetVar="DLGReAsignacion" width="500" height="450" showEffect="fade" hideEffect="fade" header="Seleccione un analista">
+
+                    <br/>
+                    <p:dataTable id="EmpAsignadosTablePreRadica" widgetVar="EmpAsignadosPR" var="EmpAsigPrerad" value="#{MBPreRadicacion.listEmpAsignaciones}" 
+                                 selection="#{MBPreRadicacion.emple}" selectionMode="single"
+                                 rowKey="#{EmpAsigPrerad.cod_Analista}"  emptyMessage="Resultados no encontrados" >                     
+                        <p:column headerText="Nombre analista"  filterBy="#{EmpAsigPrerad.nom_Analista}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                            <h:outputText value="#{EmpAsigPrerad.nom_Analista}" />
+                        </p:column>                       
+                        <p:column headerText="Total registros asignados sin revision"  filterBy="#{EmpAsigPrerad.total}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                            <h:outputText value="#{EmpAsigPrerad.total}" />
+                        </p:column>
+
+                    </p:dataTable>
+                    <br/>
+                    <center>
+                        <p:commandButton id="ReAsigPreRadi" value="Realizar cambio" action="#{MBPreRadicacion.generarReAsignacion(2)}" 
+                                         icon="ui-icon-arrowrefresh-1-e" update=":contenedorGeneral:Contenedor:growl_General,PNLAsignadosRad"/>
+                    </center>
+                    <br/>
+
+                </p:dialog>
+            </p:outputPanel>
+
+
+        </h:form>
+    </h:body>
+</html>
+

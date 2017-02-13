@@ -1,0 +1,187 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Avaluos radicados</title>
+        <h:outputStylesheet name="./css/estilo.css"/>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+        </style>
+    </h:head> 
+
+    <h:body>
+        <h:form id="FRMActividadesYRecordEntrega">
+
+            <br/>
+            <table cellspacing="4" cellpadding="4" border="0">
+                <tr>
+                    <td><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Mis actividades y recordatorios</font></big></big></b></td>
+                    <td>
+                        <b><big><font face="Arial" ><p:outputLabel value="|" /></font></big></b>
+                    </td>
+                    <td>
+                        <center>
+                            <!--  <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Seleccionar registro" 
+                                              action="{MBRadicacion.capturarNumPreRadica()}" 
+                                              update=":contenedorGeneral:Contenedor:growl_General,:contenedorGeneral:Contenedor:FRMActividadesYRecord:InfRad"/>-->
+                            <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Seleccionar registro" 
+                                             ajax="false" 
+                                             actionListener="#{MBEntregaYRevision.consultaInformacionEntrega()}" action="#{beanDireccionar.url_Menu_Entrega('FormEntregaActividades')}"
+                                             />
+                        </center>
+                    </td>
+                    <td >
+
+                        <table border="0" style="float: right;">
+                            <tr>
+                                <td style="background: #F6B7B7 !important;" >
+                                    <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F6B7B7 !important;"/>
+                                </td>
+                                <td>
+                                    <p:outputLabel  value="Falta información " style="font-size: 12px;font-family: Arial;"/>
+                                </td>
+                                <td style="background: #F9AE6C !important;" >
+                                    <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F9AE6C !important;"/>
+                                </td>
+                                <td>
+                                    <p:outputLabel  value="Impedido " style="font-size: 12px;font-family: Arial;"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+
+            <table cellpadding="4" cellspacing="4" border="0">
+                <tr><td colspan="20"><p:separator /></td></tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBEntregaYRevision.listActividadesYRecord)}" style="font-family: Arial;font-size: 13px;" /></b>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr >
+                    <td colspan="20">
+                        <p:dataTable var="EntrActYRec" selectionMode="single" value="#{MBEntregaYRevision.listActividadesYRecord}"  id="ActiviRecordTable"  widgetVar="Radicados"  selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" rowKey="#{EntrActYRec.codSeguimiento}"
+                                     style="font-family: Arial;font-size: 12px; height: 350px;" emptyMessage="Resultados no encontrados"
+                                     rowStyleClass="#{EntrActYRec.estadoAva eq 'IMPEDIDO' ? 'highlight' : 
+                                                      null}"
+                                     styleClass="FirstCol" scrollable="true" scrollHeight="100%;"  frozenColumns="1"><!--GCH NOV2016-->
+
+                            <p:column headerText="N° de avalúo"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{EntrActYRec.codAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                <h:outputText value="#{EntrActYRec.codAvaluo}" />
+                            </p:column>
+                            <p:column headerText="N° de bien"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{EntrActYRec.codNBien}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                <h:outputText value="#{EntrActYRec.codNBien}" />
+                            </p:column>
+                            <p:column headerText="N° de actividades"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{EntrActYRec.NActividades}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 120px;">
+                                <h:outputText value="#{EntrActYRec.NActividades}" />
+                            </p:column>
+                            <p:column headerText="N° de recordatorios"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{EntrActYRec.NRecordatorios}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 120px;">
+                                <h:outputText value="#{EntrActYRec.NRecordatorios}" />
+                            </p:column>
+                            <p:column headerText="Producto entidad" filterBy="#{EntrActYRec.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 170px;">
+                                <h:outputText value="#{EntrActYRec.producEntidAva}" />
+                            </p:column>
+                            <p:column headerText="Tipo de avalúo" filterBy="#{EntrActYRec.tipoAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                <h:outputText value="#{EntrActYRec.tipoAva}" />
+                            </p:column>
+                            <p:column headerText="Cliente(s)"  filterBy="#{EntrActYRec.clientes}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 500px;">
+                                <h:outputText value="#{EntrActYRec.clientes}" />
+                            </p:column>
+                            <p:column headerText="Entidad(es)"  filterBy="#{EntrActYRec.entidades}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 500px;">
+                                <h:outputText value="#{EntrActYRec.entidades}" />
+                            </p:column>
+                            <p:column headerText="Observaciones"  filterStyle="font-family:Arial;font-size: 12px;width:150px;"  filterBy="#{EntrActYRec.observacion}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 300px;">
+                                <h:outputText value="#{EntrActYRec.observacion}" />
+                            </p:column> 
+                            <p:column headerText="Valor Avaluo Perito"  filterBy="#{EntrActYRec.valorPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                <h:outputText value="#{EntrActYRec.valorPerito}" />
+                            </p:column>
+                            <p:column headerText="Fecha de radicado"  filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterBy="#{EntrActYRec.fechaRadica}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                <h:outputText value="#{EntrActYRec.fechaRadica}" />
+                            </p:column>
+                            <p:column headerText="Tiempo transcurrido desde radicación"  filterStyle="font-family:Arial;font-size: 12px;width:80px;" filterBy="#{EntrActYRec.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 260px;">
+                                <h:outputText value="#{EntrActYRec.tiempoTranscurridoRad}" />
+                            </p:column>                            
+                            <p:column headerText="Seguimiento de:"  filterBy="#{EntrActYRec.empSeguimiento}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                <h:outputText value="#{EntrActYRec.empSeguimiento}" />
+                            </p:column>
+                            <p:column headerText="Ubicación:"  filterBy="#{EntrActYRec.ubicacionAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                <h:outputText value="#{EntrActYRec.ubicacionAva}" />
+                            </p:column>
+                            <p:column headerText="Fecha de cita"  filterBy="#{EntrActYRec.fechaCita}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                <h:outputText value="#{EntrActYRec.fechaCita}" />
+                            </p:column>                                             
+                            <p:column headerText="Fecha de entrega"  filterBy="#{EntrActYRec.fechaEntrega}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                <h:outputText value="#{EntrActYRec.fechaEntrega}" />
+                            </p:column>                         
+                            <p:column headerText="Estado"  filterStyle="font-family:Arial;font-size: 12px;width:70px;"  filterBy="#{EntrActYRec.estadoAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                <h:outputText value="#{EntrActYRec.estadoAva}" />
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+            <!-- DIALOG DE INFORMACION PARA EL PROCESO DE RADICACION  -->
+            <!--Dialog con la informacion de las opciones que se pueden llegar a realizar dentro de la Radicacion-->
+            <p:dialog id="InfRad" header="Opciones" widgetVar="DlgInfRadicacion" modal="false" height="auto" width="auto" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="AvaluoRadica">
+                    <table cellspacing="3" cellpadding="3">
+                        <tr>
+                            <td><b><p:outputLabel value="N° de avaluo seleccionado:  " style="font-family:Arial;font-size: 12px;"/></b></td>
+                            <td><b><h:outputLabel value="#{MBRadicacion.radi.codAvaluo} -  #{MBRadicacion.radi.codBienSeguimiento} " style="font-family:Arial;font-size: 12px;"/></b></td>
+                        </tr>
+                    </table>
+                    <br/>
+
+                    <table cellspacing="3" cellpadding="3">
+                        <tr>
+                            <td>
+                                <center>
+                                    <p:commandButton  icon="ui-icon-pencil" value="Ver información"  style="font-family:Arial;font-size: 13px;" action="#{MBRadicacion.verInformacion(1)}"  
+                                                      update=":InformacionRadicacion:DialogInfoRadicacion,
+                                                      :contenedorGeneral:Contenedor:growl_General"
+                                                      />
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <center>
+                                    <p:commandButton  icon="ui-icon-pencil" value="Editar información"  
+                                                      style="font-family:Arial;font-size: 13px;" ajax="false" 
+                                                      actionListener="#{MBRadicacion.verInformacion(2)}" action="#{beanDireccionar.url_Menu_Radica('RadicacionEditar')}" />
+                                </center>
+                            </td>
+                        </tr>
+
+                    </table>
+
+
+                    <br/>
+                </p:outputPanel>
+            </p:dialog>
+
+
+
+        </h:form>
+    </h:body>
+</html>
+

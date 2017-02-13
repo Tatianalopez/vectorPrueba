@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Los avaluos que se encuentran pendientes por la aprobacion</title>
+          <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: 50px !important ;
+            }
+
+            .ui-datatable .ui-state-highlight { 
+                border: 2px inset  #e3a1a1 !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+           <h:form id="FRMMisPend">
+            <table style="font-family: Arial;" cellpadding="3" cellspacing="4" >
+                <tr> 
+                    <td style="width: 450px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Pendientes por aprobar</font></big></big></b></td>
+                    <td>
+                        <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                    </td>
+                    <td style="width: 180px;" >
+                        <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Abrir avalúo" ajax="false" action="#{beanDireccionar.url_Menu_Revision('SelecPendientAprobacion')}"/>
+                        <!--actionListener="{MBEntregaYRevision.consultaInformacionEntrega()}"-->
+                    </td>
+                </tr>
+
+            </table>
+            <p:outputPanel id="MisAsignadosRGen" >
+                <table style="font-family: Arial;font-size: 12px;width: 100%;" cellpadding="3" cellspacing="4" >
+                    <tr>  
+                        <td colspan="3"><p:separator /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- Informacion de mis asignados-->
+                            <p:dataTable selectionMode="single" var="PendA" widgetVar="MisAsigPend"  id="MisPendATable" emptyMessage="No se encontraron Avaluos para revisar asignados" value="#{MBEntregaYRevision.listMisPendientAprobacion}"
+                                         rowKey="#{PendA.codSeguimiento}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" 
+                                         scrollable="true" scrollHeight="100%;" frozenColumns="1"  styleClass="FirstCol"  style="height: 380px"><!--GCH NOV2016-->
+                                <p:column headerText="N° de avaluo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{PendA.codAvaluo}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{PendA.codAvaluo}" />
+                                </p:column>
+                                <p:column headerText="N* de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{PendA.codNBien}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{PendA.codNBien}" />
+                                </p:column>
+                                <p:column headerText="Tipo de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{PendA.tipoAva}" filterMatchMode="startsWith"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{PendA.tipoAva}" />
+                                </p:column>
+                                <p:column headerText="Producto entidad" filterBy="#{PendA.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                    <h:outputText value="#{PendA.producEntidAva}" />
+                                </p:column>
+                                 <p:column headerText="Solicitante" filterBy="#{PendA.clientes}"  filterStyle="font-family:Arial;font-size: 12px;width:180px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;" >
+                                    <h:outputText value="#{PendA.clientes}" />
+                                </p:column>
+                                <p:column headerText="Entidad" filterBy="#{PendA.entidades}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;">
+                                    <h:outputText value="#{PendA.entidades}" />
+                                </p:column>
+                                <p:column headerText="Detalle"  filterBy="#{PendA.observacion}" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{PendA.observacion}" />
+                                </p:column>
+                                 <p:column headerText="Seguimiento asignado a"  filterBy="#{PendA.empSeguimiento}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{PendA.empSeguimiento}" />
+                                </p:column> 
+                                <p:column headerText="Avaluador (es)"  filterBy="#{PendA.nombreCPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:120px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{PendA.nombreCPerito}" />
+                                </p:column>                               
+                                <p:column headerText="Ubicación" filterBy="#{PendA.ubicacionAva}" filterStyle="font-family:Arial;font-size: 12px;width:150px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                    <h:outputText value="#{PendA.ubicacionAva}" />
+                                </p:column>
+                                <p:column headerText="Valor Avaluo Perito"  filterBy="#{PendA.valorPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{PendA.valorPerito}" />
+                                </p:column>
+                                <p:column headerText="Fecha Entrega"  filterBy="#{PendA.fechaEntrega}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{PendA.fechaEntrega}" />
+                                </p:column>
+                                <p:column headerText="Estado"  filterBy="#{PendA.estadoAva}" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                    <h:outputText value="#{PendA.estadoAva}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido radicacion" filterBy="#{PendA.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 350px;">
+                                    <h:outputText value="#{PendA.tiempoTranscurridoRad}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido visita cita" filterBy="#{PendA.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 350px;">
+                                    <h:outputText value="#{PendA.tiempoTranscurridoVisCit}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido entrega" filterBy="#{PendA.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 350px;">
+                                    <h:outputText value="#{PendA.tiempoTranscurridoEnt}" />
+                                </p:column>                                                        
+                            </p:dataTable>
+
+                        </td>
+                    </tr>                              
+                </table>
+            </p:outputPanel>             
+        </h:form>
+    </h:body>
+</html>
+

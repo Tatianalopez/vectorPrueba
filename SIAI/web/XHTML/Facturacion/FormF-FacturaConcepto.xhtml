@@ -1,0 +1,345 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Factura Concepto</title>
+    </h:head>
+    <h:body>
+        <h:form id="FormFactConcepto" >
+            <table border="0" cellspacing="4" cellpadding="4">
+                <tr>
+                    <td><big><big><b><p class="Title">Factura Concepto</p></b></big></big></td>
+                </tr>
+                <tr>
+                    <td colspan="10" style="width: 1200px"> <p:separator /></td>
+                </tr>
+                <tr>
+                    <td> <b><h:outputLabel styleClass="Texto" style="color: red;" value="Campos obligatorios (*)" /></b></td>
+                </tr>
+
+            </table>
+            <center>
+                <p:outputPanel  autoUpdate="true">
+                    <table style="font-family: Arial;font-size: 12px;">
+                        <tr>
+                            <b> <p:outputLabel  value="¿A que persona desea Facturar?"  for="OPCons" style="font-family: Arial;font-size: 13px;"/></b>
+                            <br/>
+                            <!-- Radios para mostrar ya sea el panel de entidades, sucursales o asesores ok--> 
+                            <p:panel style="border: none;">
+                                <td><p:selectOneRadio id="OPCons" value="#{MBFacturacion.opcionFacturarA}" >
+                                        <f:selectItem itemLabel="Entidad" itemValue="Entidad" />
+                                        <f:selectItem itemLabel="Cliente"  itemValue="Cliente"/>
+                                        <p:ajax event="change" update="
+                                                InfoCliente" 
+                                                listener="#{MBFacturacion.ConsultarPersona(7)}" />
+                                    </p:selectOneRadio></td>
+                            </p:panel>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </center>
+            <br/>
+            <!--INFORMACION DEL TIPO DE CONSULTA QUE SE VA A REALIZAR-->
+            <p:outputPanel  id="PnlPersona" autoUpdate="true">
+                <center>
+                    <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="4" cellspacing="4">
+                        <tr>
+                            <td>
+                                <center>
+                                    <p:outputLabel value="Seleccione los filtros que considere necesarios para realizar la consulta" style="font-weight: bold;"/>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>                                                    
+                                <p:separator/>                                                    
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <c:choose>
+                                    <c:when  test="#{MBFacturacion.opcionFacturarA=='Entidad'}">
+                                        <center>
+                                            <table style="font-family: Arial;font-size: 12px;" cellpadding="4" cellspacing="4">
+                                                <p:outputPanel id="pnlEntidad">
+                                                    <tr>                   
+                                                        <td>
+                                                            <p:selectOneMenu  id="CmbEntidadRadic1" filter="true" style="width: 185px;font-size: 12px;" effect="fade" value="#{MBEntidad.codEntidad1}" >
+                                                                <p:ajax listener="#{MBEntidad.onSucursalRadic(1)}" update="CmbSucursalRadic1,:contenedorGeneral:Contenedor:growl_General" />
+                                                                <f:selectItem  itemValue="0" itemLabel="--Seleccione Entidad--"  noSelectionOption="true"/>
+                                                                <f:selectItems  value="#{MBEntidad.cargaEnt1}" />
+                                                            </p:selectOneMenu> 
+                                                        </td>
+                                                        <td>
+                                                            <p:selectOneMenu id="CmbSucursalRadic1" style="width: 185px;font-size: 12px;" effect="fade" value="#{MBEntidad.codSucursal1}" filter="true" >
+                                                                <p:ajax listener="#{MBEntidad.onAsesorRadic(1)}" update="CmbSucursalRadic1,:contenedorGeneral:Contenedor:growl_General"/>
+                                                                <f:selectItem  itemValue="0" itemLabel="--Seleccione Sucursal--" noSelectionOption="true"/>
+                                                                <f:selectItems  value="#{MBEntidad.cargaSucur1}" />
+                                                            </p:selectOneMenu> 
+                                                        </td>
+                                                        <td>
+                                                            <p:selectOneMenu id="CmbAsesorRadic1" style="width: 185px;font-size: 12px;" filter="true" effect="fade" value="#{MBEntidad.codAsesor1}" disabled="#{MBEntidad.deshabilitarAsesor1}">
+                                                                <p:ajax listener="#{MBEntidad.InfoAsesor(1)}" 
+                                                                        update=":contenedorGeneral:Contenedor:growl_General"/>
+                                                                <f:selectItem  itemValue="0" itemLabel="--Seleccione Asesor--" noSelectionOption="true"/>
+                                                                <f:selectItems  value="#{MBEntidad.cargaAses1}" />
+                                                            </p:selectOneMenu> 
+                                                            <p:tooltip  for="CmbAsesorRadic1" showEffect="clip" value="Seleccione Asesor: *" style=" font-size: 12px;font-family: Arial;" />
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <p:commandButton update=":contenedorGeneral:Contenedor:growl_General" icon="ui-icon-check" action="#{MBFacturacion.ConsultarPersona(1)}"
+                                                                                 style="font-family: Arial;font-size: 13px;"/>
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+
+                                                </p:outputPanel>
+                                            </table>
+                                        </center>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="#{MBFacturacion.opcionFacturarA=='Cliente'}">
+                                                <center>
+                                                    <p:outputPanel id="PNLcllnte">
+                                                        <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="3" cellspacing="3">
+                                                            <tr>
+                                                                <td><p:outputLabel value="Cliente:" style="font-weight: bold;"/></td>
+                                                                <td> <p:selectOneMenu id="CmbCliente"  style="width:135px;font-size: 12px;" value="#{MBFacturacion.opcCliente}" >
+                                                                        <f:selectItem itemLabel="Seleccione.." itemValue=""  />
+                                                                        <f:selectItem itemLabel="Nombre" itemValue="Nombre" />
+                                                                        <f:selectItem itemLabel="Identificacion" itemValue="Identificacion"  />
+                                                                        <p:ajax event="change" update="PNLcllnte,PnlPersona"/>
+                                                                    </p:selectOneMenu></td>
+                                                                <td>
+                                                                    <c:choose>
+                                                                        <c:when test="#{MBFacturacion.opcCliente=='Nombre'}">
+                                                                            <td> <p:outputLabel value="Nombre:" style="font-weight: bold;"/>  </td>
+                                                                            <td><p:inputText value="#{MBFacturacion.nomPers}" style="width: 250px;"  rendered="#{MBFacturacion.opcCliente=='Nombre'}" /></td>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <c:choose>
+                                                                                <c:when test="#{MBFacturacion.opcCliente=='Identificacion'}">
+                                                                                    <td><p:outputLabel value="Identificacion: " style="font-weight: bold;"/></td>
+                                                                                    <td><p:inputText value="#{MBFacturacion.identfPersona}" style="width: 250px;"  rendered="#{MBFacturacion.opcCliente=='Identificacion'}"  /></td>
+                                                                                </c:when>
+                                                                            </c:choose>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="6">
+                                                                    <center>
+                                                                        <p:commandButton update=":contenedorGeneral:Contenedor:growl_General,InfoCliente" icon="ui-icon-check" value="Consultar"  action="#{MBFacturacion.ConsultarPersona(1)}"
+                                                                                         style="font-family: Arial;font-size: 13px;"/>
+                                                                    </center>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </p:outputPanel>
+                                                </center>
+                                            </c:when>
+                                        </c:choose>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <!--Cargar la informacion seleccionada del Cliente-->
+                    <p:outputPanel id="InfoCliente" autoUpdate="true">
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.selectPersFactAnti.size()>0 }">
+                                <br/>
+                                <tr>
+                                    <td >
+                                        <b><p:outputLabel value="» Información Cliente" style="font-size: 14px;font-family: Arial;" /></b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <center>
+                                    <br/>
+                                    <p:dataTable id="PerSel" var="Perslt" value="#{MBFacturacion.selectPersFactAnti}" 
+                                                 style=" width: 600px" emptyMessage="No ha realizado la busqueda">
+                                        <p:column headerText="Codigo" style="font-family: Arial;font-size: 12px ;width:35px;" >
+                                            <h:outputText value="#{Perslt.codCliente}"/>
+                                        </p:column>
+                                        <p:column headerText="N° Documento" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                            <h:outputText value="#{Perslt.numeroDoccliente}"/>
+                                        </p:column>
+                                        <p:column headerText="Persona Entidad/Cliente" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                            <h:outputText value="#{Perslt.nombreCliente}"/>
+                                        </p:column>
+                                    </p:dataTable> 
+                                </center>
+                            </c:when>
+                        </c:choose>
+
+                        <br/>
+                        <br/>
+                        <center>
+                            <table cellspacing="3" cellpadding="3">
+                                <c:choose>
+                                    <c:when test="#{MBFacturacion.selectPersFactAnti.size()>0 or MBFacturacion.validacion}">
+                                        <tr>
+                                            <td>
+                                                <b><p:outputLabel value="Concepto:* " style="font-family: Arial;font-size: 13px;"/></b>
+                                            </td>
+                                            <td>
+                                                <p:selectOneMenu  id="CmbTipoConcep" style="width:200px;font-size: 12px;" value="#{MBFacturacion.codTipoConcepto}">
+                                                    <f:selectItems id="SelItemTipo"  value="#{MBAdministacion.cargarfactConcepto}" />
+                                                </p:selectOneMenu>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><b><p:outputLabel value="Valor Factura:*" style="font-family: Arial;font-size: 13px;" /></b></td>
+                                            <td ><b>
+                                                    <p:inputText value="#{MBFacturacion.totalpagarFactAnt}"   style="font-family: Arial;font-size: 13px; text-align:  right; " onkeypress="return validarnumeros(event);"  onkeyup="formatoNum(this)" >
+                                                        <f:convertNumber locale="en_US"/>
+                                                    </p:inputText>
+                                                    <p:commandButton update="InfoCliente" icon="ui-icon-check"   action="#{MBFacturacion.ConsultarPersona(4)}"  
+                                                                     style="font-family: Arial;font-size: 12px;" />
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b><p:outputLabel value="N° Factura:*" style="font-family: Arial;font-size: 13px;"/></b></td>
+                                            <td>
+                                                <p:inputText value="#{MBFacturacion.nfactAnticpo}"   style="font-family: Arial;font-size: 13px; text-align: right"/>
+                                            </td>
+                                        </tr>
+                                        <tr><td><p:spacer height="10"/></td></tr>
+                                        <tr><td colspan="3"><center>    
+                                                    <p:commandButton update=":contenedorGeneral:Contenedor:growl_General,PnlPersona,DlgConfi" 
+                                                                     icon="ui-icon-check" value="Facturar"  ajax="true" action="#{MBFacturacion.ConsultarPersona(5)}"
+                                                                     style="font-family: Arial;font-size: 12px;" /></center></td></tr>
+                                    </c:when>
+                                </c:choose>
+                            </table>
+                        </center>
+                        <br/>
+                        <br/>
+
+                    </p:outputPanel>
+
+                    <!--Dialog Informacion del cliente o la entidad !-->
+                    <p:dialog  header="Informacion Entidad / Cliente" style="font-family: Arial; font-size: 12px" widgetVar="DlgPers" minHeight="100" resizable="false">
+                        <p:outputPanel  autoUpdate="true">
+                            <p:dataTable id="PersFactAnti" var="PersFact" value="#{MBFacturacion.listPersFacAnti}" scrollable="true" scrollHeight="150" 
+                                         rowKey="#{PersFact.codCliente}"
+                                         selectionMode="multiple" selection="#{MBFacturacion.selectPersFactAnti}"
+                                         style=" width: 600px" emptyMessage="No ha realizado la busqueda">
+                                <p:column headerText="Codigo" style="font-family: Arial;font-size: 12px ;width:35px;" >
+                                    <h:outputText value="#{PersFact.codCliente}"/>
+                                </p:column>
+                                <p:column headerText="N° Documento" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                    <h:outputText value="#{PersFact.numeroDoccliente}"/>
+                                </p:column>
+                                <p:column headerText="Cliente" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                    <h:outputText value="#{PersFact.nombreCliente}"/>
+                                </p:column>
+                            </p:dataTable> 
+                        </p:outputPanel>
+                        <center>
+                            <br/>
+                            <br/>
+                            <p:commandButton  style="font-family: Arial;font-size: 13px;"                              
+                                              icon="ui-icon-check" value="Seleccionar" action="#{MBFacturacion.ConsultarPersona(2)}"
+                                              update=":contenedorGeneral:Contenedor:growl_General,InfoCliente"  />
+                        </center>
+                    </p:dialog>
+                    <!-- Confirmacion de la factura anticipo !-->
+                    <p:dialog id="DlgConfi" header="Confirmar Información" style="font-family: Arial; font-size: 12px" widgetVar="FactuConcepto" minHeight="100" resizable="false">
+                        <p:outputPanel  autoUpdate="true" >
+                            <br/>
+                            <center>
+                                <h:panelGrid>                                                                       
+                                    <h:outputText  style="font-family:cursive; font-size: 14px;" value="La información pasara a Impresion de factura con los siguientes datos:"  />
+                                </h:panelGrid>
+                                <br/>
+                                <table cellspacing="9">                           
+                                    <!--Informacion de persona natural -->
+
+                                    <tr>
+                                        <td>
+                                            <b>  <p:outputLabel  value="No Factura " style="font-family: Arial;font-size: 12px" /></b>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="#{MBFacturacion.nfactAnticpo}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px" onkeyup="formatoNum(this)"  >
+                                            </p:outputLabel>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>  <p:outputLabel  value="Por Concepto de: " style="font-family: Arial;font-size: 12px" /></b>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="#{MBFacturacion.nombre}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px" onkeyup="formatoNum(this)"  >
+                                            </p:outputLabel>
+                                        </td>
+                                    </tr>
+                                    <c:choose>
+                                        <c:when test="#{MBFacturacion.selectPersFactAnti.size() > 0}" >
+                                            <ui:repeat  value="#{MBFacturacion.selectPersFactAnti}" var="PerFactCli" >
+                                                <tr>
+                                                    <td>
+                                                        <b>  <p:outputLabel  value="No Documento " style="font-family: Arial;font-size: 12px" /></b>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel value="#{PerFactCli.numeroDoccliente}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px"   >
+                                                        </p:outputLabel>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <b>  <p:outputLabel  value="Nombre " style="font-family: Arial;font-size: 12px" /></b>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel value="#{PerFactCli.nombreCliente}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px"   >
+                                                        </p:outputLabel>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </c:when>
+                                    </c:choose>
+                                    <tr>
+                                        <td>
+                                            <b>  <p:outputLabel  value="Valor Total Factura " style="font-family: Arial;font-size: 12px" /></b>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="#{MBFacturacion.totalpagarFactAnt}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px"   >
+                                                <f:convertNumber locale="en_US" />
+                                            </p:outputLabel>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </center>
+                        </p:outputPanel>
+                        <br/>
+                        <center>
+                            <h:panelGrid>
+                                <p:commandButton icon="ui-icon-disk" value="Grabar"  action="#{MBFacturacion.ConsultarPersona(6)}"
+                                                 update=":contenedorGeneral:Contenedor:growl_General" 
+                                                 style="font-family: Arial;font-size: 13px;" /> 
+                            </h:panelGrid>
+                        </center>
+                    </p:dialog>
+
+                </center>
+            </p:outputPanel>
+        </h:form>
+    </h:body>
+</html>
+

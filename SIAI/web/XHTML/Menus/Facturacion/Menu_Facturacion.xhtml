@@ -1,0 +1,161 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Menu de Facturacion</title>
+        <style type="text/css">
+            .ui-commandButton:hover{
+                text-align: left;
+                background: #f4f4f4;
+                border: none;
+                border-bottom: 2px solid #CECECE;
+                width: 100%; 
+                border-radius: 0px;;
+                font-family: Arial;
+                color: #00427f;
+                font-family: Arial;
+                font-size: 12px;                                              
+                height: 2.75em;
+            }
+
+            #wrapper {  
+                width: 220px;
+                font-size: 0.8125em;
+            }
+
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMMenuFactura">
+            <p:growl id="growl" life="2000" />
+            <div id="wrapper">
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Pendientes por facturar (#{MBFacturacion.numPendiFac})" action="#{beanDireccionar.url_Menu_Facturacion('PendienteXFact')}" icon="ui-icon-tag" />
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Pendientes Impresión (#{MBFacturacion.numPendiImpr})" action="#{beanDireccionar.url_Menu_Facturacion('PendienteImpresion')}" icon="ui-icon-folder-open" />
+
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Factura Anticipo" action="#{beanDireccionar.url_Menu_Facturacion('Factura_Anticipo')}" icon="ui-icon-seek-first" />
+
+
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Factura Concepto" action="#{beanDireccionar.url_Menu_Facturacion('Factura_Concepto')}" icon="ui-icon-pencil" />
+
+
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Factura Copia" action="#{beanDireccionar.url_Menu_Facturacion('Factura_Copia')}" icon="ui-icon-document" />
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Factura Exedente (#{MBFacturacion.numPendiFacEx})" action="#{beanDireccionar.url_Menu_Facturacion('PendiExcede')}" icon="ui-icon-plus" />
+
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Remisiones" action="#{beanDireccionar.url_Menu_Facturacion('Remisiones')}" icon="ui-icon-document-b" />
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" styleClass="menussss" ajax="false" value="Consulta Facturados" action="#{beanDireccionar.url_Menu_Facturacion('ConsulFact')}" icon="ui-icon-search" />
+
+
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Mis actividades (#{MBFacturacion.numPendiActRec})"  icon="ui-icon-suitcase" ajax="false" action="#{beanDireccionar.url_Menu_Facturacion('MisActividades')}"/>
+
+
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

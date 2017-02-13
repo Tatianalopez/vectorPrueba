@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pendientes por excendete</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMpENDfACT" >
+
+            <table cellspacing="4" cellpadding="4"  border="0">
+                <tr>
+                    <td><big><big><b><p class="Title" >Excedentes pendientes por facturar  |   </p></b></big></big></td>
+
+                    <td>
+                        <p:commandButton  value="Abrir Excedente"   action="#{beanDireccionar.url_Menu_Facturacion('FacExcedente')}"  ajax="false"  icon="ui-icon-check" iconPos="left"  
+                                          style="font-family:Arial;font-size: 13px;position: relative;"   update=":contenedorGeneral:Contenedor:growl_General, PNLTipoFact,Dlg2,p"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"> <p:separator /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"> 
+                        <p:outputLabel value="Seleccione un registro de la tabla:" style="font-family: Arial;font-size: 12px;"/>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:outputPanel id="PNLPendXFac">
+                            <p:dataTable id="PendXFactTable" var="Fact" value="#{MBFacturacion.listPendientXFact}" selection="#{MBFacturacion.fac}"  rowKey="#{Fact.cliente}"
+                                         widgetVar="PendFact" selectionMode="single" emptyMessage="No hay pendientes por facturar"   scrollable="true" scrollHeight="300" scrollWidth="auto" >
+                                <p:column headerText="N° Avaluo"  filterBy="#{Fact.codAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 30px;"  filterStyle="width: 40px;">
+                                    <h:outputText value="#{Fact.codAva}" />
+                                </p:column>
+                                <p:column headerText="N° Bien"  filterBy="#{Fact.numBienSeg}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 20px;" filterStyle="width: 40px;" >
+                                    <h:outputText value="#{Fact.numBienSeg}" />
+                                </p:column>
+                                <p:column headerText="Clientes"  filterBy="#{Fact.cliente}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{Fact.cliente}"/>
+                                </p:column>
+                                <p:column headerText="Valor perito"  filterBy="#{Fact.valComerPerito}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 90px;">
+                                    <h:outputText value="#{Fact.valComerPerito}">
+                                        <f:convertNumber locale="en_US"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Valor  Revision"  filterBy="#{Fact.oldValComerRevi}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{Fact.oldValComerRevi}">
+                                        <f:convertNumber locale="en_US"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Valor a facturar"  filterBy="#{Fact.newValComer}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{Fact.newValComer}">
+                                        <f:convertNumber locale="en_US"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </td>
+                </tr>
+            </table>
+
+        </h:form>
+    </h:body>
+</html>
+

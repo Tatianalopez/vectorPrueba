@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="./css/estilo.css"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/iconos/logo.ico"/>
+        <h:outputStylesheet name="./css/estilo.css"/>
+        <style type="text/css">
+            #wrapper {  
+                width: 220px;
+                font-size: 0.8125em;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMMenu_Entrega" >
+
+            <div id="wrapper">
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;"
+                    value="Reconsiderar Valor" action="#{beanDireccionar.url_Menu_Revision('Reasignar')}" ajax="false" icon="ui-icon-wrench"/>
+            </div>
+        </h:form>
+    </h:body>
+</html>

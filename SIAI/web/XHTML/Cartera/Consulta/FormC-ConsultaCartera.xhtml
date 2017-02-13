@@ -1,0 +1,304 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://java.sun.com/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>SIAI 2.0</title>
+        <style>
+            .ui-tabs ul{
+                background: white !important;
+                padding: 5px 5px;
+                border: none;
+
+                .ul-fileupload ul {
+                    background: blue !important;
+                    padding: 5px 5px;
+                    border: none;
+                }
+                .holaaaa {
+                    border: none!important;
+                    border-bottom-left-radius: 0px!important;
+                    border-bottom-right-radius: 0px!important;
+                    background: transparent!important;
+                    background-color: transparent!important;
+                    float: right; /* and content on right */
+                }
+
+                .ui-fileupload  {
+                    border: 10px solid blue !important;
+                }
+
+                .width-fileupload{
+                    width : 1600px;
+                }
+
+                /*     .ui-tabs ul li a:active{
+                       background: red !important;
+                       padding: 5px 5px;
+                       border: none;
+                   }    */
+            </style>
+        </h:head>
+        <h:body>
+            <h:form enctype="multipart/form-data" id="formConsltCart">
+                <!-- Encabezado del Formulario-->
+                <table cellpadding="4" cellspacing="4" border="0" style="width: auto;">
+                    <tr> 
+                        <td style="width: 850px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Consulta Estado Cartera</font></big></big></b></td>
+                        <td>
+                            <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                        </td>
+                        <td style="width: 250px;">
+                            <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Devolver a cuentas X cobrar" ajax="true" actionListener="#{MBCartera.GestionCartera('Devolver_Fact')}" action="#{MBCartera.cargarPaneles()}" update=":contenedorGeneral:Contenedor:growl_General" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"><p:separator /></td>
+                    </tr>
+                </table>
+                <table style="font-family: Arial;font-size: 12px;">
+                    <tr>
+                        <td><p:outputLabel value="Seleccione el modo de consulta: *" for="OPCons"  /></td>
+                        <td><p:selectOneRadio value="#{MBCartera.opcionConsul}" id="OPCons">
+                                <f:selectItem itemLabel="General" itemValue="Gen" />
+                                <f:selectItem itemLabel="Específico"  itemValue="Esp"/>
+                                <p:ajax update="PNLConsul" event="change"/>
+                            </p:selectOneRadio></td>
+                    </tr>
+                </table>
+                <!-- Generacion de Filtros para la consulta -->
+                <p:outputPanel id="PNLConsul">
+                    <c:choose >
+                        <!--INFORMACION GENERAL PARA UN NUMERO ESPECIFICO DE PRERADICACION-->
+                        <c:when test="#{MBCartera.opcionConsul=='Esp'}">
+                            <p:outputPanel id="panelEsp">
+                                <center>
+                                    <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="3" cellspacing="3">
+                                        <tr>
+                                            <td>
+                                                <center>
+                                                    <p:outputLabel value="Ingrese el numero del avalúo o factura que desea consultar" style="font-weight: bold;"/>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>                                                    
+                                                <p:separator/>                                                    
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="3" cellspacing="3">
+                                        <tr>
+                                            <td><p:outputLabel value="Buscar por: " /></td>
+                                            <td>
+                                                <p:selectOneMenu   style="width:135px;font-size: 12px;" value="#{MBConsultaFactu.filtrarX}" >
+                                                    <f:selectItem itemLabel="Seleccione.." itemValue="" noSelectionOption="true" />
+                                                    <f:selectItem itemLabel="Factura" itemValue="Factura" />
+                                                    <f:selectItem itemLabel="Avaluo" itemValue="Avaluo"  />
+                                                    <p:ajax event="change" update="PNLFiltro"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td colspan="4">
+                                                <p:outputPanel id="PNLFiltro">
+                                                    <center>
+                                                        <c:choose>
+                                                            <c:when test="#{MBConsultaFactu.filtrarX=='Factura'}">                                                
+                                                                <table style="font-family: Arial;font-size: 12px; ">
+                                                                    <tr>
+                                                                        <td><p:outputLabel value="N° Factura " style="font-weight: bold;"/></td>
+                                                                        <td>
+                                                                            <p:inputText value="#{MBConsultaFactu.numFac}" style="width: 75px;"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>                                        
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <c:choose>
+                                                                    <c:when test="#{MBConsultaFactu.filtrarX=='Avaluo'}">
+                                                                        <table style="font-family: Arial;font-size: 12px;">
+                                                                            <tr>
+                                                                                <td><p:outputLabel value="N° Avalúo " style="font-weight: bold; "/></td>
+                                                                                <td>
+                                                                                    <p:inputText value="#{MBConsultaFactu.numAva}" style="width: 75px;"  />
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </c:when>
+                                                                </c:choose>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </center>
+                                                </p:outputPanel>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table  >
+                                        <tr>
+                                            <td colspan="6">
+                                                <center>
+                                                    <p:commandButton value="Consultar" icon="ui-icon-search" iconPos="left"  action="#{MBConsultaFactu.validaInfoFactu('Cons')}"
+                                                                     ajax="false" update=":contenedorGeneral:Contenedor:growl_General,PanConEsp"  style="font-family: Arial;font-size: 12px;" />
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </center>
+                            </p:outputPanel>
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                                <!--INFORMACION ESPECIFICA PARA GENERAR CONSULTA SOBRE VARIOS AVALUOS-->
+                                <c:when test="#{MBCartera.opcionConsul=='Gen'}">
+                                    <p:outputPanel id="panel">
+                                        <center>
+                                            <p:outputPanel id="PnlCarte">
+                                              
+                                                <table border="0">
+                                                    <tr>
+                                                        <td>
+                                                            <p:spacer width="50px"></p:spacer>
+                                                            <center>
+                                                                <p:outputPanel id="PnlRadioEstadoFact">
+                                                                    <b><p:outputLabel for="RbEstado" value="Seleccione el filtro de la consulta" style="font-family: Arial;font-size: 13px;" /></b>
+                                                                    <p:selectOneRadio id="RbEstado" value="#{MBCartera.opcionFiltroEstado}" style="font-family: Arial;font-size: 12px;" >
+                                                                        <f:selectItem itemLabel="Cartera Castigada" itemValue="Cast_Carte" />
+
+                                                                        <f:selectItem itemLabel="Cobro Juridico" itemValue="Cobro_Jurid" />
+                                                                        <p:ajax event="change" id="ajaxEstadoCart" 
+                                                                                update="
+                                                                                :contenedorGeneral:Contenedor:growl_General" />
+                                                                    </p:selectOneRadio>
+                                                                </p:outputPanel>
+                                                            </center></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            <p:spacer width="25px"></p:spacer>
+                                                            <center><p:commandButton value="Consultar Cartera" icon="ui-icon-search" iconPos="left"  action="#{MBCartera.cargarPaneles()}"  ajax="true" update=":contenedorGeneral:Contenedor:growl_General,PnlResultEstadoCartera"  style="font-family: Arial;font-size: 12px;" /></center>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </p:outputPanel>
+                                        </center>
+                                    </p:outputPanel>
+
+                                    <!-- Inicio del resultado de la busqueda -->
+                                    <center>
+                                        <p:outputPanel id="PnlResultEstadoCartera" autoUpdate="true" >
+                                            <c:choose>
+                                                <c:when test="#{MBCartera.listaEstadoCartera.size()>0}" >
+                                                    <br/>
+                                                    <table style="font-family: Arial;font-size: 12px; " cellspacing="3" cellpadding="3">
+                                                        <tr>
+                                                            <td><br/>
+                                                                <p:outputLabel value="» Resultados de búsqueda" style="font-weight: bold;font-size: 14px;"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><p:separator/><br/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <table>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBCartera.listaEstadoCartera)}" style="font-family: Arial;font-size: 13px;" /></b>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <p:dataTable id="ConsulRTable" widgetVar="DatTCart" value="#{MBCartera.listaEstadoCartera}"  var="ConsulCart"  selection="#{MBCartera.selectCmbioEstado}"  sortBy="#{ConsulCart.fechaFacturacion}"
+                                                                             rowKey="#{ConsulCart.codFactura}"    scrollable="true"  style="font-family: Arial;font-size: 12px;"    scrollWidth="1010"   rows="10" >
+                                                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                                                        <p:column headerText="Factura N°"  filterBy="#{ConsulCart.codFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                                                        <h:outputText value="#{ConsulCart.codFactura}" />
+                                                                    </p:column>
+                                                                    <p:column headerText="Tipo"  filterBy="#{ConsulCart.tipoFactura}" filterMatchMode="contains"  filterStyle="width: 60px;" style="font-family:Arial;font-size: 12px;width: 70px;">
+                                                                        <h:outputText value="#{ConsulCart.tipoFactura}" />
+                                                                    </p:column>
+                                                                    <p:column headerText="Cliente"  filterBy="#{ConsulCart.nombreEntidad} #{ConsulCart.nombrecliente}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;" filterStyle="width: 90px;" >
+                                                                        <h:outputText value="#{ConsulCart.nombreEntidad} #{ConsulCart.nombrecliente}" />
+                                                                    </p:column>
+                                                                    <p:column headerText="Fecha Facturación"  filterBy="#{Carte.fechaFacturacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                                        <h:outputText value="#{ConsulCart.fechaFacturacion}" />
+                                                                    </p:column>      
+                                                                    <p:column headerText="Abono"  filterBy="#{ConsulCart.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                                        <h:outputText value="Abonos..." />
+                                                                    </p:column>     
+                                                                    <p:column headerText="Valor Factura"  filterBy="#{ConsulCart.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                                        <h:outputText value="#{ConsulCart.valorFactura}" />
+                                                                    </p:column>  
+                                                                    <p:column headerText="Observación"  filterBy="#{ConsulCart.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                                        <h:outputText value="Observacion" />
+                                                                    </p:column> 
+                                                                    <p:column headerText="Fecha Seguimiento"  filterBy="#{ConsulCart.fechaFacturacion}"  filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                                        <h:outputText value="#{ConsulCart.fechaFacturacion}" >
+
+                                                                        </h:outputText>
+                                                                    </p:column>
+                                                                    <p:summaryRow>
+                                                                        <p:column colspan="5"  style="font-family: Arial;font-size: 12px; text-align: right" >
+                                                                                <h:outputText value="Total:" />
+                                                                            </p:column>
+                                                                            <p:column colspan="5"  style="font-family: Arial;font-size: 12px; text-align: left">
+                                                                                <h:outputText value="#{ConsulCart.valorFactura}">
+                                                                                    <f:convertNumber type="currency" currencySymbol="$" />
+                                                                                </h:outputText>
+                                                                            </p:column>
+                                                                        </p:summaryRow>
+                                                                    </p:dataTable>
+                                                                </td>
+                                                            </tr>                                                    
+                                                        </table>
+                                                        <br/>
+                                                        <center>
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <p:commandButton value="Exportar información a excel"  action="#{MBConsultaRad.exportConsulRad()}" ajax="false" update=":contenedorGeneral:Contenedor:growl_General" icon="ui-icon-arrowstop-1-s" style="font-family: Arial;font-size: 13px;"/>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </center>
+                                                    <br/>
+                                                    <br/>
+                                                    <br/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <table style="width: 100%;font-family: Arial;font-size: 12px;">
+                                                        <tr>
+                                                            <td><p:outputLabel value="» Resultados de búsqueda" style="font-weight: bold;font-size: 14px;"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><p:separator/><br/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> <center>
+                                                                    <p:outputLabel value="No se encontraron resultado respecto a la busqueda iniciada, vuelva a intentarlo" style="color: #cc0204;font-weight: bold;"/>
+                                                                </center></td>
+                                                        </tr>
+                                                    </table>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </p:outputPanel> 
+                                    </center>
+                                    <!--Fin del resultado de la busqueda-->
+                                </c:when>
+                            </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+                </p:outputPanel>
+                <!-- Fin de los filtros para la busqueda -->
+
+
+
+            </h:form>
+        </h:body>
+    </html>

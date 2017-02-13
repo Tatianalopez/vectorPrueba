@@ -1,0 +1,111 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Mis asignados</title>
+        <style>
+            .ui-breadcrumb ul{
+                background: blue !important;
+                color: blue !important;
+                margin: 0;
+                padding: 0;
+                height: 21px;
+                display: block;
+                width: auto;
+            }
+
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+
+        </style>
+    </h:head>
+    <h:body >
+        <h:form id="FormMisAsignados"> 
+
+            <p:outputPanel id="PendientesSeg">
+                <table cellpadding="4" cellspacing="4" border="0" style="width: 100%;">
+                    <tr> 
+                        <td><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Mis Asignados</font></big></big></b></td>
+                        <td>
+                            <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                        </td>
+                        <td style="width: 150px;">
+                            <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Abrir avalúo" ajax="false" 
+                                             actionListener="#{MBRadicacion.seleccionarAvaluo(2,MBRadicacion.radi.codAvaluo,MBRadicacion.radi.codSeguimiento)}" action="#{beanDireccionar.url_Menu_Seguimiento('RadicacionFormSeguimiento')}"/>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <table cellpadding="4" cellspacing="4" border="0">
+                    <tr>
+                        <td colspan="3"><p:separator /></td>
+                    </tr>                  
+
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBSeguimiento.listSeguimientoRadicacionesConCita)}" style="font-family: Arial;font-size: 13px;" /></b>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br/>                      
+                            <p:dataTable  var="Rad" selectionMode="single" value="#{MBSeguimiento.listSeguimientoRadicacionesConCita}" 
+                                          id="RadicadosSegTable"  widgetVar="RadicadosSeg"  selection="#{MBRadicacion.radi}" rowKey="#{Rad.codSeguimiento}"
+                                          style="font-family: Arial;font-size: 12px; height: 320px;" emptyMessage="Resultados no encontrados" 
+                                          scrollable="true" scrollHeight="100%;" frozenColumns="1" styleClass="FirstCol" >
+                                <p:column headerText="N* de avalúo"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{Rad.codAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 60px;">
+                                    <h:outputText value="#{Rad.codAvaluo}" />
+                                </p:column>
+                                <p:column headerText="N* de bien"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{Rad.codBienSeguimiento}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{Rad.codBienSeguimiento}" />
+                                </p:column>
+                                <p:column headerText="Producto entidad" filterBy="#{Rad.tipProducEnti}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{Rad.tipProducEnti}" />
+                                </p:column>
+                                <p:column headerText="Tipo de avalúo" filterBy="#{Rad.tipAvaluo}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{Rad.tipAvaluo}" />
+                                </p:column>
+                                <p:column headerText="Cliente(s) y Entidad(es)"  filterBy="#{Rad.clientes} #{Rad.entidades}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 500px;">
+                                    <h:outputText value="#{Rad.clientes} #{Rad.entidades}" />
+                                </p:column>     
+                                <p:column headerText="Fecha de solicitud"  filterStyle="font-family:Arial;font-size: 12px;width:80px;" filterBy="#{Rad.fechaSolicitud}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 110px;">
+                                    <h:outputText value="#{Rad.fechaSolicitud}" />
+                                </p:column> 
+                                <p:column headerText="Fecha de registro"  filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterBy="#{Rad.fechaRegistro}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 130px;">
+                                    <h:outputText value="#{Rad.fechaRegistro}" />
+                                </p:column>
+                                <p:column headerText="Fecha de pre-radicación"  filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterBy="#{Rad.fechaPreRadica}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 170px;">
+                                    <h:outputText value="#{Rad.fechaPreRadica}" />
+                                </p:column>
+                                <p:column headerText="Fecha de radicado"  filterStyle="font-family:Arial;font-size: 12px;width:100px;" filterBy="#{Rad.fechaRadica}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 130px;">
+                                    <h:outputText value="#{Rad.fechaRadica}" />
+                                </p:column> 
+                                <p:column headerText="Radicación de:" filterBy="#{Rad.radicadoPor}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 290px;">
+                                    <h:outputText value="#{Rad.radicadoPor}" />
+                                </p:column>
+                                <p:column headerText="Ubicación:"  filterBy="#{Rad.ciudad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{Rad.ciudad}" />
+                                </p:column>
+                                <p:column headerText="Fecha de cita"  filterBy="#{Rad.fechaCita}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                    <h:outputText value="#{Rad.fechaCita}" />
+                                </p:column>
+                            </p:dataTable>
+                        </td>
+                    </tr>                      
+
+                </table>
+            </p:outputPanel>   
+        </h:form>
+    </h:body>
+</html>
+

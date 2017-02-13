@@ -1,0 +1,974 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Cuentas por Cobrar</title>        
+    </h:head> 
+    <h:body>
+        <h:form>
+            <p:tabView  id="TabCart" dynamic="true" effect="fade" effectDuration="fast" cache="true" style="width: auto;font-family: Arial;font-size: 12px;border-radius: 5px;"  widgetVar="TabCartera" >
+                <!-- !-->
+                <!--TAB DE ACTIVIDADES-->
+                <p:tab title="Actividades" >
+                    <!-- Panel para ver las opciones de actividades -->
+                    <p:outputPanel autoUpdate="true">
+                        <p:panel rendered="true" style="border: none;">
+                            <br/>
+                            <center>
+                                <table style="font-family: Arial;width: 1000px;font-weight: bold;">
+                                    <tr>
+                                        <td><p:outputLabel value="» Actividades y recordatorios" /></td></tr><tr>
+                                        <td><p:separator/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p:panel id="OpcionesTablero" style="border: none;">
+                                                <b><p:outputLabel value="Seleccione una opción: " style="font-family:Arial;font-size: 13px;"/></b>
+                                                <br/>
+                                                <p:selectOneRadio id="OpTablero" value="#{MBActivRecor.opcionTableroControlSeguim}" style="font-family: Arial;font-size: 12px;">
+                                                    <f:selectItem itemLabel="Actividades" itemValue="1"  />
+                                                    <f:selectItem itemLabel="Recordatorios" itemValue="2" />                                                                
+                                                    <p:ajax event="change"  update="OpcionMisActividades,OpcionMisRecordatorios,
+                                                            OpcionActividadesAsignadas,OpcionRecordatAsignadas"  listener="#{MBActivRecor.habilitarInfoTableroControl(0)}"/>
+                                                </p:selectOneRadio>
+                                            </p:panel>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!-- Panel para ver las opciones de actividades -->
+                                <p:outputPanel autoUpdate="true">
+                                    <p:panel rendered="#{MBActivRecor.opcionTableroControlSeguim == 1}" style="border: none;">
+                                        <br/>
+                                        <table cellspacing="3" cellpadding="3">
+                                            <tr>                                                            
+                                                <td><p:commandButton  style="font-family: Arial;font-size: 13px;"                                      
+                                                                      icon="ui-icon-arrowthick-1-e" value="Crear y asignar actividad"   action="#{MBActivRecor.habilitarInfoTableroControl(2)}" 
+                                                                      update=":contenedorGeneral:Contenedor:growl_General,DialogActividadRealizada,OpcionMisActividades,OpcionMisRecordatorios
+                                                                      ,OpcionActividadesAsignadas,OpcionRecordatAsignadas"  /></td>
+                                                <td><p:commandButton  style="font-family: Arial;font-size: 13px;"                                      
+                                                                      icon="ui-icon-arrowthick-1-e" value="Estado de actividades asignadas"   action="#{MBActivRecor.habilitarInfoTableroControl(6)}" 
+                                                                      update="OpcionMisActividades,OpcionMisRecordatorios,OpcionActividadesAsignadas,OpcionRecordatAsignadas"  /></td>
+                                            </tr>
+                                        </table>
+                                        <br/>
+                                    </p:panel>
+                                </p:outputPanel>        
+
+                                <!-- Panel para ver las opciones de recordatorios -->
+                                <p:outputPanel autoUpdate="true">                                                
+                                    <p:panel rendered="#{MBActivRecor.opcionTableroControlSeguim == 2}" style="border: none;">
+                                        <br/>
+                                        <table cellspacing="3" cellpadding="3">
+                                            <tr>                                                          
+                                                <td><p:commandButton value="Crear y asignar recordatorios"
+                                                                     icon="ui-icon-arrowthick-1-e" action="#{MBActivRecor.habilitarInfoTableroControl(4)}" style="font-size: 13px;font-family: Arial;"
+                                                                     update=":contenedorGeneral:Contenedor:growl_General,DialogActividadRealizada,OpcionMisActividades,OpcionMisRecordatorios,
+                                                                     OpcionActividadesAsignadas,OpcionRecordatAsignadas"/></td>
+                                                <td><p:commandButton  style="font-family: Arial;font-size: 13px;"                                      
+                                                                      icon="ui-icon-arrowthick-1-e" value="Estado de recordatorios asignados"   action="#{MBActivRecor.habilitarInfoTableroControl(7)}" 
+                                                                      update="OpcionMisActividades,OpcionMisRecordatorios,OpcionActividadesAsignadas,OpcionRecordatAsignadas"  /></td>
+                                            </tr>
+                                        </table>
+                                        <br/>
+                                    </p:panel>
+                                </p:outputPanel>                                                        
+
+                            </center>
+                            <br/>
+                        </p:panel>
+                    </p:outputPanel>        
+                    <!-- Panel para ver las actividades que tiene asignada la persona para realizar -->
+                    <p:outputPanel id="OpcionMisActividades">                                               
+                        <p:panel rendered="#{MBActivRecor.estadoPanelMisActivid}" style="border: none;">
+                            <br/>                                                    
+                            <table>
+                                <tr>
+                                    <td style="width: 120px;">
+                                        <b><p:outputLabel value="» Mis actividades a realizar" style="font-size: 14px;font-family: Arial;" /></b>
+                                    </td>
+                                    <td style="width: 15px;">
+                                        <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                                    </td>
+                                    <td style="width: 200px;">
+
+                                        <table border="0" >
+                                            <tr>
+
+                                                <td style="background: #F6B7B7 !important;" >
+                                                    <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F6B7B7 !important;"/>
+                                                </td>
+                                                <td>
+                                                    <p:outputLabel  value="Atrasado" style="font-size: 12px;font-family: Arial;"/>
+                                                </td>
+                                                <td style="background: #F9AE6C !important;" >
+                                                    <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F9AE6C !important;"/>
+                                                </td>
+                                                <td>
+                                                    <p:outputLabel  value="Por culminar " style="font-size: 12px;font-family: Arial;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="10">
+                                        <p:separator />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  colspan="10">
+                                        <p:dataTable var="AccionesSeguim" value="#{MBActivRecor.listAccionesSeg}"
+                                                     selectionMode="single" id="AccionesSeguim" style="font-family: Arial;font-size: 12px;width: auto;" 
+                                                     rowKey="#{AccionesSeguim.codAccion}" selection="#{MBActivRecor.segActivid}"  widgetVar="AccionesSeguimiento"
+                                                     scrollHeight="50" emptyMessage="No se encontraron actividades" 
+                                                     rowStyleClass="#{AccionesSeguim.estadoTiempoTanscurrAcc eq 'Atrasado' ? 'FaltaInforma':
+                                                                      AccionesSeguim.estadoTiempoPorCulminarAct eq 'Si' ? 'highlight': null}">
+
+                                            <p:column headerText="N* actividad" style="font-family:Arial;font-size: 12px;width: 100px;" >
+                                                <h:outputText value="#{AccionesSeguim.codAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Nombre" style="font-family:Arial;font-size: 12px;width: 150px;" >
+                                                <h:outputText value="#{AccionesSeguim.nombreAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Descripción" style="font-family:Arial;font-size: 12px;width: 150px;"  >
+                                                <h:outputText value="#{AccionesSeguim.descripcionAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha maxima de ejecucion" style="font-family:Arial;font-size: 12px;width: 150px;"  >
+                                                <h:outputText value="#{AccionesSeguim.fecha_Max_ejecuc}" />
+                                            </p:column>
+                                            <p:column headerText="Tiempo restante" style="font-family:Arial;font-size: 12px;width: 150px;"  >
+                                                <h:outputText value="#{AccionesSeguim.maximoTiempoAccion}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                        <br/>
+                                        <center>
+                                            <p:commandButton  style="font-family: Arial;font-size: 13px;"                                      
+                                                              icon="ui-icon-check" value="Seleccionar actividad"   action="#{MBActivRecor.cargarDialogActivComple(1)}" 
+                                                              update=":contenedorGeneral:Contenedor:growl_General,DialogActividadRealizada"  />
+                                        </center>
+                                        <br/>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                        </p:panel>                                                
+                    </p:outputPanel>
+
+                    <!-- Panel para ver los recordatorios que no se han realizado-->
+                    <p:outputPanel id="OpcionMisRecordatorios">
+                        <p:panel rendered="#{MBActivRecor.estadoPanelMisRecordat}" style="border: none;">
+                            <br/>
+                            <div align="left">
+                                <table cellspacing="3" cellpadding="3">
+                                    <tr>
+                                        <td colspan="20">
+                                            <b><p:outputLabel value="» Mis recordatorios" style="font-size: 16px;font-family: Arial;" /></b>
+                                        </td>
+                                        <td >
+                                            <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                                        </td>
+                                        <td >
+
+                                            <table border="0" >
+                                                <tr>
+
+                                                    <td style="background: #F6B7B7 !important;" >
+                                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F6B7B7 !important;"/>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel  value="Atrasado" style="font-size: 12px;font-family: Arial;"/>
+                                                    </td>  
+                                                    <td style="background: #F9AE6C !important;" >
+                                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F9AE6C !important;"/>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel  value="Por culminar " style="font-size: 12px;font-family: Arial;"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td colspan="10">
+                                        <p:separator />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p:dataTable  var="SeguimRecordat" value="#{MBActivRecor.listaRecordatorios}"
+                                                      id="ListaRecordatorios" style="font-family: Arial;font-size: 12px;width: auto;" 
+                                                      rowKey="#{SeguimRecordat.codRecordat}" selection="#{MBActivRecor.listaRecordatoriosRealizados}"  widgetVar="ListaRecordatorios"
+                                                      emptyMessage="No se encontraron recordatorios" 
+                                                      rowStyleClass="#{SeguimRecordat.estadoTiempoTanscurrRecord eq 'Atrasado' ? 'FaltaInforma':
+                                                                       SeguimRecordat.estadoTiempoPorCulminarRecor eq 'Si' ? 'highlight': null}">
+
+                                            <center><p:column headerText="Realizado"  selectionMode="multiple" style="font-family:Arial;font-size: 12px;width: 18px;" >                                                                       
+                                                </p:column> </center>
+                                            <p:column headerText="Nombre" style="font-family:Arial;font-size: 12px;width: 150px;" >
+                                                <h:outputText value="#{SeguimRecordat.nombreRecorda}" />
+                                            </p:column>
+                                            <p:column headerText="Descripción" style="font-family:Arial;font-size: 12px;width: 150px;"  >
+                                                <h:outputText value="#{SeguimRecordat.descripRecordat}" />
+                                            </p:column>
+                                            <p:column headerText="Maximo tiempo para ejecutar" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{SeguimRecordat.fecha_Max_ejecuc}" />                                                                        
+                                            </p:column>
+                                            <p:column headerText="Tiempo restante" style="font-family:Arial;font-size: 12px;width: 150px;"  >
+                                                <h:outputText value="#{SeguimRecordat.maximoReqRecordat}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                        <br/>
+                                        <center>
+                                            <p:commandButton  style="font-family: Arial;font-size: 13px;"                                      
+                                                              icon="ui-icon-check" value="Completar recordatorio(s)" action="#{MBActivRecor.completarRecordat()}"
+                                                              update=":contenedorGeneral:Contenedor:growl_General,OpcionMisRecordatorios"  />
+                                        </center>
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:panel>                                              
+                    </p:outputPanel>
+
+                    <!-- Panel para ver las actividades que asigno la persona  -->
+                    <p:outputPanel id="OpcionActividadesAsignadas">                                                
+                        <p:panel rendered="#{MBActivRecor.estadoPanelActividAsign}" style="border: none;">
+                            <br/>
+                            <div align="left">
+                                <table cellspacing="3" cellpadding="3">
+                                    <tr>
+                                        <td colspan="20">
+                                            <b><p:outputLabel value="» Actividades asignadas" style="font-size: 16px;font-family: Arial;" /></b>
+                                        </td>
+                                        <td >
+                                            <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                                        </td>
+                                        <td >
+
+                                            <table border="0" >
+                                                <tr>
+
+                                                    <td style="background: #F6B7B7 !important;" >
+                                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F6B7B7 !important;"/>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel  value="Atrasado" style="font-size: 12px;font-family: Arial;"/>
+                                                    </td>
+                                                    <td style="background: #F9AE6C !important;" >
+                                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F9AE6C !important;"/>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel  value="Por culminar " style="font-size: 12px;font-family: Arial;"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td colspan="20">
+                                        <b><p:outputLabel value="» Internas (empleados)" style="font-size:13px;font-family: Arial;" /></b>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="10">
+                                        <p:separator />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p:dataTable var="ActividAsigns" value="#{MBActivRecor.listActiviAsig}"
+                                                     id="ActividadesAsignadas" style="font-family: Arial;font-size: 12px;width: auto;" 
+                                                     widgetVar="ActividadesAsignadas"
+                                                     scrollHeight="50" emptyMessage="No se encontraron actividades"
+                                                     rowStyleClass="#{ActividAsigns.estadoTiempoTanscurrAcc eq 'Atrasado' and ActividAsigns.estadoAccion eq 'Pendiente por realizar'   ? 'FaltaInforma':
+                                                                      ActividAsigns.estadoTiempoPorCulminarAct eq 'Si' ? 'highlight': null}" >
+
+                                            <c:choose>
+                                                <c:when test="#{ActividAsigns.estadoAccion eq 'Pendiente por realizar'}">
+                                                    <center><p:column headerText="Realizado"  selectionMode="multiple" style="font-family:Arial;font-size: 12px;width: 18px;" >                                                                       
+                                                        </p:column> </center>
+                                                </c:when>
+                                            </c:choose>
+
+
+                                            <p:column headerText="Nombre" style="font-family:Arial;font-size: 12px;width: 150px;" >
+                                                <h:outputText value="#{ActividAsigns.nombreAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Descripción" style="font-family:Arial;font-size: 12px;width: 140px;"  >
+                                                <h:outputText value="#{ActividAsigns.descripcionAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Maxima fecha de ejecución" style="font-family:Arial;font-size: 12px;width: 130px;"  >
+                                                <h:outputText value="#{ActividAsigns.fecha_Max_ejecuc}" />                                                                        
+                                            </p:column>                                                                    
+                                            <p:column headerText="Tiempo restante" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsigns.maximoTiempoAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de solución" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsigns.fecha_solucionActivORecor}" />                                                                        
+                                            </p:column>       
+                                            <p:column headerText="Empleado asignado" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsigns.personaAsignarInternOExt}" />
+                                            </p:column>
+                                            <p:column headerText="Estado" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsigns.estadoAccion}" />
+                                            </p:column>
+
+                                        </p:dataTable>                                                                
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td colspan="20">
+                                        <b><p:outputLabel value="» Externas" style="font-size:13px;font-family: Arial;" /></b>
+                                    </td>
+                                </tr>                                                           
+                                <tr>
+                                    <td colspan="10">
+                                        <p:separator />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p:dataTable var="ActividAsignsExter" value="#{MBActivRecor.listActiviAsigExter}"
+                                                     id="ActividadesAsignadasExter" style="font-family: Arial;font-size: 12px;width: auto;" 
+                                                     rowKey="#{ActividAsignsExter.codAccion}" selection="#{MBActivRecor.listaActividadesExterRealiz}"  widgetVar="ActividadesAsignadasExternas"
+                                                     scrollHeight="50" emptyMessage="No se encontraron actividades"
+                                                     rowStyleClass="#{ActividAsignsExter.estadoTiempoTanscurrAcc eq 'Atrasado' and ActividAsignsExter.estadoAccion eq 'Pendiente por realizar'   ? 'FaltaInforma':
+                                                                      ActividAsignsExter.estadoTiempoPorCulminarAct eq 'Si' ? 'highlight': null}" >
+
+
+                                            <center><p:column headerText="Realizado"  selectionMode="multiple" style="font-family:Arial;font-size: 12px;width: 50px;" >                                                                       
+                                                </p:column> </center>
+
+
+                                            <p:column headerText="Nombre" style="font-family:Arial;font-size: 12px;width: 150px;" >
+                                                <h:outputText value="#{ActividAsignsExter.nombreAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Descripción" style="font-family:Arial;font-size: 12px;width: 140px;"  >
+                                                <h:outputText value="#{ActividAsignsExter.descripcionAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Tipo de externo:" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsignsExter.tipoPersona}" />
+                                            </p:column>
+                                            <p:column headerText="Maxima fecha de ejecución" style="font-family:Arial;font-size: 12px;width: 130px;"  >
+                                                <h:outputText value="#{ActividAsignsExter.fecha_Max_ejecuc}" />                                                                        
+                                            </p:column>                                                                    
+                                            <p:column headerText="Tiempo restante" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsignsExter.maximoTiempoAccion}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de solución" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsignsExter.fecha_solucionActivORecor}" />                                                                        
+                                            </p:column>       
+                                            <p:column headerText="Asignado a:" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsignsExter.personaAsignarInternOExt}" />
+                                            </p:column>
+                                            <p:column headerText="Estado" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{ActividAsignsExter.estadoAccion}" />
+                                            </p:column>
+
+                                        </p:dataTable>    
+                                        <br/>   
+                                        <center>
+                                            <p:commandButton  style="font-family: Arial;font-size: 13px;"                                      
+                                                              icon="ui-icon-check" value="Completar actividad(es) externa(s)" action="#{MBActivRecor.completarActiviAsigExternas()}"
+                                                              update=":contenedorGeneral:Contenedor:growl_General,OpcionActividadesAsignadas"  />
+                                        </center>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                        </p:panel>    
+                    </p:outputPanel>
+
+                    <!-- Panel para ver los recordatorios que asigno la persona  -->
+                    <p:outputPanel id="OpcionRecordatAsignadas">
+                        <p:panel rendered="#{MBActivRecor.estadoPanelRecordatAsign}" style="border: none;">
+                            <br/>
+                            <div align="left">
+                                <table cellspacing="3" cellpadding="3">
+                                    <tr>
+                                        <td colspan="20">
+                                            <b><p:outputLabel value="» Recordatorios asignados" style="font-size: 16px;font-family: Arial;" /></b>
+                                        </td>
+                                        <td >
+                                            <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                                        </td>
+                                        <td >
+
+                                            <table border="0" >
+                                                <tr>
+
+                                                    <td style="background: #F6B7B7 !important;" >
+                                                        <p:outputLabel  value="----" style="font-size: 12px;font-family: Arial;color: #F6B7B7 !important;"/>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel  value="Atrasado" style="font-size: 12px;font-family: Arial;"/>
+                                                    </td>
+                                                    <td style="background: #F9AE6C !important;" >
+                                                        <p:outputLabel  value="----" style="font-size: 12px;font-family: Arial;color: #F9AE6C !important;"/>
+                                                    </td>
+                                                    <td>
+                                                        <p:outputLabel  value="Por culminar " style="font-size: 12px;font-family: Arial;"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td colspan="20">
+                                        <b><p:outputLabel value="» Internas (empleados)" style="font-size:13px;font-family: Arial;" /></b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10">
+                                        <p:separator />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p:dataTable var="RecordatAsigns" value="#{MBActivRecor.listRecordatAsig}"
+                                                     id="RecordatorAsignados" style="font-family: Arial;font-size: 12px;width: auto;" 
+                                                     widgetVar="RecordatorAsignados"
+                                                     scrollHeight="50" emptyMessage="No se encontraron recordatorios" 
+                                                     rowStyleClass="#{RecordatAsigns.estadoTiempoTanscurrRecord eq 'Atrasado' and RecordatAsigns.estadoRecord eq 'Pendiente por realizar'   ? 'FaltaInforma':
+                                                                      RecordatAsigns.estadoTiempoPorCulminarRecor eq 'Si' ? 'highlight': null}">
+
+
+                                            <p:column headerText="Nombre" style="font-family:Arial;font-size: 12px;width: 150px;" >
+                                                <h:outputText value="#{RecordatAsigns.nombreRecorda}" />
+                                            </p:column>
+                                            <p:column headerText="Descripción" style="font-family:Arial;font-size: 12px;width: 140px;"  >
+                                                <h:outputText value="#{RecordatAsigns.descripRecordat}" />
+                                            </p:column>
+                                            <p:column headerText="Maximo fecha de ejecución" style="font-family:Arial;font-size: 12px;width: 130px;"  >
+                                                <h:outputText value="#{RecordatAsigns.fecha_Max_ejecuc}" />
+                                            </p:column>
+                                            <p:column headerText="Tiempo restante" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{RecordatAsigns.maximoReqRecordat}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de solución" style="font-family:Arial;font-size: 12px;width: 130px;"  >
+                                                <h:outputText value="#{RecordatAsigns.fecha_solucionActivORecor}" />                                                                        
+                                            </p:column>
+                                            <p:column headerText="Empleado asignado" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{RecordatAsigns.personaAsignarInternOExt}" />
+                                            </p:column>
+                                            <p:column headerText="Estado" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{RecordatAsigns.estadoRecord}" />
+                                            </p:column>
+
+                                        </p:dataTable>                                                             
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td colspan="20">
+                                        <b><p:outputLabel value="» Externas" style="font-size:13px;font-family: Arial;" /></b>
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="10">
+                                        <p:separator />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p:dataTable var="RecordatAsignsExter" value="#{MBActivRecor.listRecordatAsigExter}"
+                                                     id="RecordatorAsignadosExter" style="font-family: Arial;font-size: 12px;width: auto;" 
+                                                     rowKey="#{RecordatAsignsExter.codRecordat}" selection="#{MBActivRecor.listaRecordarAsigExterRealiz}"  widgetVar="RecordatorAsignadosExtern"
+                                                     scrollHeight="50" emptyMessage="No se encontraron recordatorios" 
+                                                     rowStyleClass="#{RecordatAsignsExter.estadoTiempoTanscurrRecord eq 'Atrasado' and RecordatAsignsExter.estadoRecord eq 'Pendiente por realizar'   ? 'FaltaInforma':
+                                                                      RecordatAsignsExter.estadoTiempoPorCulminarRecor eq 'Si' ? 'highlight': null}">
+
+                                            <center><p:column headerText="Realizado"  selectionMode="multiple" style="font-family:Arial;font-size: 12px;width: 50px;" >                                                                       
+                                                </p:column> </center>
+
+                                            <p:column headerText="Nombre" style="font-family:Arial;font-size: 12px;width: 150px;" >
+                                                <h:outputText value="#{RecordatAsignsExter.nombreRecorda}" />
+                                            </p:column>
+                                            <p:column headerText="Descripción" style="font-family:Arial;font-size: 12px;width: 140px;"  >
+                                                <h:outputText value="#{RecordatAsignsExter.descripRecordat}" />
+                                            </p:column>
+                                            <p:column headerText="Tipo de externo:" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{RecordatAsignsExter.tipoPersona}" />
+                                            </p:column>
+                                            <p:column headerText="Maximo fecha de ejecución" style="font-family:Arial;font-size: 12px;width: 130px;"  >
+                                                <h:outputText value="#{RecordatAsignsExter.fecha_Max_ejecuc}" />
+                                            </p:column>
+                                            <p:column headerText="Tiempo restante" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{RecordatAsignsExter.maximoReqRecordat}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de solución" style="font-family:Arial;font-size: 12px;width: 130px;"  >
+                                                <h:outputText value="#{RecordatAsignsExter.fecha_solucionActivORecor}" />                                                                        
+                                            </p:column>
+                                            <p:column headerText="Asignado a" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{RecordatAsignsExter.personaAsignarInternOExt}" />
+                                            </p:column>
+                                            <p:column headerText="Estado" style="font-family:Arial;font-size: 12px;width: 120px;"  >
+                                                <h:outputText value="#{RecordatAsignsExter.estadoRecord}" />
+                                            </p:column>
+
+                                        </p:dataTable>      
+                                        <br/>
+                                        <center>
+                                            <p:commandButton  style="font-family: Arial;font-size: 13px;"                                      
+                                                              icon="ui-icon-check" value="Completar recordatorio(s) externo(s)" action="#{MBActivRecor.completarRecordatAsigExternos()}"
+                                                              update=":contenedorGeneral:Contenedor:growl_General,OpcionRecordatAsignadas"  />
+                                        </center>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                        </p:panel> 
+                    </p:outputPanel>
+
+
+                    <!--DIALOGS DE INFORMACION DE LAS ACTIVIDADES QUE TIENE QUE REALIZAR Y/O ASIGNAR-->
+                    <p:outputPanel style="font-family: Arial;font-size: 12px;" id="DialogActividadRealizada">
+                        <p:dialog header="#{MBActivRecor.estadoTituloDialogActivRecordat}" widgetVar="DlgActivRealiada" modal="false" height="auto" width="600" showEffect="fade" hideEffect="fade">
+                            <p:outputPanel style="font-family: Arial;font-size: 12px;" id="TablaActiivORecorda">
+                                <br/>
+                                <center>
+                                    <table cellspacing="3" cellpadding="3" border="0">
+                                        <tr>
+                                            <td> <b><h:outputLabel styleClass="Texto" style="color: red;" value="Campos obligatorios (*)" /></b></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="10"><p:separator style="font-family:Arial;font-size: 12px;" /></td>
+                                        </tr>
+                                        <c:choose>
+                                            <c:when test="#{MBActivRecor.estadoTituloDialogActivRecordat == 'Crear y asignar actividades' || MBActivRecor.estadoTituloDialogActivRecordat == 'Crear y asignar recordatorios' }">
+                                                <c:choose>
+                                                    <c:when test="#{MBActivRecor.estadoTituloDialogActivRecordat == 'Crear y asignar actividades'}">
+                                                        <tr>
+                                                            <td style="width: 170px;"><b><p:outputLabel value="Nombre de acción:* "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                            <td> 
+                                                                <p:selectOneMenu id="CmbNombreActividad"  style="width:200px;font-size: 12px;" value="#{MBActivRecor.nombreActivORecor}" >
+                                                                    <f:selectItem itemLabel="--Seleccione--" itemValue=""  />
+                                                                    <f:selectItems id="SelItemActivid"  value="#{MBActivRecor.cargaActividadesCombo}" />
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td>
+                                                                <p:commandButton id="btnCrearActividad" title="Crear nueva actividad" style="font-size: 13px;font-family: Arial;" update="DialogCrearActividadesORecordatorr"  icon="ui-icon-plusthick"  action="#{MBActivRecor.abrirDialogCreaActividORecord(1)}" />
+                                                                <p:tooltip id="TipCrearActividad" for="btnCrearActividad" showEffect="clip" style="font-size: 12px;font-family: Arial;" />
+                                                            </td>
+                                                        </tr>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <tr>
+                                                            <td style="width: 170px;"><b><p:outputLabel value="Nombre de recordatorio:* "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                            <td> 
+                                                                <p:selectOneMenu id="CmbNombreRecordato"  style="width:200px;font-size: 12px;" value="#{MBActivRecor.nombreActivORecor}" >
+                                                                    <f:selectItem itemLabel="--Seleccione--" itemValue=""  />
+                                                                    <f:selectItems id="SelItemRecordat"  value="#{MBActivRecor.cargaRecordatoriosCombo}" />
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td >
+                                                                <p:commandButton id="btnCrearRecordator" title="Crear nuevo recordatorio" style="font-size: 13px;font-family: Arial;" update="DialogCrearActividadesORecordatorr" icon="ui-icon-plusthick"   action="#{MBActivRecor.abrirDialogCreaActividORecord(2)}" />
+                                                                <p:tooltip id="TipCrearRecordat" for="btnCrearRecordator" showEffect="clip" style="font-size: 12px;font-family: Arial;"/>
+                                                            </td>
+                                                        </tr>
+                                                    </c:otherwise>
+                                                </c:choose>
+
+                                                <tr>
+                                                    <td > <b><p:outputLabel value="Pioridad:* "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                    <td colspan="2" style="width:200px;"> <p:selectOneMenu id="CmbNombrePioridad"  style="width:200px;font-size: 12px;" value="#{MBActivRecor.pioridadActivORecor}" >
+                                                            <f:selectItem itemLabel="--Seleccione--" itemValue=""  />
+                                                            <f:selectItem itemLabel="Baja" itemValue="Baja"  />
+                                                            <f:selectItem itemLabel="Media" itemValue="Media"  />
+                                                            <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                </tr>            
+                                            </c:when>
+                                            <c:otherwise>
+                                                <tr>
+                                                    <td><b><p:outputLabel value="N° de actividad: "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                    <td><p:outputLabel value="#{MBActivRecor.codigoActivORecor}"  style="font-family: Arial;font-size: 12px;" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b><p:outputLabel value="Nombre: "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                    <td> <p:outputLabel value="#{MBActivRecor.nombreActivORecor}"  style="font-family: Arial;font-size: 12px;width: 200px;" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td  ><b> <p:outputLabel value="Descripción: "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                    <td style="width: 250px;"><p:outputLabel value="#{MBActivRecor.descripcionActivORecor}" style="font-family: Arial;font-size: 12px;" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td> <b><p:outputLabel value="Pioridad: "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                    <td><p:outputLabel value="#{MBActivRecor.pioridadActivORecor}" style="font-family: Arial;font-size: 12px;" /></td>
+                                                </tr>            
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </table>
+
+                                    <p:outputPanel id="CamposCompartidos">
+                                        <table cellspacing="3" cellpadding="3" border="0">
+                                            <c:choose>
+                                                <c:when test="#{MBActivRecor.estadoTituloDialogActivRecordat == 'Verificar y completar actividad'}">
+                                                    <tr>
+                                                        <td style="width: 145px;"> <b><p:outputLabel value="Actividad completada:* "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                        <td style="width: 340px;">
+                                                            <p:selectBooleanCheckbox id="chk_estadoValidarActividad" value="#{MBActivRecor.estadoActividadComplet}" >                                                                       
+                                                            </p:selectBooleanCheckbox>
+                                                        </td>
+                                                    </tr>
+                                                </c:when>                                                                
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="#{MBActivRecor.estadoTituloDialogActivRecordat == 'Crear y asignar actividades' || MBActivRecor.estadoTituloDialogActivRecordat == 'Crear y asignar recordatorios' }">
+                                                            <tr>
+                                                                <td style="width: 170px;"> <b><p:outputLabel value="Tipo de persona:* "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                                <td style="width: 250px;">
+                                                                    <p:selectOneMenu id="TipoPersona"  style="width:200px;font-size: 12px;" value="#{MBActivRecor.tipoPersona}" >
+                                                                        <f:selectItem itemLabel="--Seleccione--" itemValue="" noSelectionOption="true" />
+                                                                        <p:ajax update="CamposCompartidos" listener="#{MBActivRecor.selectTipoPersonaInterna()}"/>
+                                                                        <f:selectItem itemLabel="Externa" itemValue="Externa"  />
+                                                                        <f:selectItem itemLabel="Interna" itemValue="Interna"  />
+                                                                    </p:selectOneMenu>
+                                                                </td>
+                                                            </tr>                                                             
+                                                            <c:choose>
+                                                                <c:when test="#{MBActivRecor.tipoPersona == 'Externa'}">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p:outputPanel >
+                                                                                <b><p:outputLabel value="Tipo de externo:* "  style="font-family: Arial;font-size: 12px;"  rendered="#{MBActivRecor.tipoPersona == 'Externa'}"/></b>
+                                                                            </p:outputPanel></td>
+
+                                                                        <td>
+                                                                            <p:outputPanel autoUpdate="true">
+                                                                                <p:selectOneMenu id="CmbTipoPersonaExterno"  style="width:200px;font-size: 12px;" value="#{MBActivRecor.tipoPersonaExterno}" rendered="#{MBActivRecor.tipoPersona == 'Externa'}" >
+                                                                                    <f:selectItem itemLabel="--Seleccione--" itemValue=""  />
+                                                                                    <p:ajax update="lblPerExt,PersonaExterno" listener="#{MBActivRecor.selectTipoPersonaExterna()}"/>
+                                                                                    <f:selectItem itemLabel="Cliente" itemValue="Cliente"  />
+                                                                                    <f:selectItem itemLabel="Entidad" itemValue="Entidad"  />
+                                                                                    <f:selectItem itemLabel="Avaluador" itemValue="Avaluador" />
+                                                                                </p:selectOneMenu>
+                                                                            </p:outputPanel>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <c:choose>
+                                                                        <c:when test="#{MBActivRecor.tipoPersonaExterno != '' || MBActivRecor.tipoPersonaExterno != null  }">
+
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p:outputPanel autoUpdate="true">
+                                                                                        <b><p:outputLabel id="lblPerExt" value="#{MBActivRecor.tipoPersonaExterno}:* "  rendered="#{MBActivRecor.tipoPersona == 'Externa'}" style="font-family: Arial;font-size: 12px;"  /></b>
+                                                                                    </p:outputPanel>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <p:outputPanel autoUpdate="true">
+                                                                                        <p:selectOneMenu id="PersonaExterno"  style="width:200px;font-size: 12px;" value="#{MBActivRecor.personaExterno}"  rendered="#{MBActivRecor.tipoPersona == 'Externa'}">
+                                                                                            <f:selectItem itemLabel="--Seleccione--" itemValue="" noSelectionOption="true" /> 
+                                                                                            <f:selectItems id="SelItemPersonaEctena"  value="#{MBActivRecor.cargaPersonaExterna}" />
+                                                                                        </p:selectOneMenu>
+                                                                                    </p:outputPanel>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </c:when>                                                                             
+
+                                                                    </c:choose>
+
+
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:choose>
+                                                                        <c:when test="#{MBActivRecor.tipoPersona == 'Interna'}">
+                                                                            <tr>
+
+                                                                                <td>   
+                                                                                    <p:outputPanel autoUpdate="true">
+                                                                                        <b> <p:outputLabel value="Empleado:* "  style="font-family: Arial;font-size: 12px;" rendered="#{MBActivRecor.tipoPersona == 'Interna'}" /></b>
+                                                                                    </p:outputPanel>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <p:outputPanel autoUpdate="true">
+                                                                                        <p:selectOneMenu id="PersonaInterno"  style="width:200px;font-size: 12px;" rendered="#{MBActivRecor.tipoPersona == 'Interna'}" value="#{MBActivRecor.personaInterno}" >
+                                                                                            <f:selectItem itemLabel="--Seleccione--" itemValue="" noSelectionOption="true" />      
+                                                                                            <f:selectItems id="SelItemPersonaInterna"  value="#{MBActivRecor.cargaPersonaInterna}" />
+                                                                                        </p:selectOneMenu>
+                                                                                    </p:outputPanel>
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        </c:when>
+
+                                                                    </c:choose>
+
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:when>
+                                                        <c:otherwise>
+
+                                                        </c:otherwise>
+                                                    </c:choose>
+
+
+
+
+                                                </c:otherwise>
+                                            </c:choose>
+
+
+
+                                            <tr>
+                                                <td> <b><p:outputLabel value="Descripción:* "  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                <td >
+                                                    <p:inputTextarea id="txt_observa_activ_comple" title="Ingrese una observación" placeholder="Ingrese una observación" value="#{MBActivRecor.observaActividadComplet}"
+                                                                     style="font-family: Arial;font-size: 12px;width: 210px;height: 50px;text-transform: uppercase;"/>
+                                                    <p:tooltip for="txt_observa_activ_comple" showEffect="clip" style="font-size: 12px;font-family: Arial;" />
+                                                </td>
+                                            </tr>
+
+                                            <c:choose>
+                                                <c:when  test="#{MBActivRecor.estadoTituloDialogActivRecordat == 'Crear y asignar actividades' || MBActivRecor.estadoTituloDialogActivRecordat == 'Crear y asignar recordatorios' }" >
+                                                    <tr>
+                                                        <td style="width: 170px;"> <b><p:outputLabel value="Fecha de ejecución maxima:*"  style="font-family: Arial;font-size: 12px;"  /></b></td>
+                                                        <td>
+                                                            <p:calendar  pattern="yyyy-MM-dd HH:mm" mask="true" locale="es" value="#{MBActivRecor.fechaActividadComplet}" placeholder="AAAA / MM / DD HH:mm"  
+                                                                         style="font-family:Arial;font-size: 12px;" mindate="#{MBActivRecor.fecha_actual}">                                                                        
+                                                            </p:calendar>
+                                                        </td>
+                                                    </tr>
+                                                </c:when>
+
+                                            </c:choose>
+
+
+                                        </table>
+                                    </p:outputPanel>
+
+                                    <br/>
+                                    <table>
+                                        <tr>
+                                            <c:choose>
+                                                <c:when test="#{MBActivRecor.estadoTituloDialogActivRecordat == 'Verificar y completar actividad'}">
+                                                    <td>
+                                                        <center><p:commandButton icon="ui-icon-disk" style="font-family: Arial;font-size: 13px;" value="Completar actividad" action="#{MBActivRecor.modifiActividadAsignadaCompleta()}"
+                                                                                 update=":contenedorGeneral:Contenedor:growl_General,OpcionMisActividades"/> </center>
+                                                    </td>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <td>
+                                                        <center><p:commandButton icon="ui-icon-disk" style="font-family: Arial;font-size: 13px;" value="Asignar actividad" action="#{MBActivRecor.insertActividadAsignada()}"
+                                                                                 update=":contenedorGeneral:Contenedor:growl_General"/> </center>
+                                                    </td>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </tr>
+                                    </table>
+                                    <br/>
+                                </center>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </p:outputPanel>
+
+                    <p:dialog widgetVar="DialogCrearActividadesORecordat" id="DialogCrearActividadesORecordatorr" width="1000" height="550" modal="false"  showEffect="fade" hideEffect="fade">
+                        <!-- Radios para mostrar ya sea el panel de actividades o recordatorios ok--> 
+                        <p:panel style="border: none;">
+                            <b><p:outputLabel value="Seleccione la opción a ver y/o modificar " style="font-family:Arial;font-size: 13px;"/></b>
+                            <br/>
+                            <br/>
+                            <p:selectOneRadio value="#{MBAdministacion.estadoRadioSeleccionActiviYRecord}" disabled="true">
+                                <f:selectItem itemLabel="Gestión de actividades" itemValue="GesAcccion" />
+                                <f:selectItem itemLabel="Gestión de recordatorios" itemValue="GesRecordat" />                    
+                                <p:ajax event="change" update="
+                                        InfAcciones,
+                                        InfRecordat" listener="#{MBAdministacion.visiblePanelActividRecordat()}"/>
+                            </p:selectOneRadio>
+                        </p:panel>
+                        <!-- Tablas de de tipo predios y maquinarias ok--> 
+
+                        <!-- Datatable que carga todos las actividades -->
+                        <p:outputPanel id="InfAcciones">
+
+                            <p:panel rendered="#{MBAdministacion.estadoRadioSeleccionActiviYRecord == 'GesAcccion'}" style="border: none;">
+                                <table>
+                                    <tr>                             
+                                        <td>
+                                            <p:commandButton value="Crear una nueva actividad" icon="ui-icon-arrowthick-1-e"  action="#{MBAdministacion.abrirInfodialogRegistro(10)}" update="GestionActividad" 
+                                                             style="font-family: Arial;font-size: 13px;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <p:dataTable var="TipActivid" value="#{MBAdministacion.listActividGest}" selectionMode="single" id="TipActividadTable" style="font-family: Arial;font-size: 12px;" rows="50"
+                                             rowKey="#{TipActivid.codActividad}" selection="#{MBAdministacion.admActidiGest}"  widgetVar="TipActividad" scrollable="true" scrollHeight="250"
+                                             emptyMessage="No se encontraron registros">
+
+                                    <p:column headerText="Numero" filterBy="#{TipActivid.codActividad}" style="font-family:Arial;font-size: 12px;">
+                                        <h:outputText value="#{TipActivid.codActividad}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre"  filterBy="#{TipActivid.nombreActividad}" style="font-family:Arial;font-size: 12px;">
+                                        <h:outputText value="#{TipActivid.nombreActividad}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                                <br/>
+                                <center>
+                                    <p:commandButton
+                                        update="GestionActividad,:contenedorGeneral:Contenedor:growl_General" 
+                                        icon="ui-icon-check" value="Seleccionar" action="#{MBAdministacion.abrirInfodialog(10)}" style="font-family: Arial;font-size: 13px;"/>
+                                </center>
+                                <br/>
+
+                            </p:panel>
+                        </p:outputPanel>
+
+                        <!-- Datatable que carga todas los recordatorios -->
+                        <p:outputPanel id="InfRecordat">
+                            <p:panel style="font-size: 12px;border: none;" rendered="#{MBAdministacion.estadoRadioSeleccionActiviYRecord == 'GesRecordat'}" >
+                                <table>
+                                    <tr>                             
+                                        <td>
+                                            <p:commandButton value="Crear un nuevo recordatorio" icon="ui-icon-arrowthick-1-e" action="#{MBAdministacion.abrirInfodialogRegistro(11)}" update="GestionRecordat"
+                                                             style="font-family: Arial;font-size: 13px;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <p:dataTable var="TipRecordator" value="#{MBAdministacion.listRecordaGest}"  id="TipRecordatorTable" style="font-family: Arial;font-size: 12px;" rowKey="#{TipRecordator.codRecordatorio}" 
+                                             selection="#{MBAdministacion.admRecordatGest}"  widgetVar="TipoRecordat" scrollable="true" scrollHeight="250" selectionMode="single"
+                                             emptyMessage="No se encontraron registros">
+
+                                    <p:column headerText="Numero"  filterBy="#{TipRecordator.codRecordatorio}" style="font-family:Arial;font-size: 12px;">
+                                        <h:outputText value="#{TipRecordator.codRecordatorio}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre"  filterBy="#{TipRecordator.nombreRecordatorio}" style="font-family:Arial;font-size: 12px;">
+                                        <h:outputText value="#{TipRecordator.nombreRecordatorio}" />
+                                    </p:column>                                      
+                                </p:dataTable>
+                                <br/>
+                                <center>
+                                    <p:commandButton update="GestionRecordat,
+                                                     :contenedorGeneral:Contenedor:growl_General" icon="ui-icon-check" value="Seleccionar"  action="#{MBAdministacion.abrirInfodialog(11)}"
+                                                     style="font-family: Arial;font-size: 13px;"/>
+                                </center>
+                                <br/>
+                            </p:panel>
+                        </p:outputPanel>
+
+                    </p:dialog>
+
+                    <!--DIALOGS DE Registro / modificacion -->
+
+                    <!-- Para Crear/modificar una actividad -->
+                    <p:outputPanel style="font-family: Arial;font-size: 12px;" id="GestionActividad">
+
+                        <p:dialog header="#{MBAdministacion.tituloDialogActividad}" widgetVar="DlgActividad"  height="auto" width="500" showEffect="fade" hideEffect="fade">
+                            <br/>
+                            <center>
+                                <table cellspacing="3" cellpadding="3">
+                                    <tr>
+                                        <td> <b><h:outputLabel styleClass="Texto" style="color: red;" value="Campos obligatorios (*)" /></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="10"><p:separator style="font-family:Arial;font-size: 12px;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td> <h:outputText value="Nombre: *"  style="font-family: Arial;font-size: 12px;" /></td>
+                                        <td><p:inputText id="txt_nombre" value="#{MBAdministacion.nombreActividad}" placeholder="Nombre"  style="font-family: Arial;font-size: 12px;"  onkeypress="return validarAlfaNumenicos(event)"/></td>
+                                    </tr>                          
+                                </table>
+                                <br/>                     
+                                <table>
+                                    <tr>
+                                        <c:choose>
+                                            <c:when test="#{MBAdministacion.tituloDialogActividad=='Registrar nueva actividad'}" >
+                                                <td> <p:commandButton  icon="ui-icon-disk" value="Guardar" action="#{MBActivRecor.regisActivid()}"   style="font-family: Arial;font-size: 13px;" 
+                                                                       update="InfAcciones,DialogActividadRealizada,                                                             
+                                                                       :contenedorGeneral:Contenedor:growl_General"/></td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td><p:commandButton icon="ui-icon-disk" action="#{MBActivRecor.modifiActivida()}" value="Modificar" 
+                                                                     update=":contenedorGeneral:Contenedor:growl_General,DialogActividadRealizada,
+                                                                     InfAcciones"  style="font-family: Arial;font-size: 13px;"/> </td>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tr>
+                                </table>  
+                            </center>
+
+                        </p:dialog>
+                    </p:outputPanel>
+
+                    <!--Crear/modificar un recordatorio-->
+                    <p:outputPanel style="font-family: Arial;font-size: 12px;" id="GestionRecordat">
+                        <p:dialog header="#{MBAdministacion.tituloDialogRecordat}" widgetVar="DlgRecordator"  height="auto" width="500" showEffect="fade" hideEffect="fade">
+                            <br/>
+                            <center>
+                                <table cellspacing="3" cellpadding="3">
+                                    <tr>
+                                        <td> <b><h:outputLabel styleClass="Texto" style="color: red;" value="Campos obligatorios (*)" /></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="10"><p:separator style="font-family:Arial;font-size: 12px;" /></td>
+                                    </tr>
+                                    <tr>                                                                
+                                        <td> <h:outputText value="Nombre: *"  style="font-family: Arial;font-size: 12px;" /></td>
+                                        <td><p:inputText id="txt_nombre_record" value="#{MBAdministacion.nombreRecordatori}" placeholder="Nombre"  style="font-family: Arial;font-size: 12px;"  onkeypress="return validarAlfaNumenicos(event)"/></td>
+                                    </tr>                          
+                                </table>
+                                <br/>                     
+                                <table>
+                                    <tr>
+                                        <c:choose>
+                                            <c:when test="#{MBAdministacion.tituloDialogRecordat == 'Registrar nuevo recordatorio'}" >
+                                                <td> <p:commandButton  icon="ui-icon-disk" value="Guardar" action="#{MBActivRecor.regisRecordator()}"   style="font-family: Arial;font-size: 13px;" 
+                                                                       update="InfRecordat,DialogActividadRealizada                                                        
+                                                                       :contenedorGeneral:Contenedor:growl_General"/></td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td><p:commandButton icon="ui-icon-disk" action="#{MBActivRecor.modifiRecordator()}" value="Modificar" 
+                                                                     update=":contenedorGeneral:Contenedor:growl_General,
+                                                                     InfRecordat,DialogActividadRealizada"  style="font-family: Arial;font-size: 13px;"/> </td>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tr>
+                                </table>  
+                            </center>
+
+                        </p:dialog>
+
+
+                    </p:outputPanel>
+                </p:tab>  
+            </p:tabView>
+        </h:form>
+    </h:body>
+</html>
+

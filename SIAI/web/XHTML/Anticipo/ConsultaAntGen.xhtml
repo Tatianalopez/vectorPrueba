@@ -1,0 +1,369 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"     
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:pt="http://java.sun.com/jsf/passthrough"    
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Consulta Anticipos</title>
+    </h:head> 
+    <h:body>
+        <h:form id="FRMAntiGest" style="font-family: Arial;font-size: 13px;">
+            <p:outputPanel id="PNLPenRad" style="font-family: Arial;font-size: 13px;">
+
+                <table cellspacing="4" cellpadding="4"  border="0" >
+
+                    <tr>
+                        <td ><big><big><b><p class="Title">#{beanDireccionar.tituloMenu} > Todos los Anticipos registrados</p></b></big></big></td>
+                        <td>
+                            <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                        </td>
+                        <td>
+                            <table border="0" style="float: left;">
+                                <tr>
+                                    <td style="background: #F4D9BF !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F4D9BF !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Pendiente" style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+                                    <td style="background: #dcf2dc !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #dcf2dc !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Aprobado " style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+                                    <td style="background: #dddddd !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #dddddd !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Devuelto " style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+                                    <td style="background: #F6B7B7 !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F6B7B7 !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Anulado " style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+                                    <td style="background: #f2d2f2 !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #f2d2f2 !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Trasladado " style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <table cellspacing="4" cellpadding="4"  border="0" style="width: 100%;font-size: 12px;" >
+                    <center>
+                        <tr>
+                            <td colspan="2" > <p:separator /></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <center>
+                                    <p:outputLabel value="Seleccione los filtros que considere necesarios para realizar la consulta" style="font-weight: bold;"/>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>                                                    
+                                <p:separator/>                                                    
+                            </td>
+                        </tr>
+                    </center>
+                </table>
+                <br/>
+                <center>
+                    <table style="font-size: 12px;" cellpadding="3" cellspacing="3">
+
+                        <tr>
+                            <td><p:outputLabel value="Fechas de consignación:" for="OpcFecRad" style="font-weight: bold;"/>
+                                <p:selectBooleanCheckbox value="#{MBAnticipo.opcFechaConsig}" id="OpcFecRad" >
+                                    <p:ajax update="PNLFecRad" event="change" />
+                                </p:selectBooleanCheckbox>
+                            </td>
+                            <td colspan="2">
+                                <p:outputPanel id="PNLFecRad" >
+                                    <c:choose>
+                                        <c:when test="#{MBAnticipo.opcFechaConsig==true}" >
+                                            <table style="font-family: Arial;font-size: 12px;">
+                                                <tr>
+                                                    <td><p:outputLabel for="FecRegIni" value="Desde:" style="padding-left:38px; font-weight: bold;" /></td>
+                                                    <td><p:calendar id="FecRegIni" value="#{MBAnticipo.fechaConsigIni}" pt:placeholder="AAAA/MM/DD" locale="es" mindate="2010-01-01"
+                                                                    maxdate="#{MBSeguimiento.fecha_actual}" pattern="yyyy-MM-dd" mask="true"/></td>
+                                                    <td><p:outputLabel for="FecRegFin" value="Hasta:" style="font-weight: bold;"/></td>
+                                                    <td><p:calendar id="FecRegFin" value="#{MBAnticipo.fechaConsigFin}" pattern="yyyy-MM-dd" mask="true" maxdate="#{MBSeguimiento.fecha_actual}" 
+                                                                    pt:placeholder="AAAA/MM/DD" locale="es" mindate="2010-01-01" /></td>
+                                                </tr>
+                                            </table>
+                                        </c:when>
+                                    </c:choose>
+                                </p:outputPanel>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><p:outputLabel value="Estado del Anticipo" style="font-weight: bold;"/></td>
+                            <td><p:selectCheckboxMenu  id="CmbEst" filter="true" style="width: 135px;font-size: 12px;"  
+                                                       value="#{MBAnticipo.listEstado}" label="Seleccione.." filterFunction="true" filterMatchMode="contains"
+                                                       >
+                                    <f:selectItem  itemLabel="PENDIENTE" itemValue="P"/>
+                                    <f:selectItem  itemLabel="DEVUELTO" itemValue="D"/> 
+                                    <f:selectItem  itemLabel="APROBADO" itemValue="A"/>  
+                                    <f:selectItem  itemLabel="ANULADO" itemValue="Anu"/>       
+                                    <f:selectItem  itemLabel="TRASLADADO" itemValue="T"/>    
+                                    <p:ajax listener="#{MBAnticipo.onCargarEstadosSelecc('')}"  update="ListaEstadosSel"/>
+                                </p:selectCheckboxMenu> </td>
+                            <td>
+                                <center>
+                                    <p:outputPanel id="ListaEstadosSel" autoUpdate="true" style="width: 250px;padding-left:1px;margin-top:10px;font-size: 11px;font-family: Arial;">
+                                        <p:dataList value="#{MBAnticipo.selectListEstado}" var="EstadosSel" emptyMessage="Sin selección">
+                                            #{EstadosSel.label}
+                                        </p:dataList>
+                                    </p:outputPanel>
+                                </center>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p:outputLabel value="Número del avalúo" style="font-weight: bold;"/></td>
+                            <td><p:inputText value="#{MBAnticipo.cajaRepar1}" style="width: 70px" onkeypress="return validarSoloNumeros(event)"/></td>
+                        </tr>
+                        <tr><td><p:spacer height="10"/></td></tr>
+
+                        <tr>
+                            <td colspan="4"><center>
+                                    <p:commandButton value="Consultar" icon="ui-icon-arrowthick-1-e"  actionListener ="#{MBAnticipo.validaInfoConsAnti()}"    
+                                                     update=":contenedorGeneral:Contenedor:growl_General,PNLPenRad"  style="font-size: 13px;" ajax="true" >
+                                        <f:ajax  id="ajax"  execute="@this"/>
+                                    </p:commandButton>
+                                    <p:spacer  width="15"/>
+                                    <p:commandButton value="Monto" icon="ui-icon-pin-s" iconPos="left" type="button" style="width:70px; height: 25px; font-family: Arial; font-size: 12px " onclick="PF('popMontos').show();" />
+                                </center>
+                            </td>
+                        </tr>
+
+                    </table>
+                </center>
+                <br/>
+                <br/>
+                <table style="width: 100%" cellspacing="5" cellpadding="5">
+                    <tr>
+                        <td colspan="3">                                                    
+                            <p:separator style="width: 100%"/>                                                    
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td>
+                            <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBAnticipo.listConslGen)}" style="font-family: Arial;font-size: 13px;" /></b>
+                        </td>
+                        <td style="float: right">
+                            <p:commandButton value="Devolver anticipo" icon="ui-icon-arrowthick-1-e"  actionListener ="#{MBAnticipo.cambarEstadoTablas('DevPop')}"    
+                                             update=":contenedorGeneral:Contenedor:growl_General"  style="font-size: 13px;" ajax="true" />
+                            <p:spacer width="10"/>
+                            <p:commandButton value="Aprobar anticipo" icon="ui-icon-arrowthick-1-e"  actionListener ="#{MBAnticipo.cambarEstadoTablas('AprobacionMasiva')}"    action ="#{beanDireccionar.url_Menu_Anticipo('ConsulAnt')}"
+                                             update=":contenedorGeneral:Contenedor:growl_General,PNLPenRad"  style="font-size: 13px;" ajax="true" >
+                                <f:ajax  id="ajax"  execute="@this"/>
+                            </p:commandButton>
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="ui-icon-folder-open"  title="Ver información solicitante" style="width: 30px; height: 22px "   actionListener ="#{MBAnticipo.cambarEstadoTablas('info')}" 
+                                             update=":contenedorGeneral:Contenedor:growl_General,PNLPenRad" >
+                            </p:commandButton>
+                            <p:spacer width="10"/>
+                            <p:commandButton icon="ui-icon-document" title="Ver observaciónes de anticipos" style="width: 30px; height: 22px "   actionListener ="#{MBAnticipo.cambarEstadoTablas('Observacion')}" 
+                                             update=":contenedorGeneral:Contenedor:growl_General,PNLPenRad" >
+                            </p:commandButton>
+                            <p:spacer width="8"/>
+                            <p:commandButton  ajax="false"  icon="ui-icon-arrowthick-1-s"  action="#{MBAnticipo.cambarEstadoTablas('descargar')}"   
+                                              title="Descargar archivo"  style="width: 16px;height: 14px;" /> 
+
+                        </td>
+                        <td> <p:spacer width="15"/></td>
+                    </tr>
+                </table>
+                <br/>
+                <table style="width: 100%">
+                    <tr>
+                        <td><center>
+                                <p:dataTable id="TablaAproAgil" var="Anti" value="#{MBAnticipo.listConslGen}"  selection="#{MBAnticipo.selectAprobados}" 
+                                             rowKey="#{Anti.codAnticipo}" scrollable="true" scrollWidth="1020" scrollHeight="420"  emptyMessage="No se han encontrado registros"
+                                             rowStyleClass="#{
+                                             Anti.estadoAnticipo eq 'Pendiente' ? 'highlight':
+                                                 Anti.estadoAnticipo eq 'Aprobado' ? 'EstadoRadicadoOK':   
+                                                 Anti.estadoAnticipo eq 'Devuelto' ? 'EstadoAnulado':
+                                                 Anti.estadoAnticipo eq 'Trasladado' ? 'EstadoDevuelto':     
+                                                 Anti.estadoAnticipo eq 'Anulado' ? 'FaltaInforma':     
+                                                 null}"
+                                             >
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                    <p:column headerText=" Avaluo" style="font-family: Arial;font-size: 12px ;width: 50px;" >
+                                        <h:outputText value="#{Anti.codAvaluo}"/>
+                                    </p:column>
+                                    <p:column headerText="Varios avaluos"  style="font-family: Arial;font-size: 12px ;width: 50px;" >
+                                        <h:outputText value="#{Anti.multipleAva}"/>
+                                    </p:column>
+                                    <p:column headerText="Valor Consignación" style="font-family: Arial;font-size: 12px ;width: 120px;" >
+                                        <h:outputText value="#{Anti.valorAnticipo}" />
+                                    </p:column>
+                                    <p:column headerText="Valor consignación Avalúo"  style="font-family: Arial;font-size: 12px ;width: 120px;" >
+                                        <h:outputText value="#{Anti.valorParcial}" />
+                                    </p:column>
+                                    <p:column headerText="Valor cliente" style="font-family: Arial;font-size: 12px ;width: 120px;" >
+                                        <h:outputText value="#{Anti.valorCorrespondiente}" />
+                                    </p:column>
+                                    <p:column headerText="Cliente" style="font-family: Arial;font-size: 12px;width: 410px;">
+                                        <h:outputText value="#{Anti.entidad}  #{Anti.nombreCliente} "/>
+                                    </p:column>
+                                    <p:column headerText="Cuenta" style="font-family: Arial;font-size: 12px ;width: 243px;">
+                                        <h:outputText value="#{Anti.bancoAnticipo} #{Anti.cuentaBancaria}"/>
+                                    </p:column>
+                                    <p:column headerText="Consignacion"  style="font-family: Arial;font-size: 12px ;width: 100px;">
+                                        <h:outputText value="#{Anti.fechaAnticipoConsignacion}"/>
+                                    </p:column>
+                                    <p:column headerText="Estado" style="font-family: Arial;font-size: 12px ;width: 90px;">
+                                        <h:outputText value="#{Anti.estadoAnticipo}"/>
+                                    </p:column>
+                                    <p:column headerText="Observacion" style="font-family: Arial;font-size: 12px;width: 320px;">
+                                        <h:outputText value="#{Anti.observacionAnticipo}"/>
+                                    </p:column>
+                                </p:dataTable>
+
+                            </center>
+                            <p:dialog header="Información del cliente" widgetVar="infoCliente"  style=" font-size: 15px">
+                                <table  cellspacing="5" cellpadding="5">
+                                    <ui:repeat  value="#{MBAnticipo.selectAprobados}" var="Anti"  varStatus="status"> 
+                                        <tr>
+                                            <tr>
+                                                <td><b><p:outputLabel value="Tipo de documento: " style="font-family: Arial;font-size: 12px;" styleClass="Texto"/></b></td>
+                                                <td><p:outputLabel value="#{Anti.tipoDoc}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto"/></td>
+                                            </tr>
+                                            <td><b><p:outputLabel   value="Numero de documento: " style="font-family: Arial;font-size: 12px;" /></b></td>
+                                            <td><p:outputLabel   value="#{Anti.documentoCliente}" style="font-family: Arial;font-size: 12px;" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b><p:outputLabel   value="Nombre: " style="font-family: Arial;font-size: 12px;" /></b></td>
+                                            <td><p:outputLabel    value="#{Anti.nombreCliente}"  style="font-family: Arial;font-size: 12px;"  /></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b><p:outputLabel   value="Correo: " style="font-family: Arial;font-size: 12px;" /></b></td>
+                                            <td><p:outputLabel   value="#{Anti.correo}"  style="font-family: Arial;font-size: 12px;"  /></td>                                                                        
+                                        </tr>                                                                       
+                                        <tr>
+                                            <td><b><p:outputLabel value="Dirección: " style="font-family: Arial;font-size: 12px;" styleClass="Texto" /></b></td>
+                                            <td><p:outputLabel    value="#{Anti.direccion}"   style="font-family: Arial;font-size: 12px;"  styleClass="Texto" /></td>
+                                        </tr>           
+                                        <tr>
+                                            <td><b><p:outputLabel  value="Telefono: " style="font-family: Arial;font-size: 12px;" styleClass="Texto"/></b></td>
+                                            <td><p:outputLabel   value="#{Anti.telefono}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto"/></td>
+                                        </tr>
+                                    </ui:repeat>
+
+                                </table>
+                            </p:dialog>
+
+
+                            <p:dialog header="Observaciónes del anticipo" widgetVar="observ"  style=" font-size: 13px">
+                                <table title="Observaciones" style="font-size: 12px;font-family: Arial;width: 600px">
+                                    <c:choose>
+                                        <c:when test="#{MBAnticipo.listObservaciones.size()>0}">
+                                            <ui:repeat value="#{MBAnticipo.listObservaciones}" var="obAnt1">
+                                                <tr>
+                                                    <td><b><p:outputLabel   value="Observación: "/></b></td>
+                                                    <td><p:outputLabel value="#{obAnt1.observacionAnticipo}"/></td>   
+                                                    <td><b><p:outputLabel   value="Fecha: " /></b></td>
+                                                    <td><p:outputLabel   value="#{obAnt1.fechaObservacion}" /></td>
+                                                    <td><b><p:outputLabel   value="Realizada por:"/></b></td>
+                                                    <td><p:outputLabel   value="#{obAnt1.nombreEmpleado}"/></td>
+                                                </tr>
+
+                                                <tr> 
+                                                    <td colspan="6"><p:separator/></td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr><td>
+                                                    <center>
+                                                        <p:outputLabel value="No se han realizado observaciones" style="font-size: 15px;"/>
+                                                    </center>
+                                                </td></tr>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </table>
+                            </p:dialog>
+
+                            <p:dialog header="Devolución de anticipo" widgetVar="devAntiMasi"  showEffect="fade" hideEffect="explode"  style="font-family: Arial;font-size: 13px;">
+
+                                <p:outputPanel autoUpdate="true">
+                                    <table cellspacing="5" cellpadding="5" >
+                                        <tr><td>
+                                                <p:dataTable id="TabDev" var="Anti" value="#{MBAnticipo.selectAprobados}" style=" width: 800px" emptyMessage="No se han encontrado registros"  >
+                                                    <p:column headerText=" Avaluo" style="font-family: Arial;font-size: 12px ; width: 75px" >
+                                                        <h:outputText value="#{Anti.codAvaluo}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Valor Total"  style="font-family: Arial;font-size: 12px ;width: 110px" >
+                                                        <h:outputText value="#{Anti.valorAnticipo}" />
+                                                    </p:column>
+                                                    <p:column headerText="Cliente" style="font-family: Arial;font-size: 12px;">
+                                                        <h:outputText value="#{Anti.entidad}  #{Anti.nombreCliente} "/>
+                                                    </p:column>
+                                                    <p:column headerText="Cuenta"  style="font-family: Arial;font-size: 12px ;">
+                                                        <h:outputText value="#{Anti.bancoAnticipo} #{Anti.cuentaBancaria}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Consignación"   style="font-family: Arial;font-size: 12px ;">
+                                                        <h:outputText value="#{Anti.fechaAnticipoConsignacion}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </td> </tr>
+
+                                        <br/>
+                                        <tr><td>  <center>
+                                                    <p:outputLabel value="Ingrese el motivo por el cual desea devolver el anticipo:* "
+                                                                   style="font-size: 12px;font-family: Arial;"/></center></td></tr>
+                                        <tr><td><center>
+                                                    <p:inputTextarea style="font-size: 12px;font-family: Arial;width: 60%;height: 50px;" placeholder="Ingrese observación"
+                                                                     value="#{MBAnticipo.observacionDevMasi}" /></center></td></tr>
+                                        <tr><td>
+                                                <center>
+                                                    <p:commandButton value="Devolver anticipo" icon="ui-icon-arrowthick-1-e"  actionListener ="#{MBAnticipo.cambarEstadoTablas('DevolverMasivo')}"   
+                                                                     action ="#{beanDireccionar.url_Menu_Anticipo('ConsulAnt')}" update=":contenedorGeneral:Contenedor:growl_General,PNLPenRad"  style="font-size: 13px;" ajax="true" >
+                                                        <f:ajax  id="ajax"  execute="@this"/>
+                                                    </p:commandButton></center>
+                                            </td></tr>
+                                    </table>
+                                </p:outputPanel>
+
+                            </p:dialog>
+                            <p:dialog header="Monto total por estado de Anticipos"  style="font-family: Arial; font-size: 12px" widgetVar="popMontos" minHeight="100" resizable="false">
+                                <p:outputPanel  autoUpdate="true">
+                                    <p:dataTable var="Anti" value="#{MBAnticipo.listMontosPopUp}" style=" width: 400px" emptyMessage="No ha realizado la busqueda">
+                                        <p:column headerText="N°" style="font-family: Arial;font-size: 12px ;width:25px;" >
+                                            <h:outputText value="#{Anti.contador}"/>
+                                        </p:column>
+                                        <p:column headerText="Estado"  style="font-family: Arial;font-size: 12px ;" >
+                                            <h:outputText value="#{Anti.nombreCliente}" />
+                                        </p:column>
+                                        <p:column headerText="Total" style="font-family: Arial;font-size: 12px ;width:90px;" >
+                                            <h:outputText value="#{Anti.codAnticipo}">
+                                                <f:convertNumber locale="en_US"/>
+                                            </h:outputText>
+                                        </p:column>
+                                    </p:dataTable> 
+                                </p:outputPanel>
+                            </p:dialog>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+            </p:outputPanel>
+        </h:form>
+    </h:body>
+</html>

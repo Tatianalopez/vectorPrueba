@@ -1,0 +1,132 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>ReAsignacion de Avaluos en Seguimiento</title>
+        <style type="text/css">
+            .ui-datatable .ui-state-highlight { 
+                border: 2px inset  #e3a1a1 !important ;
+            }
+
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: 50px !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMAsigSegui">
+
+            <table cellspacing="4" cellpadding="4"  border="0" style="width: 100%;">
+                <tr>
+                    <td><big><big><b><p class="Title">#{beanDireccionar.tituloMenu} > Cambio de analistas</p></b></big></big></td>
+                </tr>
+                <tr>
+                    <td colspan="2" > <p:separator /></td>
+                </tr>
+                <tr>
+                    <td> 
+                        <p:outputLabel value="Seleccione un producto entidad para continuar" style="font-family: Arial;font-size: 12px;"/>
+                    </td> 
+                </tr>
+                <tr>
+                    <td>
+                        <table cellspacing="3" cellpadding="3">
+                            <tr>   
+                                <td colspan="1" >
+                                    <p:outputLabel for="CMBPE" value="Producto entidad:* " style="font-family: Arial;font-size: 12px;"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu  style="font-family: Arial;font-size: 12px; width: 200px;" value="#{MBSeguimiento.codProEnt}" id="CMBPE">
+                                        <p:ajax listener="#{MBSeguimiento.consultaReasignaAvaluo()}" update="PNLAsignadosSeg"/>
+                                        <f:selectItem id="PrEnt" itemValue="" itemLabel="--Seleccione--"/>
+                                        <f:selectItems id="SelItemTDoc"  value="#{MBAdministacion.proEntAll}" />
+                                    </p:selectOneMenu> 
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <p:outputPanel id="PNLAsignadosSeg" >
+                <br/>
+                <table style="width: 100%;">
+                    <c:choose><c:when test="#{MBSeguimiento.listSeguimientoAsignados.size()>0}" >
+                            <tr>
+                                <td>
+                                    <p:dataTable var="AsigRad"  value="#{MBSeguimiento.listSeguimientoAsignados}" scrollable="true" scrollWidth="85%" scrollHeight="250"
+                                                 widgetVar="AsignaSegui"    selectionMode="multiple" selection="#{MBSeguimiento.listSeguimSeleccAsignados}"  
+                                                 rowKey="#{AsigRad.codSeguimiento}"  emptyMessage="Resultados No Encontrados" 
+                                                 styleClass="FirstCol" frozenColumns="2" >
+                                        <p:column headerText="N* de avalúo"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                            <h:outputText value="#{AsigRad.codAvaluo}" />
+                                        </p:column> 
+                                        <p:column headerText="Cod Segui"  style="font-family:Arial;font-size: 12px;width: 150px;" rendered="#{MBTodero.estadoColumnaTabla}">
+                                            <h:outputText value="#{AsigRad.codSeguimiento}" />
+                                        </p:column>
+                                        <p:column headerText="Producto Entidad"  style="font-family:Arial;font-size: 12px;width: 270px;">
+                                            <h:outputText value="#{AsigRad.tipProducEnti}" />
+                                        </p:column>
+                                        <p:column headerText="Radicado por"  style="font-family:Arial;font-size: 12px;width: 320px;">
+                                            <h:outputText value="#{AsigRad.radicadoPor}" />
+                                        </p:column>
+                                        <p:column headerText="En seguimiento:" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                            <h:outputText value="#{AsigRad.asignado}" />
+                                        </p:column>
+                                        <p:column headerText="Fecha de radicado" style="font-family:Arial;font-size: 12px;width: 130px;">
+                                            <h:outputText value="#{AsigRad.fechaRadica}" />
+                                        </p:column>
+                                        <p:column headerText="Fecha de solicitud"  style="font-family:Arial;font-size: 12px;width: 120px;">
+                                            <h:outputText value="#{AsigRad.fechaSolicitud}" />
+                                        </p:column>
+                                        <p:column headerText="Estado" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{AsigRad.estadoAvaluo}" />
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr><td>     <center>
+                                        <p:commandButton id="BTN1"   value="Seleccionar"  style="font-family:Arial;font-size: 12px;" icon="ui-icon-check"  action="#{MBSeguimiento.seleccionListaReAsignacion()}"  update=":contenedorGeneral:Contenedor:growl_General,:contenedorGeneral:Contenedor:FRMAsigSegui:PNLReasignar"  />
+                                    </center></td></tr>
+
+                        </c:when></c:choose>
+
+
+                </table>
+
+            </p:outputPanel>
+
+
+            <br/><br/>
+
+            <!-- DIALOG DE INFORMACION DE LAS REASIGNACIONES QUE SE LE VAN A REALIZAR A OTRO ANALISTA DE INFORMACION EN EL PROCESO DE RADICACION Y SEGUIMIENTO-->
+            <p:dialog id="DLGAsigRadica" widgetVar="DlgReAsigSeguim" header="Asignacion de Avaluos" position="center" modal="false" width="500" height="450" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="PNLReasignar">
+                    <p:dataTable id="EmpAsignadosTable" widgetVar="EmpAsignadosSeg" var="EmpAsig" value="#{MBSeguimiento.listEmpAsignaciones}" selection="#{MBSeguimiento.seg}" selectionMode="single"  rowKey="#{EmpAsig.codEmp}"  emptyMessage="Resultados No Encontrados">
+
+
+                        <p:column headerText="Nombre de analista"  filterBy="#{EmpAsig.asignado}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                            <h:outputText value="#{EmpAsig.asignado}" />
+                        </p:column>
+                        <p:column headerText="Total hoy" filterBy="#{EmpAsig.hoyAsig}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                            <h:outputText value="#{EmpAsig.hoyAsig}" />
+                        </p:column>
+                        <p:column headerText="Total de asignados" filterBy="#{EmpAsig.totalAsig}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                            <h:outputText value="#{EmpAsig.totalAsig}" />
+                        </p:column>                       
+                    </p:dataTable>
+                    <br/>
+                    <center><p:commandButton id="ReAsig"  value="Realizar cambio" action="#{MBSeguimiento.generarReAsignacion()}" update=":contenedorGeneral:Contenedor:growl_General, PNLAsignadosSeg"  icon="ui-icon-arrowrefresh-1-e"/></center>
+                    <br/>
+                </p:outputPanel>    
+            </p:dialog>
+
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,159 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Pendientes por facturar</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMpENDfACT" >
+
+            <table style=" width: 165%">
+                <tr>
+                    <td><big><big><b><p class="Title" >Gestionar envios  |   </p></b></big></big></td>
+                    <td colspan="2">
+                        <p:commandButton  value="Marcar como enviados"   action="#{MBEnvio.OpcionesEnvio('confirmar')}"  ajax="true"  icon="ui-icon-check" iconPos="left"  
+                                          style="font-family:Arial;font-size: 13px;position: relative;"   update=":contenedorGeneral:Contenedor:growl_General"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton  value="Agregar observación"   action="#{MBEnvio.OpcionesEnvio('observacion')}"  ajax="true"  icon="ui-icon-plus" iconPos="left"  
+                                          style="font-family:Arial;font-size: 13px;position: relative;"   update=":contenedorGeneral:Contenedor:growl_General, PNLPendXFac, PendXFactTable"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"> <p:separator style=" width: 57%; float: left " /></td>
+                </tr>
+            </table>
+            <br/>
+            <p:outputPanel autoUpdate="true">
+                <table>
+                    <tr>
+                        <td colspan="2"> 
+                            <p:outputLabel value="Seleccione un registro de la tabla:" style="font-family: Arial;font-size: 13px;"/>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td colspan="2"><center>
+                                <p:outputPanel id="PNLPendXFac">
+                                    <p:dataTable id="PendXFactTable" var="Envi" style=" width: 1000px" value="#{MBEnvio.listPendientXEnvi}"  selection="#{MBEnvio.selectListPendientXEnvi}" 
+                                                 rowKey="#{Envi.codEnvi}" scrollable="true"  emptyMessage="No hay pendientes de envio" >
+                                        <p:column selectionMode="multiple" style="width:9px;text-align:center"/> 
+                                        <p:column headerText="Codigo de envio"  filterBy="#{Envi.codEnvi}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;">
+                                            <h:outputText value="#{Envi.codEnvi}" />
+                                        </p:column>
+                                        <p:column headerText="Tipo de envio"  filterBy="#{Envi.tipEnv}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;">
+                                            <h:outputText value="#{Envi.tipEnv}" />
+                                        </p:column>
+                                        <p:column headerText="N° asociado"  filterBy="#{Envi.asociado}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;" filterStyle="width: 60px;" >
+                                            <h:outputText value="#{Envi.asociado}" />
+                                        </p:column>
+                                        <p:column headerText="Estado"  filterBy="#{Envi.estado}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;">
+                                            <h:outputText value="#{Envi.estado}" />
+                                        </p:column>
+                                        <p:column headerText="Observación"  filterBy="#{Envi.observacion}"  filterMatchMode="contains" style="width:400px ;font-family: Arial;font-size: 12px;">
+                                            <h:outputText value="#{Envi.observacion}"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:outputPanel></center>
+                        </td>
+                    </tr>
+                </table>
+            </p:outputPanel>
+            <p:dialog  id="observEnvio" header="Agregar observación de envio" widgetVar="enviPop" width="350" resizable="false">
+                <br/>
+                <p:outputPanel autoUpdate="true">
+                    <table cellspacing="3"  style=" font-family:Arial;  font-size: 13px ">
+                        <tr>
+                            <td>
+                                <p:outputLabel value=">> Ingrese observaciones del envio"/>
+                            </td>
+                        </tr>
+                        <tr><td><p:spacer height="10"/></td></tr>
+                        <tr>
+                            <td><center><p:inputTextarea value="#{MBEnvio.observacion}" style=" width: 320px" placeholder="Ingrese sus observaciones aqui"/></center>
+                            </td>
+                        </tr>
+                        <tr><td><p:spacer height="9"/></td></tr>
+                        <tr>
+                            <td><center>  
+                                    <p:commandButton  value="Aceptar"   action="#{MBEnvio.OpcionesEnvio('InserObser')}"  ajax="true"  icon="ui-icon-check" iconPos="left"  
+                                                      style="font-family:Arial;font-size: 13px;position: relative;"   update=":contenedorGeneral:Contenedor:growl_General"/>
+                                </center> </td>
+                        </tr>
+                    </table>
+                    <br/>
+
+                    <center>  
+                        <table  style=" font-family:Arial;  font-size: 13px ">
+                            <c:choose>
+                                <c:when test="#{MBEnvio.listObservaciones.size()>0}">
+                                    <tr>
+                                        <td><b> <p:outputLabel value="Codigo Envio"></p:outputLabel></b></td>
+                                        <td><p:spacer width="20"/></td>
+                                        <td><b><p:outputLabel value="Observación"></p:outputLabel></b></td>
+                                        <td><p:spacer width="20"/></td>
+                                        <td><center><b><p:outputLabel value="Fecha"></p:outputLabel></b></center></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <ui:repeat  value="#{MBEnvio.listObservaciones}" var="En"  varStatus="status">
+                                                <tr>
+                                                    <td><center> <p:outputLabel value="#{En.codEnvi}" style="font-family: Arial;font-size: 12px"   /></center></td>
+                                                    <td></td>
+                                                    <td> <p:outputLabel value="#{En.estado}" style="font-family: Arial;font-size: 12px"   /></td>
+                                                    <td></td>
+                                                    <td><center> <p:outputLabel value="#{En.fecha}" style="font-family: Arial;font-size: 12px"   /></center></td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </td>
+                                    </tr>
+                                </c:when>
+                            </c:choose>
+                        </table>
+                        <br/>
+                    </center>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog   header="Confirmación de envios" widgetVar="confirPop" width="350" resizable="false">
+                <br/>
+                <p:outputPanel autoUpdate="true">
+                    <table cellspacing="3"  style=" font-family:Arial;  font-size: 13px ">
+                        <tr>
+                            <td><center>
+                                    <p:outputLabel value="¿Esta seguro de que desea marcar los siguientes registros seleccionados como enviados?"/></center>
+                            </td>
+                        </tr>
+                        <tr><td><p:spacer height="10"/></td></tr>
+                        <tr><td>
+                                <p:dataTable  var="En" style=" width: 330px" value="#{MBEnvio.selectListPendientXEnvi}" >
+                                    <p:column headerText="Tipo de envio"    style="font-family:Arial;font-size: 12px;width: 10px;">
+                                        <h:outputText value="#{En.tipEnv}" />
+                                    </p:column>
+                                    <p:column headerText="N° asociado"    style="font-family:Arial;font-size: 12px;width: 10px;">
+                                        <h:outputText value="#{En.asociado}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </td></tr>
+                        <tr><td><p:spacer height="10"/></td></tr>
+                        <tr>
+                            <td><center>  
+                                    <p:commandButton  value="Aceptar"   action="#{MBEnvio.OpcionesEnvio('InserConfir')}"  ajax="true"  icon="ui-icon-check" iconPos="left"  
+                                                      style="font-family:Arial;font-size: 13px;position: relative;"   update=":contenedorGeneral:Contenedor:growl_General"/>
+                                </center> </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,248 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Administración</title>
+        <style>
+            .Menu-general:focus {
+                border-color: orange;
+            }
+        </style>
+    </h:head>
+    <h:body> 
+        <h:form id="SUB_Menu_Administrador"  >
+            <br/>
+            <table style="line-height:10px;font-size:12px;font-family:Arial Black;font-weight:normal;" cellspacing="3" cellpadding="3">
+                <tr>
+                    <td colspan="3"><p:outputLabel value="Gestion administrativa" style="font-weight: bold; font-size: 18px;" /></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><p:separator/></td>
+                </tr>
+                <tr>
+                    <tr>
+                        <td>
+                            <!--INFORMACION DENTRO DE LOS TABS-->
+                            <p:tabView dynamic="true" id="TabSubMenu" effect="fade" >
+                                <p:tab title="Personas">
+                                    <table style="font-family: Arial;font-size: 12px;">
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <center>                                  
+                                                        <p:commandButton value="Empleados" action="#{beanDireccionar.url_MenusInternos('Gestion_Empleado')}"  ajax="false" styleClass="Menus-internos" icon="ui-icon-person" />
+                                                    </center> 
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup id="pperitos" >
+                                                    <center>
+                                                        <p:commandButton value="Avaluadores" action="#{beanDireccionar.url_MenusInternos('Gestion_Peritos')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-person" />
+                                                    </center>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Estados usuarios" action="#{beanDireccionar.url_MenusInternos('Gestion_Estados')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-info" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tipo de documento" action="#{beanDireccionar.url_MenusInternos('ConsultaTipoDocumento')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-contact" />
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Cargo organizacional" action="#{beanDireccionar.url_MenusInternos('GCargos')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-document-b" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Roles" action="#{beanDireccionar.url_MenusInternos('ConsultaRoles')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-unlocked"/>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Regimen" action="#{beanDireccionar.url_MenusInternos('ConsultaRegimen')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-tag"/>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Entidades" action="#{beanDireccionar.url_MenusInternos('GestionEntidades')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-note" />
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </p:tab>
+                                <p:tab title="Ubicación">
+                                    <table style="font-family: Arial;font-size: 12px;">
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Ubicaciones" action="#{beanDireccionar.url_MenusInternos('ConsultaUbicacion')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-zoomin" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Envio" action="#{beanDireccionar.url_MenusInternos('GestionEnvio')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-mail-closed" />
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </p:tab>
+                                <p:tab title="Proceso de avalúos">
+                                    <table style="font-family: Arial;font-size: 12px;">
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Actividades y recordatorios" action="#{beanDireccionar.url_MenusInternos('GestionActividYRecordat')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-note" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tipos de medida" action="#{beanDireccionar.url_MenusInternos('Medidas')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-circle-close"/>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Producto entidad" action="#{beanDireccionar.url_MenusInternos('ConsultaProductoEntidad')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-calculator" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tipos de bien" action="#{beanDireccionar.url_MenusInternos('GestionTipoBienes')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-cart"/>
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Archivos" action="#{beanDireccionar.url_MenusInternos('GArchivos')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-document" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Reglas del proceso" action="#{beanDireccionar.url_MenusInternos('ReglaArchivoAvaluo')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-wrench"  />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Bitacora de procesos" action="#{beanDireccionar.url_MenusInternos('BitacoraGeneral')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-folder-open"/>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Plantillas" action="#{beanDireccionar.url_MenusInternos('GestionPlantillas')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-newwin" />
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Motivos de anulación" action="#{beanDireccionar.url_MenusInternos('GestionAnulaciones')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-circle-minus" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Lista de chequeo" action="#{beanDireccionar.url_MenusInternos('GestionListaChequeo')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-folder-open" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Devoluciones" action="#{beanDireccionar.url_MenusInternos('Devoluciones')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-arrowreturnthick-1-s"/>
+                                                </h:panelGroup>
+                                            </td>
+
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Modificaciones de informe" action="#{beanDireccionar.url_MenusInternos('ModificacionesInfome')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-image"/>
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tipos de construcción" action="#{beanDireccionar.url_MenusInternos('TiposContrucciones')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-home"/>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Aprobación de impresión" action="#{beanDireccionar.url_MenusInternos('AprobImpresion')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-newwin"/>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tiempos de avalúos" action="#{beanDireccionar.url_MenusInternos('TiemposAvaluos')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-newwin"/>
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </p:tab>
+
+                                <p:tab title="Proceso de facturación">
+                                    <table style="font-family: Arial;font-size: 12px;">
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tablas de facturación" action="#{beanDireccionar.url_MenusInternos('GestionTablasFacturacion')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-note" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Impuestos" action="#{beanDireccionar.url_MenusInternos('GestionImpuestos')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-circle-close"/>
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tabla de impuestos" action="#{beanDireccionar.url_MenusInternos('GestionTablasImpuesto')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-calculator" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Bancos" action="#{beanDireccionar.url_MenusInternos('GestionBancos')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-cart" />
+                                                </h:panelGroup>
+                                            </td>           
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Tipo de Conceptos" action="#{beanDireccionar.url_MenusInternos('GestionConcepto')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-contact" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Valores adicionales" action="#{beanDireccionar.url_MenusInternos('GestionTipoValorAdicional')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-plus" />
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+
+
+                                    </table>
+                                </p:tab>
+                                <p:tab title="Proceso Cartera">
+                                    <table style="font-family: Arial;font-size: 12px;">
+                                        <tr>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Medios de Pago" action="#{beanDireccionar.url_MenusInternos('ConsultaMedioPago')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-zoomin" />
+                                                </h:panelGroup>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup>
+                                                    <p:commandButton value="Consecutivos Pago" action="#{beanDireccionar.url_MenusInternos('ConsecutivoCartera')}" ajax="false" styleClass="Menus-internos" icon="ui-icon-zoomin" />
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </p:tab>
+                            </p:tabView>
+                        </td>
+
+                    </tr>
+                </tr>
+            </table>
+        </h:form>
+    </h:body>
+</html>

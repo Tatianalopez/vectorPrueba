@@ -1,0 +1,629 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:pt="http://java.sun.com/jsf/passthrough"  >
+
+
+    <h:head>
+        <title>Impresion</title>
+    </h:head>
+    <h:body>
+        <h:form id="FormFactImpresion" >
+            <table border="0">
+                <tr>
+                    <td><big><big><b><p class="Title">Impresion de Factura  #{MBFacturacion.fac.tipoFactura} N°  #{MBFacturacion.fac.codFactu}</p></b></big></big></td>
+                    <td>
+                        <p:spacer width="60" />
+                    </td>
+
+                    <td>       
+                        <c:choose>
+                            <c:when  test="#{MBFacturacion.listaFacturaAnticipo!=null and MBFacturacion.listaFacturaAnticipo.size()>0 }">
+                                <p:commandButton icon="ui-icon-document" value="Facturas Anticipo"    style="font-size: 13px;font-family: Arial;" onclick="PF('anti').show()"/>
+                            </c:when>
+                        </c:choose>
+                        <p:spacer width="15" />
+                        <p:commandButton icon="ui-icon-document" value="Detalle Factura"    style="font-size: 13px;font-family: Arial;" onclick="PF('detalleFac').show()"/>
+                        <p:spacer width="15" />
+                        <p:commandButton icon="ui-icon-disk" value="Facturar" action="#{MBFacturacion.Facturar('PopUp')}" 
+                                         update=":contenedorGeneral:Contenedor:growl_General, PNLFacturado" 
+                                         style="font-family: Arial;font-size: 13px;" /></td>
+
+                </tr>
+                <tr>
+                    <td colspan="10" style="width: 1200px"> <p:separator /></td>
+                </tr>
+            </table>
+
+            <center>
+                <table>       
+                    <table style="width: 100%;font-family: Arial;font-size: 13px;position: relative;">
+                        <tr>
+                            <td><p:outputLabel value="Persona a facturar" style="font-weight: bold;"/></td>
+                        </tr>
+                    </table>
+
+                    <center>
+                        <table cellspacing="3" cellpadding="3">
+                            <tr>
+                                <td>
+                                    <b><p:outputLabel  value="Identificación: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                </td>
+                                <td>
+                                    <p:outputLabel value="#{MBFacturacion.fac.docClie} #{MBFacturacion.fac.nit}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                </td>
+                                <td>
+                                    <b><p:outputLabel value="Nombre Completo: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                      
+                                </td>
+                                <td>                                                                                        
+                                    <p:outputLabel value="#{MBFacturacion.fac.nombre_Entidad} #{MBFacturacion.fac.cliente}" style="font-size: 12px;font-family: Arial;" /> 
+                                </td>
+                                <td>
+                                    <b><p:outputLabel value="Telefono: " style="font-size: 12px;font-family: Arial;" /></b>                                                                       
+                                </td>
+                                <td>
+                                    <p:outputLabel value="#{MBFacturacion.fac.telefono} #{MBFacturacion.fac.telefonoenti}" style="font-size: 12px;font-family: Arial;" />                                                                                       
+                                </td>    
+
+                                <td>
+                                    <!-- ver informacion 1-->
+                                    <p:commandButton id="btnInfoCli1" icon="ui-icon-folder-open" style="width: 22px;" action="#{MBFacturacion.removeTabFactu(4,MBFacturacion.fac.docClie,MBFacturacion.fac.nit,'')}"  styleClass="buttonC" 
+                                                     update=":DialogInfoAsesor:dialodinfoasesor,:DialogInfoAsesor:dialodinfocliente,:contenedorGeneral:Contenedor:growl_General"/>
+                                    <p:tooltip for="btnInfoCli1" value="Ver información del cliente" showEffect="clip" style="font-size: 12px;font-family: Arial;" />
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width: 100%;font-family: Arial;font-size: 13px;position: relative;">
+                            <tr><td>
+                                    <p:separator />
+                                </td></tr>
+                            <tr>    
+                                <td><p:outputLabel value="» Información Avaluo" style="font-weight: bold;"/></td>
+                            </tr>
+                            <br/>
+                        </table>
+                        <table style="font-family: Arial;font-size: 12px; width: 900px; border: #bfbbbf; border-bottom:"  border="2"  colspan="6" >
+                            <tr>
+                                <td>
+                                    <b><center><p:outputLabel value="Avaluo"/></center></b>
+                                </td>
+                                <td>
+                                    <b><center><p:outputLabel value="Ciudad"/></center></b>
+                                </td>
+                                <td>
+                                    <b><center><p:outputLabel value="Exenta"/></center></b>
+                                </td>
+                                <td>
+                                    <b> <center> <p:outputLabel value="Valor Avaluo"/></center></b>
+                                </td>
+                                <td>
+                                    <b> <center> <p:outputLabel value="Valor a facturar"/></center></b>
+                                </td>
+                                <td>
+                                    <b><center>  <p:outputLabel value="Descuento Avalúo"/></center></b>
+                                </td>
+                                <td>
+                                    <b><center>  <p:outputLabel value="Descuento Factura"/></center></b>
+                                </td>
+                                <td>
+                                    <b><center>  <p:outputLabel value="Adicional Avaluo"/></center></b>
+                                </td>
+                                <td>
+                                    <b><center>  <p:outputLabel value="% " /></center></b>
+                                </td>
+                            </tr>
+                            <ui:repeat  value="#{MBFacturacion.listInfoImpri}" var="info"  varStatus="status">
+                                <p:outputPanel autoUpdate="true">                                
+                                    <tr>
+                                        <td>
+                                            <center>      <p:outputLabel value="#{info.numAvaluo}"/></center>
+                                        </td>
+                                        <td>
+                                            <center>      <p:outputLabel value="#{info.ciudad}"/></center>
+                                        </td>
+                                        <td>  
+                                            <center><p:outputLabel value="#{info.ciudadText}"/></center>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel style=" float:  right" value="#{info.valorTotalAvaluo}">
+                                                <f:convertNumber locale="en_US"/>
+                                            </p:outputLabel>                        
+                                        </td> 
+                                        <td>
+                                            <p:outputLabel style=" float:  right" value="#{info.valorFacturado}">
+                                                <f:convertNumber locale="en_US"/>
+                                            </p:outputLabel>                        
+                                        </td>    
+                                        <td>
+                                            <p:outputLabel style=" float:  right" value="#{info.descuentos}">
+                                                <f:convertNumber  locale="en_US"  />
+                                            </p:outputLabel>
+                                            <p:outputLabel style=" float:  right" value="#{info.tipoDescuento}"/>
+                                        </td>  
+                                        <td>
+                                            <p:outputLabel style=" float:  right" value="#{info.descuentoFactura} "/>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel style=" float:  right" value="#{info.totalValorAdicional}">
+                                                <f:convertNumber locale="en_US"/>
+                                            </p:outputLabel>                        
+                                        </td>
+                                        <td>
+                                            <p:outputLabel style=" float:  right" value="#{info.porcentajeParti}">
+                                                <f:convertNumber  locale="en_US"  />
+                                            </p:outputLabel>
+                                        </td> 
+                                    </tr>
+                                </p:outputPanel>
+                            </ui:repeat>                           
+                        </table>
+                    </center>
+                </table>     
+            </center>
+            <center>
+                <table style="width: 100%;font-family: Arial;font-size: 13px;position: relative;">
+                    <br/>
+                    <tr>
+                        <td><p:separator/><br/></td>
+                    </tr> 
+                    <tr>
+                        <td><p:outputLabel value="» Aplicación de Impuestos" style="font-weight: bold;"/></td>
+                    </tr>
+                </table>
+            </center>
+            <br/>
+            <br/>
+
+            <center>
+                <table style="font-family: Arial;font-size: 13px;" cellspacing="10">
+                    <p:outputPanel id="impu">
+                        <c:choose>
+                            <c:when test="#{beanDireccionar.estadoActivacionGestor==true and ((MBFacturacion.exento==0 and MBFacturacion.listInfoImpri.size()==1) or MBFacturacion.listInfoImpri.size()>1)}" >
+                                <tr>
+                                    <td>
+                                        <p:outputLabel value="Rete ica:" for="OpcRI" style="font-weight: bold;"/></td>
+                                    <td>
+                                        <p:selectBooleanCheckbox value="#{MBFacturacion.opcReteIca}" id="OpcRI" >
+                                            <p:ajax update="PNLRI" event="change" />
+                                        </p:selectBooleanCheckbox></td>
+                                    <td>
+                                        <p:outputPanel id="PNLRI" >
+                                            <c:choose>
+                                                <c:when test="#{MBFacturacion.opcReteIca==true}" >
+                                                    <table style="font-family: Arial;font-size: 12px;">
+                                                        <tr>
+                                                            <td><p:outputLabel for="ica" value="%" style="padding-left:38px; font-weight: bold;"/></td>
+                                                            <td>
+                                                                <p:selectOneMenu   id="ica" style="width:100px;font-size: 12px;" value="#{MBFacturacion.ica1}">
+                                                                    <f:selectItem id="ic" itemValue="0" itemLabel="reteica" noSelectionOption="true"/>
+                                                                    <f:selectItems id="selIc"  value="#{MBAdministacion.cargarICA}" />
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </c:when>
+                                            </c:choose>
+                                        </p:outputPanel>
+                                    </td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.fac.regimen.equalsIgnoreCase('Persona Juridica') and  MBAdministacion.cargarFuente.size() >1}" >
+                                <tr>
+                                    <td  colspan="2">
+                                        <p:outputLabel value="Rete fuente" style="font-weight: bold;"/></td>
+                                    <td>
+                                        <p:outputPanel id="PNLRF" >
+                                            <table style="font-family: Arial;font-size: 12px;">
+                                                <tr>
+                                                    <td><p:outputLabel for="fuente" value="%" style="padding-left:38px; font-weight: bold;"/></td>
+                                                    <td>
+                                                        <p:selectOneMenu   id="fuente" style="width:100px;font-size: 12px;" value="#{MBFacturacion.fuente1}">
+                                                            <f:selectItem id="fuen" itemValue="0" itemLabel="retefuente" noSelectionOption="true"/>
+                                                            <f:selectItems id="selFue"  value="#{MBAdministacion.cargarFuente}" />
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </p:outputPanel>
+                                    </td>
+                                </tr>
+                                <c:choose>
+                                    <c:when test="#{ MBFacturacion.fac.calificacion.equalsIgnoreCase('GRANDES CONTRIBUYENTES') and MBAdministacion.cargarReteIva.size() >1}"  >
+                                        <tr>
+                                            <td colspan="2"><p:outputLabel value="Rete Iva:" style="font-weight: bold;"/></td>
+                                            <td>
+                                                <p:outputPanel id="PNLRIV" >
+
+                                                    <table style="font-family: Arial;font-size: 12px;">
+                                                        <tr>
+                                                            <td><p:outputLabel for="rIva" value="%" style="padding-left:38px; font-weight: bold;"/></td>
+                                                            <td>
+                                                                <p:selectOneMenu   id="rIva" style="width:100px;font-size: 12px;" value="#{MBFacturacion.reteiva}">
+                                                                    <f:selectItem id="i" itemValue="0" itemLabel="reteiva" noSelectionOption="true"/>
+                                                                    <f:selectItems id="selRIva2"  value="#{MBAdministacion.cargarReteIva}" />
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </p:outputPanel>
+                                            </td>
+                                        </tr>     
+                                    </c:when>
+                                </c:choose>
+                            </c:when>
+                        </c:choose>
+
+                    </p:outputPanel>
+
+                </table>
+            </center>
+            <c:choose>
+                <c:when  test="#{((MBFacturacion.exento==0 and MBFacturacion.listInfoImpri.size()==1) or MBFacturacion.listInfoImpri.size()>1)}">
+                    <br/>
+                    <center>
+                        <table>
+                            <tr><td><center><p:commandButton value="Aplicar"  icon="ui-icon-check"  action="#{MBFacturacion.AplicarImpuestos('Aplicar')}" 
+                                                             update=":contenedorGeneral:Contenedor:growl_General, PNLFacturado"  style="font-size: 13px;" ajax="true" >
+                                            <f:ajax  id="ajax"  execute="@this"/>
+                                        </p:commandButton></center></td></tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                </c:when>
+                <c:otherwise>
+                    <center>
+                        <table>
+                            <tr><td><center><p:outputLabel value="Factura exenta de iva" style=" color:  red"/></center></td></tr>
+                        </table>
+                    </center>
+                </c:otherwise>
+            </c:choose>
+            <center>
+
+                <p:outputPanel id="PNLFacturado">
+                    <table style="font-family: Arial;font-size: 13px;float: bottom; width: 200px" colspan="2">             
+                        <tr>
+                            <td colspan="4"><p:separator /></td>
+                        </tr>
+                        <tr>
+                            <td><p:outputLabel value="Valor a facturar " style="font-weight: bold;"/></td>
+                            <td><p:outputLabel style="float: right;" value="#{MBFacturacion.fac.valor}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                        </tr>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valorAdicion > 0}" >
+                                <tr>
+                                    <td><p:outputLabel   value="Adicional avaluo" style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel style="float: right;" value="#{MBFacturacion.valorAdicion}">
+                                            <f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valAdiFacIva > 0}" >
+                                <tr>
+                                    <td><p:outputLabel   value="Adicional factura" style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel  style="float: right;" value="#{MBFacturacion.valAdiFacIva}">
+                                            <f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valorDescuentos > 0}" >
+                                <tr>
+                                    <td><p:outputLabel value="Descuento #{MBFacturacion.tipoDescuento} " style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel   style="float: right;" value="#{MBFacturacion.valorDescuentos}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.sumaFacAnt > 0}" >
+                                <tr>
+                                    <td><p:outputLabel value="Anticipos facturados:" style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel  style="float: right;" value="#{MBFacturacion.sumaFacAnt}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>    
+                            </c:when>
+                        </c:choose>
+                        <tr>
+                            <td colspan="4"><p:separator /></td>
+                        </tr>
+                        <tr>
+                            <td><p:outputLabel value="Subtotal" style="font-weight: bold;"/></td>
+                            <td><p:outputLabel style="float: right;" value="#{MBFacturacion.subtotal}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                        </tr>
+                        <tr>
+                            <td><p:outputLabel value="Iva #{MBFacturacion.ivaBD} %" rendered="#{MBFacturacion.iva > 0}" style="font-weight: bold;"/></td>
+                            <td><p:outputLabel  rendered="#{MBFacturacion.iva > 0}" style="float: right;" value="#{MBFacturacion.iva}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                        </tr>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valorFuente > 0}" >
+                                <tr>
+                                    <td><p:outputLabel  value="ReteFuente #{MBFacturacion.fuente1} %" style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel  style="float: right;" value="#{MBFacturacion.valorFuente}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>                              
+                            </c:when>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valorIca > 0}" >
+                                <tr>
+                                    <td><p:outputLabel value="ReteIca #{MBFacturacion.ica1} %" style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel  style="float: right;" value="#{MBFacturacion.valorIca}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valorReIva > 0}" >
+                                <tr>
+                                    <td><p:outputLabel value="ReteIva  #{MBFacturacion.reteiva} %" style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel  style="float: right;" value="#{MBFacturacion.valorReIva}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+                        <tr>
+                            <td colspan="4"><p:separator /></td>
+                        </tr>
+                        <tr>
+                            <td><p:outputLabel value="Total" style="font-weight: bold;"/></td>
+                            <td><p:outputLabel style="float: right;" value="#{MBFacturacion.total}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                        </tr>
+
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valAdiFacSinIva > 0 or MBFacturacion.valorAdicionSinIva > 0}" >
+                                <tr>
+                                    <td colspan="4"><p:separator /></td>
+                                </tr>
+                                <tr>
+                                    <td><p:outputLabel value="Sin iva " style=" font-size: 10px;"/></td>           
+                                </tr>
+                            </c:when>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valAdiFacSinIva > 0}" >
+                                <tr>
+                                    <td><p:outputLabel  value="Adicional factura " style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel style="float: right;"    value="#{MBFacturacion.valAdiFacSinIva}" >
+                                            <f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.valorAdicionSinIva > 0}" >
+                                <tr>
+                                    <td><p:outputLabel  value="Adicional avaluo " style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel  style="float: right;"    value="#{MBFacturacion.valorAdicionSinIva}" >
+                                            <f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>
+                            </c:when>
+                        </c:choose>
+                        <tr>
+                            <td colspan="4"><p:separator  rendered="#{MBFacturacion.anticipo5 > 0}" /></td>
+                        </tr>
+                        <c:choose>
+                            <c:when test="#{MBFacturacion.anticipo5 > 0}" >
+                                <tr>
+                                    <td><p:outputLabel value="Anticipos:" style="font-weight: bold;"/></td>
+                                    <td><p:outputLabel style="float: right;" value="#{MBFacturacion.anticipo5}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                                </tr>   
+                            </c:when>
+                        </c:choose>
+
+                        <tr>
+                            <td colspan="4"><p:separator /></td>
+                        </tr>
+                        <tr>
+                            <td><p:outputLabel  value="Saldo a pagar:" style="font-weight: bold; color:  red; font-size: 14px "/></td>
+                            <td><p:outputLabel  style="float: right;font-size: 14px" value="#{MBFacturacion.totalpagarFactAnt}" ><f:convertNumber  locale="en_US" /></p:outputLabel></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <br/>
+                    <table>  
+                        <tr>
+                            <td>
+                                <p:commandButton icon="ui-icon-disk" value="Facturar" action="#{MBFacturacion.Facturar('PopUp')}" 
+                                                 update=":contenedorGeneral:Contenedor:growl_General, PNLFacturado" 
+                                                 style="font-family: Arial;font-size: 13px;" /></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <br/>
+                </p:outputPanel>
+                <br/>
+                <br/>
+            </center>
+            <p:dialog  header="Confirmar Impresion" style="font-family: Arial; font-size: 12px" widgetVar="confirmar" minHeight="100" resizable="false">
+                <p:outputPanel  autoUpdate="true"  >
+                    <br/>
+                    <center>
+                        <h:panelGrid>                                                                       
+                            <h:outputText  style="font-family:cursive; font-size: 14px;" value="La información se grabara con los siguientes datos:"  />
+                        </h:panelGrid>
+                        <br/>
+                        <table cellspacing="9">
+                            <td>
+                                <center> <b>  <p:outputLabel  value="N° Factura " style="font-family: Arial;font-size: 12px" /></b></center>
+                            </td> 
+                            <td>
+                                <center>  <p:outputLabel  value="#{MBFacturacion.fac.codFactu} " style="font-family: Arial;font-size: 12px" /></center>
+                            </td> 
+                            <td>
+                                <center> <b>  <p:outputLabel  value="Cliente " style="font-family: Arial;font-size: 12px" /></b></center>
+                            </td>     
+                            <td>
+                                <center>  <p:outputLabel  value="#{MBFacturacion.fac.nombre_Entidad} #{MBFacturacion.fac.cliente} " style="font-family: Arial;font-size: 12px" /></center>
+                            </td>   
+                            <td>
+                                <center>   <b>  <p:outputLabel value="Total a facturar " style="font-family: Arial;font-size: 12px" /></b></center>
+                            </td>                    
+                            <td>
+                                <center> <p:outputLabel value="#{MBFacturacion.totalpagarFactAnt}" style="font-family: Arial;font-size: 12px" >
+                                        <f:convertNumber  locale="en_US" /></p:outputLabel></center>
+                            </td>      
+                        </table>
+                        <table>
+                            <tr>
+                                <td>
+                                    <b><p:outputLabel value="Facturar fecha diferente " style="font-family: Arial;font-size: 12px" /></b>
+                                </td>
+                                <td>
+                                    <p:selectBooleanCheckbox value="#{MBFacturacion.cambiarFecha}" id="camb" >
+                                        <p:ajax event="change" update="fecha" />
+                                    </p:selectBooleanCheckbox>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </p:outputPanel>
+                <p:outputPanel id="fecha">
+                    <center>
+                        <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="3" cellspacing="3">
+                            <c:choose>
+                                <c:when test="#{MBFacturacion.cambiarFecha}">
+                                    <tr>
+                                        <td colspan="10">
+                                            <p:outputLabel value="Seleccione la fecha:  " style="font-family: Arial;font-size: 12px" />
+                                        </td>
+                                        <td><p:calendar id="FecVCFin" value="#{MBFacturacion.fechaFacturacion}" pt:placeholder="AAAA/MM/DD" locale="es" mindate="2010-01-01"
+                                                        maxdate="#{MBSeguimiento.fecha_actual}" pattern="yyyy-MM-dd" mask="true"  /></td>
+                                    </tr>
+                                </c:when>
+                            </c:choose>
+                        </table>
+                    </center>
+                </p:outputPanel>
+                <br/>
+                <center>
+                    <h:panelGrid>
+                        <p:commandButton icon="ui-icon-disk" value="Grabar" action="#{MBFacturacion.Facturar('Normal')}" 
+                                         update=":contenedorGeneral:Contenedor:growl_General" 
+                                         style="font-family: Arial;font-size: 13px;" /> 
+                    </h:panelGrid>
+                </center>
+            </p:dialog>
+
+            <p:dialog header="Agregar detalle" widgetVar="detalleFac" modal="false" height="auto" width="480" showEffect="fade"  hideEffect="explode" resizable="false">
+                <p:outputPanel id="panDist">
+                    <center>
+                        <br/>
+                        <table style="font-family: Arial;font-size: 13px;">
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="Ingrese el/los detalles que desea que aparezcan en su factura:" />                  
+                                </td>     
+                            </tr>                    
+                        </table>
+                        <br/>
+                        <table style="font-family: Arial;font-size: 13px;">
+                            <tr>     
+                                <td>
+                                    <p:inputTextarea value="#{MBFacturacion.detalleFactura}"  placeholder="Ingrese el detalle" style=" width: 350px; height: 40px"/>                  
+                                </td>
+                            </tr>           
+                        </table>
+                        <br/>
+                        <table>
+                            <tr>     
+                                <td>
+                                    <p:commandButton  icon="ui-icon-document" value="Grabar"    style="font-size: 13px;font-family: Arial;" 
+                                                      actionListener="#{MBFacturacion.agregarGrupos('detalle')}" update=":contenedorGeneral:Contenedor:growl_General,detalles"  />                  
+                                </td>
+                            </tr>  
+                        </table>
+
+                        <p:outputPanel id="detalles" style="font-family: Arial;font-size: 12px;">
+                            <table >
+                                <tr><td>
+                                        <p:separator/>
+                                    </td></tr>
+                                <tr>
+                                    <td> <center>
+
+                                            <p:dataTable value="#{MBFacturacion.listaDetallesFac}" var="disL" emptyMessage="No hay registros"
+                                                         rowKey="#{disL.detalle}" selectionMode="single" selection="#{MBFacturacion.selecDist}"
+                                                         style="font-family: Arial;font-size: 12px;width: 400px;">                   
+                                                <p:column headerText="Observación" style="font-family: Arial;font-size: 13px;"  >
+                                                    <h:outputText value="#{disL.detalle}" />
+                                                </p:column>
+                                            </p:dataTable>
+                                            <br/>
+                                            <p:commandButton  icon="ui-icon-close" value="Remover" update=":contenedorGeneral:Contenedor:growl_General,detalles"
+                                                              action="#{MBFacturacion.remover('detalle')}"   style="font-family: Arial;font-size: 12px;"/></center>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </p:outputPanel>
+
+                    </center>
+                </p:outputPanel>
+            </p:dialog>
+
+
+            <p:dialog header="Anticipos" widgetVar="anti" modal="false" height="auto" width="550" showEffect="fade" hideEffect="explode"  style="font-family: Arial;font-size: 13px;">
+                <!-- Tabla que carga las filas seleccionadas de la tabla Anticipos-->
+                <p:outputPanel id="TransAnt" autoUpdate="true" >            
+                    <br/>
+                    <table cellspacing="3" cellpadding="3" style="font-family: Arial;font-size: 13px;">
+                        <br/>
+                        <tr>
+                            <td><center>
+                                    <p:outputLabel value="El cliente #{MBFacturacion.fac.nombre_Entidad} #{MBFacturacion.fac.cliente}  actualmente cuenta con los siguientes anticipos que no han sido asociados a ninguna factura. " />                  
+                                </center>      </td>   
+                        </tr>  
+                        <tr><td>
+                                <p:spacer height="13"/>
+                            </td></tr>
+                        <tr>       
+                            <td><center>
+                                    <b> <p:outputLabel value="Seleccione el/los anticipo que desa asociar a la factura  #{MBFacturacion.fac.codFactu} " />     </b>  </center>           
+                            </td>
+                        </tr>          
+
+                        <tr>
+                            <td ><center>
+                                    <p:dataTable id="facAnticipo" var="Anti" value="#{MBFacturacion.listaFacturaAnticipo}"  selection="#{MBFacturacion.selectlistaFactAnticipos}" 
+                                                 rowKey="#{Anti.codFactuAnti}"   emptyMessage="No se han encontrado registros"
+                                                 >
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                        <p:column headerText="N° Factura"    style="font-family: Arial;font-size: 12px ;width: 60px;" >
+                                            <h:outputText value="#{Anti.codFactuAnti}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Valor factura"   style="font-family: Arial;font-size: 12px ;width: 70px;" >
+                                            <h:outputText style=" float:  right" value="#{Anti.valorFacturaAnticipo}">
+                                                <f:convertNumber locale="en_US"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Fecha Factura"  style="font-family: Arial;font-size: 12px ;width: 150px;" >
+                                            <h:outputText value="#{Anti.fechaFacturAnticipo}" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td> <p:separator/> </td>
+                        </tr> 
+                        <tr>  
+                            <td> 
+                                <center>
+                                    <p:commandButton value="Aceptar" icon="ui-icon-arrowthick-1-e"    actionListener="#{MBFacturacion.asociarFactuAnti()}"
+                                                     update=":contenedorGeneral:Contenedor:growl_General, PNLFacturado" style="font-size: 13px;"  ajax="true">
+                                        <f:ajax  id="ajax"  execute="@this"/>
+                                    </p:commandButton>
+                                </center>
+                            </td></tr>
+                    </table>
+                </p:outputPanel> 
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,183 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"     
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      >
+    <h:head>
+        <title>PreRadica Gestor</title>
+        <style>
+            .ui-datatable .ui-state-highlight { 
+                border: 2px inset  #e3a1a1 !important ;
+            }
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                 height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+
+            /* !important is needed sometimes 
+            ::-webkit-scrollbar {
+                width: 12px !important;                
+            }
+
+            /* Track 
+            ::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3) !important; 
+                -webkit-border-radius: 10px !important;
+                border-radius: 10px !important;
+                
+            }
+
+            /* Handle 
+            ::-webkit-scrollbar-thumb {
+                -webkit-border-radius: 10px !important;
+                border-radius: 10px !important;
+                background: rgba(255,0,0,0.8) !important; 
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5) !important; 
+               
+            }
+            ::-webkit-scrollbar-thumb:window-inactive {
+                background: rgba(255,0,0,0.4) !important; 
+               
+            }
+            
+                 .ui-datatable thead{
+             border:  3px solid white !important;
+         
+         }
+            */
+
+            /* Needed to expand empty mediaItemsTable datatable */
+            /* Always show y-scroll bar so columns are aligned */        
+
+
+        </style>
+    </h:head> 
+    <h:body>
+        <h:form id="FRMPreRadicados" style="font-family: Arial;font-size: 13px;">
+            <p:outputPanel id="PNLPenRad" style="font-family: Arial;font-size: 13px;">
+
+                <table cellspacing="4" cellpadding="4"  border="0" style="width:920px;">
+                    <tr>
+                        <td ><big><big><b><p class="Title">#{beanDireccionar.tituloMenu} > Todas las pre-radicaciones registradas</p></b></big></big></td>
+                        <td>
+                            <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                        </td>
+                        <td>
+                            <table border="0" style="float: left;">
+                                <tr>
+                                    <td style="background: #dcf2dc !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #dcf2dc !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Radicado" style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+                                    <td style="background: #F4D9BF !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F4D9BF !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Impedido " style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+                                    <td style="background: #dddddd !important;" >
+                                        <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #dddddd !important;"/>
+                                    </td>
+                                    <td>
+                                        <p:outputLabel  value="Anulado " style="font-size: 12px;font-family: Arial;"/>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing="4" cellpadding="4"  border="0" >
+                    <tr>
+                        <td colspan="2" > <p:separator /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b> <p:outputLabel value="Total de pre-radicaciones encontradas (max: 30.000): #{fn:length(MBPreRadicacion.listMisAginadosPreRadica)}" style="font-family: Arial;font-size: 13px;" /></b>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table style="width: 100%;overflow-x: hidden;">
+                                <tr>
+                                    <td >
+                                        <p:dataTable style="height: 380px;" selectionMode="single" var="Asig" widgetVar="PreRadicados"  id="PreRadicadosTable" emptyMessage="No se encontraron registros"
+                                                     rowKey="#{Asig.codPreRadica}" selection="#{MBRadicacion.preRad}" value="#{MBPreRadicacion.listMisAginadosPreRadica}"
+                                                     styleClass="FirstCol"  scrollable="true" scrollHeight="100%;" frozenColumns="1"  
+                                                     rowStyleClass="#{Asig.estado eq 'Impedido' ? 'highlight':
+                                                                      Asig.estado eq 'Radicado' ? 'EstadoRadicadoOK':
+                                                                      Asig.estado eq 'Anulado' ? 'EstadoAnulado':                                                           
+                                                                      null}"> <!--GCH 26DIC2016-->
+                                            <p:column headerText="N° pre-radicación"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterBy="#{Asig.codPreRadica}" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{Asig.codPreRadica}" />
+                                            </p:column>
+                                            <p:column headerText="Producto entidad" filterBy="#{Asig.nomProEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                                <h:outputText value="#{Asig.nomProEnt}" />
+                                            </p:column>
+                                            <p:column headerText="Tipo de bien" filterBy="#{Asig.tipoBien}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{Asig.tipoBien}" />
+                                            </p:column>}
+                                            <p:column headerText="Cliente" filterBy="#{Asig.nombreTempClient}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 400px;">
+                                                <p:outputLabel value="#{Asig.nombreTempClient}" style="font-size: 12px;font-family: Arial;" />            
+                                            </p:column>
+                                            <p:column headerText="Entidad" filterBy="#{Asig.nombreEntid}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 400px;">
+                                                <p:outputLabel value="#{Asig.nombreEntid}" style="font-size: 12px;font-family: Arial;" />              
+                                            </p:column>
+                                            <!--GCH 26DIC2016-->
+                                            <p:column headerText="Registrado por:"  filterBy="#{Asig.nomEmpleados}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 210px;">
+                                                <h:outputText value="#{Asig.nomEmpleados}" />
+                                            </p:column>
+                                            <p:column headerText="Estado"  filterBy="#{Asig.estado}" style="font-family:Arial;font-size: 12px;width: 150px;">                                   
+                                                <h:outputText value="#{Asig.estado}" />
+                                            </p:column>
+                                                                                        
+                                            <p:column headerText="Fecha de solicitud"  filterBy="#{Asig.fechaSolicitudtraida}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{Asig.fechaSolicitudtraida}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de registro"  filterBy="#{Asig.fechaRegistro}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{Asig.fechaRegistro}" />
+                                            </p:column>                                                                
+                                            <p:column headerText="Tiempo transcurrido en registro" filterBy="#{Asig.tiempoTranscurridoRegistro}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 230px;">
+                                                <h:outputText value="#{Asig.tiempoTranscurridoRegistro}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha de pre-radicación"  filterBy="#{Asig.fechaPreRadica}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 190px;">
+                                                <h:outputText value="#{Asig.fechaPreRadica}" />
+                                            </p:column> 
+                                            <p:column headerText="Tiempo transcurrido en pre-radicación" filterBy="#{Asig.tiempoTranscurridoPreRadica}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 270px;">
+                                                <h:outputText value="#{Asig.tiempoTranscurridoPreRadica}" />
+                                            </p:column>                               
+                                            <p:column headerText="Solicitante" filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{Asig.solicitante}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 80px;" >
+                                                <h:outputText value="#{Asig.solicitante}" />
+                                            </p:column>
+                                            <p:column headerText="¿Cotización?" filterStyle="font-family:Arial;font-size: 12px;width:70px;"  filterBy="#{Asig.cotizacion}" style="font-family:Arial;font-size: 12px;width: 90px;">
+                                                <h:outputText value="#{Asig.cotizacion}" />
+                                            </p:column>
+                                            <p:column headerText="¿Estudio?" filterStyle="font-family:Arial;font-size: 12px;width:70px;"  filterBy="#{Asig.estudioPreRadica}" style="font-family:Arial;font-size: 12px;width: 90px;">
+                                                <h:outputText value="#{Asig.estudioPreRadica}" />
+                                            </p:column>
+                                                                                        
+                                        </p:dataTable>      
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <br/>
+
+
+
+            </p:outputPanel>
+        </h:form>
+    </h:body>
+</html>
+

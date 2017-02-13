@@ -1,0 +1,98 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Avaluos pendientes por realizar la revision general tanto juridico como tecnico</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMRevGen">
+            <table cellpadding="4" cellspacing="4" style="font-family: Arial;" >
+                <tr> 
+                    <td style="width: 350px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Mis asignados</font></big></big></b></td>
+                    <td>
+                        <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                    </td>
+                    <td style="width: 180px;">
+                        <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Seleccionar Avaluo" ajax="false" 
+                                         actionListener="#{MBEntregaYRevision.cargarInformaAvaluo()}" action="#{beanDireccionar.url_Menu_Revision('RevisionGeneral')}"/>
+                    </td>
+                </tr>
+            </table>
+            <table style="width: 100%;">
+                <tr>  
+                    <td colspan="3"><p:separator /></td>
+                </tr>
+            </table>
+            <table cellpadding="4" cellspacing="4" style="font-family: Arial;font-size: 12px;">
+                <tr>
+                    <td>
+                        <!-- Informacion de mis asignados-->
+                        <p:outputPanel id="MisAsignadosRGen" >  
+                            <p:dataTable selectionMode="single" var="RGen" widgetVar="MisAsigRevGen"  id="RevGenTable" emptyMessage="No se encontraron registros"
+                                         rowKey="#{RGen.codSeguimiento}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" value="#{MBEntregaYRevision.listAsignadoRevGeneral}"
+                                         rowStyleClass="#{Asig.estado eq 'IMPEDIDO' ? 'highlight':
+                                                          Asig.estado eq 'ANULADO' ? 'EstadoAnulado':                 
+                                                          null}" scrollable="true" scrollHeight="100%;" frozenColumns="1" styleClass="FirstCol" style="height: 380px;"><!--GCH NOV2016-->
+                                <p:column headerText="N* Avaluo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGen.codAvaluo}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{RGen.codAvaluo}" />
+                                </p:column>
+                                <p:column headerText="N* Bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGen.codNBien}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{RGen.codNBien}" />
+                                </p:column>
+                                <p:column headerText="Tipo de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGen.tipoAva}" filterMatchMode="startsWith"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{RGen.tipoAva}" />
+                                </p:column>
+                                <p:column headerText="Producto entidad" filterBy="#{RGen.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                    <h:outputText value="#{RGen.producEntidAva}" />
+                                </p:column>
+                                 <p:column headerText="Solicitante" filterBy="#{RGen.clientes}"  filterStyle="font-family:Arial;font-size: 12px;width:170px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;" >
+                                    <h:outputText value="#{RGen.clientes}" />
+                                </p:column>
+                                 <p:column headerText="Detalle"  filterBy="#{RGen.observacion}" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{RGen.observacion}" />
+                                </p:column>
+                                <p:column headerText="Entidad" filterBy="#{RGen.entidades}" filterStyle="font-family:Arial;font-size: 12px;width:170px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;">
+                                    <h:outputText value="#{RGen.entidades}" />
+                                </p:column>
+                                 <p:column headerText="Seguimiento Asignado A"  filterBy="#{RGen.empSeguimiento}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{RGen.empSeguimiento}" />
+                                </p:column>   
+                                <p:column headerText="Avaluador (es)"  filterBy="#{RGen.nombreCPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{RGen.nombreCPerito}" />
+                                </p:column>                                               
+                                <p:column headerText="Ubicacion" filterBy="#{RGen.ubicacionAva}" filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                    <h:outputText value="#{RGen.ubicacionAva}" />
+                                </p:column>
+                                <p:column headerText="Valor Avaluo Perito"  filterBy="#{RGen.valorPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{RGen.valorPerito}" />
+                                </p:column>
+                                <p:column headerText="Fecha Entrega"  filterBy="#{RGen.fechaEntrega}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{RGen.fechaEntrega}" />
+                                </p:column>
+                                <p:column headerText="Estado"  filterBy="#{RGen.estadoAva}" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                    <h:outputText value="#{RGen.estadoAva}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido desde radicación" filterBy="#{RGen.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{RGen.tiempoTranscurridoRad}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido desde cita confirmada" filterBy="#{RGen.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 300px;">
+                                    <h:outputText value="#{RGen.tiempoTranscurridoVisCit}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido desde entrega" filterBy="#{RGen.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{RGen.tiempoTranscurridoEnt}" />
+                                </p:column>                                
+                            </p:dataTable>
+                        </p:outputPanel>             
+                    </td>
+                </tr>                                 
+            </table>
+        </h:form>
+    </h:body>
+</html>
+

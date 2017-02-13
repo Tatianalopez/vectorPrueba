@@ -1,0 +1,239 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Remisiones</title>
+    </h:head>
+    <h:body>
+        <h:form id="FRMFactu">
+            <center>
+                <table border="0" cellspacing="3" cellpadding="3">  
+                    <tr>
+                        <td>
+                            <p:outputPanel id="principal" autoUpdate="true">
+
+                                <table border="0" cellspacing="4" cellpadding="4" style="width: 970px;">
+                                    <tr>
+                                        <td><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Remisiones </font></big></big></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6"><p:separator /></td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <center>
+                                    <table style="font-family: Arial;font-size: 13px;" border="0" cellpadding="3" cellspacing="3">
+                                        <tr>
+                                            <td>
+                                                <center>
+                                                    <p:outputLabel value="Seleccione un filtro con el cual desea iniciar la Remision" style="font-weight: bold;"/>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>                                                    
+                                                <p:separator/>                                                    
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="font-family: Arial;font-size: 13px;" border="0" cellpadding="3" cellspacing="3">
+                                        <tr>
+                                            <td><p:outputLabel value="Buscar por: " /></td>
+                                            <td>
+                                                <p:selectOneMenu   style="width:135px;font-size: 12px;" value="#{MBConsultaFactu.filtrarX}" >
+                                                    <f:selectItem itemLabel="Seleccione.." itemValue="" noSelectionOption="true" />
+                                                    <f:selectItem itemLabel="Avaluo" itemValue="Avaluo"  />
+                                                    <f:selectItem itemLabel="Nombre" itemValue="Name"  />
+                                                    <f:selectItem itemLabel="Identificacion" itemValue="Id"  />
+
+                                                    <p:ajax event="change" update="PNLFiltro"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td colspan="4">
+                                                <p:outputPanel id="PNLFiltro">
+                                                    <center>
+                                                        <c:choose>
+                                                            <c:when test="#{MBConsultaFactu.filtrarX=='Avaluo'}">                                                
+                                                                <table style="font-family: Arial;font-size: 12px; ">
+                                                                    <tr>
+                                                                        <td><p:outputLabel value="N° avalúo " style="font-weight: bold;"/></td>
+                                                                        <td>
+                                                                            <p:inputText value="#{MBConsultaFactu.numAva}" style="width: 75px;"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>                                        
+                                                            </c:when>
+                                                        </c:choose>
+                                                        <c:choose>
+                                                            <c:when test="#{MBConsultaFactu.filtrarX=='Name'}">
+                                                                <table style="font-family: Arial;font-size: 12px;">
+                                                                    <tr>
+                                                                        <td><p:outputLabel value="Cliente:" style="font-weight: bold; "/></td>
+                                                                        <td>
+                                                                            <p:inputText value="#{MBConsultaFactu.nombreCliente}" style="width: 160px;"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </c:when>
+                                                        </c:choose>
+                                                        <c:choose>
+                                                            <c:when test="#{MBConsultaFactu.filtrarX=='Id'}">
+                                                                <table style="font-family: Arial;font-size: 12px;">
+                                                                    <tr>
+                                                                        <td><p:outputLabel value="Identificación:" style="font-weight: bold; "/></td>
+                                                                        <td>
+                                                                            <p:inputText value="#{MBConsultaFactu.idCli}" style="width: 90px;"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </c:when>
+                                                        </c:choose>
+                                                    </center>
+                                                </p:outputPanel>
+                                            </td>
+                                            <td colspan="6">
+                                                <center>
+                                                    <p:commandButton value="Consultar" icon="ui-icon-search" iconPos="left"  
+                                                                     style="font-family: Arial;font-size: 12px;" action="#{MBConsultaFactu.consulRemision('consultar')}"
+                                                                     update=":contenedorGeneral:Contenedor:growl_General" ajax="true" />
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <c:choose>
+                                        <c:when test="#{MBConsultaFactu.listClientes != null and MBConsultaFactu.listClientes.size() >0 }">
+                                            <br/>
+                                            <br/>
+                                            <table>
+                                                <tr><td>
+                                                        <p:dataTable id="re" var="clie" value="#{MBConsultaFactu.listClientes}"  selection="#{MBConsultaFactu.selecListClientes}"  
+                                                                     style=" width: 800px"     rowKey="#{clie.numHojas}"  emptyMessage="No se ha encontrado el número del avalúo" >
+                                                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                                            <p:column  style="font-family: Arial;font-size: 12px ;width:10px; display: none" >
+                                                                <h:outputText value="#{clie.numHojas}"/>
+                                                            </p:column>
+                                                            <p:column headerText="N° Avaluo" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                                                <h:outputText value="#{clie.NAvaluoRad}"/>
+                                                            </p:column>
+                                                            <p:column headerText="Descripción" style="font-family: Arial;font-size: 12px ;" >
+                                                                <h:outputText value="#{clie.direcc}"/>
+                                                            </p:column>
+                                                            <p:column headerText="Clientes" style="font-family: Arial;font-size: 12px ;" >
+                                                                <h:outputText value="#{clie.clientes}"/>
+                                                            </p:column>
+                                                            <p:column headerText="Valor avalúo" style="font-family: Arial;font-size: 12px ;width:90px;" >
+                                                                <h:outputText value="$ #{clie.valAvaluo}"/>
+                                                            </p:column>
+                                                        </p:dataTable>
+                                                    </td></tr>
+                                            </table>
+                                            <br/>
+                                            <br/>
+                                            <table style="font-family: Arial;font-size: 13px;">
+                                                <tr>
+                                                    <td><p:outputLabel value="Desea Generar la carta a:"/></td>
+                                                    <td>          
+                                                        <p:selectOneMenu   style="width:135px;font-size: 12px;" value="#{MBConsultaFactu.filtrarXCarta}" >
+                                                            <f:selectItem itemLabel="Seleccione.." itemValue="" noSelectionOption="true" />
+                                                            <f:selectItem itemLabel="Solicitante" itemValue="Sol"  />
+                                                            <f:selectItem itemLabel="Cliente" itemValue="Cli"  />
+                                                            <f:selectItem itemLabel="Otro" itemValue="Otro"  />
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                    <td><p:commandButton value="Previsualizar" icon="ui-icon-document" iconPos="left"  
+                                                                         style="font-family: Arial;font-size: 12px;" action="#{MBConsultaFactu.consulRemision('preVisualizar')}" 
+                                                                         update=":contenedorGeneral:Contenedor:growl_General, Visualizar" /></td>
+                                                </tr>
+                                            </table>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <p:outputPanel id="Visualizar">
+                                                <c:choose>
+                                                    <c:when test="#{MBConsultaFactu.genCart}">
+
+                                                        <center>
+                                                            <c:choose>
+                                                                <c:when test="#{!MBConsultaFactu.panelOtro}">
+                                                                    <table style="font-family: Arial;font-size: 13px; width: 500px">
+                                                                        <tr><td><p:outputLabel value="Bogotá D.C" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="Doctor(a):" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="#{MBConsultaFactu.nombreCliente}" style=" float:  left"/></td></tr>   
+                                                                        <tr><td><p:outputLabel value="#{MBConsultaFactu.entSoli}" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="#{MBConsultaFactu.direccion}" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="#{MBConsultaFactu.codCiudadSol}" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:spacer height="10"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="ASUNTO: REMISIÓN #{MBConsultaFactu.numRemision}" style=" float:  right"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="Respetado(a) Doctor(a):" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="Adjunto a esta comunicación envió el avalúo(s) relacionado(s) a continuación:" style=" float:  left"/></td></tr>
+                                                                    </table>
+                                                                </c:when>
+                                                            </c:choose>
+                                                            <c:choose>
+                                                                <c:when test="#{MBConsultaFactu.panelOtro}">
+                                                                    <table style="font-family: Arial;font-size: 13px; width: 500px">
+                                                                        <tr><td><p:outputLabel value="Bogotá D.C" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="Doctor(a):" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:inputText value="#{MBConsultaFactu.nombreCliente}"  placeholder="NOMBRE" style=" float:  left"/></td></tr>   
+                                                                        <tr><td><p:inputText value="#{MBConsultaFactu.entSoli}"  placeholder="ENTIDAD SOLICITANTE" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:inputText value="#{MBConsultaFactu.direccion}"  placeholder="DIRECCION" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:inputText value="#{MBConsultaFactu.codCiudadSol}"  placeholder="CIUDAD" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:spacer height="10"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="ASUNTO: REMISIÓN #{MBConsultaFactu.numRemision}" style=" float:  right"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="Respetado(a) Doctor(a):" style=" float:  left"/></td></tr>
+                                                                        <tr><td><p:outputLabel value="Adjunto a esta comunicación envió el avalúo(s) relacionado(s) a continuación:" style=" float:  left"/></td></tr>
+                                                                    </table>
+                                                                </c:when>
+                                                            </c:choose>
+                                                            <br/>
+                                                            <table style="font-family: Arial;font-size: 13px; width: 500px">
+                                                                <tr><td>
+                                                                        <p:dataTable  var="clie" value="#{MBConsultaFactu.mostrarRemision}" style=" width: 700px"     >
+                                                                            <p:column headerText="N° Avaluo" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                                                                <h:outputText value="#{clie.NAvaluoRad}"/>
+                                                                            </p:column>
+                                                                            <p:column headerText="Descripción" style="font-family: Arial;font-size: 12px ;" >
+                                                                                <h:outputText value="#{clie.direcc}"/>
+                                                                            </p:column>
+                                                                            <p:column headerText="Clientes" style="font-family: Arial;font-size: 12px ; width: 370px" >
+                                                                                <h:outputText value="#{clie.entidadesRad}"/>
+                                                                            </p:column>
+                                                                            <p:column headerText="Valor avalúo" style="font-family: Arial;font-size: 12px;" >
+                                                                                <h:outputText value="$ #{clie.valAvaluo}"/>
+                                                                            </p:column>
+                                                                        </p:dataTable>
+                                                                    </td></tr>
+                                                                <tr><td><p:spacer height="10"/></td></tr>
+                                                                <tr><td><p:outputLabel value="Cordialmente," style=" float:  left"/></td></tr>
+                                                                <tr><td><p:outputLabel value="Gerente General" style=" float:  left"/></td></tr>
+                                                                <tr><td><p:spacer height="10"/></td></tr>
+                                                                <tr>
+                                                                    <td><center>
+                                                                            <p:commandButton value="Generar y visualizar carta" style="font-family:Arial;font-size: 13px;" 
+                                                                                             action="#{MBConsultaFactu.generarRemision()}" onclick="form.target = '_blank'" ajax="false"
+                                                                                             update=":contenedorGeneral:Contenedor:growl_General, principal, FRMFactu" icon="ui-icon-search"/></center>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </center>
+
+                                                    </c:when>
+                                                </c:choose>
+                                            </p:outputPanel>
+                                        </c:when>
+                                    </c:choose>
+                                </center>
+
+                            </p:outputPanel>
+                        </td>
+                    </tr>
+
+                </table>
+            </center>
+        </h:form>
+    </h:body>
+</html>
+

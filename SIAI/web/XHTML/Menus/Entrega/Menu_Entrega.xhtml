@@ -1,0 +1,151 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Menu de entrega de informes de peritos</title>
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/iconos/logo.ico"/>
+        <h:outputStylesheet name="./css/estilo.css"/>
+        <style type="text/css">
+            #wrapper {  
+                width: 220px;
+                font-size: 0.8125em;
+            }
+        </style>
+    </h:head> 
+    <h:body>
+        <h:form id="FRMMenu_Entrega">           
+
+            <div id="wrapper">
+
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Subir Informes" action="#{beanDireccionar.url_Menu_Entrega('PendienteInforme')}" icon="ui-icon-document"  ajax="false"/>
+
+           
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Mis entregados (#{MBEntregaYRevision.numeroMisEntregados})" action="#{beanDireccionar.url_Menu_Entrega('MisEntregados')}" icon="ui-icon-pencil"  ajax="false"/>
+
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Mis actividades (#{MBEntregaYRevision.numeroActividades})"  icon="ui-icon-suitcase" ajax="false" action="#{beanDireccionar.url_Menu_Entrega('MisActividades')}"/>
+
+                <c:choose>
+                    <c:when test="#{beanDireccionar.activacionAprobacionRevision==true}">
+                        <p:commandButton
+                            style="text-align: left;
+                            background: #f4f4f4;
+                            border: none;
+                            border-bottom: 2px solid #CECECE;
+                            width: 100%; 
+                            border-radius: 0px;;
+                            font-family: Arial;
+                            color: #00427f;
+                            font-family: Arial;
+                            font-size: 12px;                                              
+                            height: 2.75em;" value="Pendientes por imprimir (#{MBEntregaYRevision.numeroPendientesImprimirAprobado})" action="#{beanDireccionar.url_Menu_Entrega('RevisionEntrega')}" icon="ui-icon-print"  ajax="false"/>
+
+                        <p:commandButton
+                            style="text-align: left;
+                            background: #f4f4f4;
+                            border: none;
+                            border-bottom: 2px solid #CECECE;
+                            width: 100%; 
+                            border-radius: 0px;;
+                            font-family: Arial;
+                            color: #00427f;
+                            font-family: Arial;
+                            font-size: 12px;                                              
+                            height: 2.75em;" value="Aprobados (#{MBEntregaYRevision.numeroAprobados})" action="#{beanDireccionar.url_Menu_Entrega('AprobadosImpresion')}" icon="ui-icon-check"  ajax="false"/>
+
+                    </c:when>
+                    <c:otherwise>
+                        <p:commandButton
+                            style="text-align: left;
+                            background: #f4f4f4;
+                            border: none;
+                            border-bottom: 2px solid #CECECE;
+                            width: 100%; 
+                            border-radius: 0px;;
+                            font-family: Arial;
+                            color: #00427f;
+                            font-family: Arial;
+                            font-size: 12px;                                              
+                            height: 2.75em;" value="Impresión (#{MBEntregaYRevision.numeroPendientesImprimir})" action="#{beanDireccionar.url_Menu_Entrega('PendientePrint')}" icon="ui-icon-print"  ajax="false"/>
+                    </c:otherwise>
+                </c:choose>
+
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Cambio de analistas" action="#{beanDireccionar.url_Menu_Entrega('CambioAnalista')}" icon="ui-icon-refresh"  ajax="false" rendered="#{beanDireccionar.estadoActivacionGestor}"/>
+
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Avalúos devueltos " action="#{beanDireccionar.url_Menu_Entrega('DevolAvalEntrega')}" icon="ui-icon-seek-prev"  ajax="false" />
+                <!-- ({MBEntregaYRevision.numeroAvalDevueltosEntrega}) -->
+
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;"
+                    value="Bitacora de proceso" action="#{beanDireccionar.url_MenusInternos('BitacoraRadicacion')}" ajax="false" icon="ui-icon-folder-open"/>
+
+            </div>
+
+        </h:form>
+    </h:body>
+</html>

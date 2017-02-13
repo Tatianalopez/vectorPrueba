@@ -1,0 +1,182 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Segun el Permiso carga el Tipo de Revision A realizar</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMRevEsp">
+            <table cellpadding="5" cellspacing="6" style="font-family: Arial;" border="0">
+                <tr> 
+                    <c:choose>
+                        <c:when test="#{beanDireccionar.nombre_pagina_interna=='MisAsignadosJur'}">
+                            <td><big><big><p:outputLabel value="#{beanDireccionar.tituloMenu} > Mis asignados - Rev. juridica" style="font-weight: bold;" /> </big></big></td>
+                            <td>
+                                <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                            </td>
+                            <td>
+                                <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Abrir avalúo" ajax="false" 
+                                                 actionListener="#{MBEntregaYRevision.cargarInformaAvaluo()}" action="#{beanDireccionar.url_Menu_Revision('RevisionEspecifica')}" />
+                            </td>
+
+                        </c:when>
+                    </c:choose>
+
+                    <c:choose>
+                        <c:when test="#{beanDireccionar.nombre_pagina_interna=='MisAsignadosTec'}">
+
+                            <td><big><big><p:outputLabel value="#{beanDireccionar.tituloMenu} > Mis asignados - Rev. tecnica" style="font-weight: bold;" /> </big></big></td>
+                            <td>
+                                <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                            </td>
+                            <td>  <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Abrir avalúo" ajax="false" 
+                                                   actionListener="#{MBEntregaYRevision.cargarInformaAvaluo()}" action="#{beanDireccionar.url_Menu_Revision('RevisionEspecifica')}"/></td>
+
+                        </c:when>
+
+                    </c:choose>
+                </tr>
+
+            </table>     
+
+            <table cellpadding="4" cellspacing="4" style="font-family: Arial;font-size: 12px;">
+                <tr>  
+                    <td colspan="3"><p:separator /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <c:choose>
+                            <c:when test="#{beanDireccionar.nombre_pagina_interna=='MisAsignadosJur'}">
+                                <!--PARA LA ASIGNACION DE REVISION JURIDICA-->
+                                <p:dataTable selectionMode="single" var="RGenJ" widgetVar="MisAsigRevJur"  id="RevJurTable" emptyMessage="No se encontraron registros"
+                                             rowKey="#{RGenJ.codSeguimiento}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" value="#{MBEntregaYRevision.listAsignadoRevJuri}"
+                                             scrollable="true"  scrollRows="15"  scrollHeight="100%;" frozenColumns="1" styleClass="FirstCol" style=" height: 350px;"><!--GCH NOV2016-->
+                                    <p:column headerText="N° de avalúo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGenJ.codAvaluo}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                        <h:outputText value="#{RGenJ.codAvaluo}" />
+                                    </p:column>
+                                    <p:column headerText="N° de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGenJ.codNBien}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                        <h:outputText value="#{RGenJ.codNBien}" />
+                                    </p:column>
+                                    <p:column headerText="Tipo de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGenJ.tipoAva}" filterMatchMode="startsWith"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                        <h:outputText value="#{RGenJ.tipoAva}" />
+                                    </p:column>
+                                    <p:column headerText="Producto entidad" filterBy="#{RGenJ.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                        <h:outputText value="#{RGenJ.producEntidAva}" />
+                                    </p:column>                                    
+                                    <p:column headerText="Cliente(s)" filterBy="#{RGenJ.clientes}"  filterStyle="font-family:Arial;font-size: 12px;width:170px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;" >
+                                        <h:outputText value="#{RGenJ.clientes}" />
+                                    </p:column>
+                                    <p:column headerText="Entidad(es)" filterBy="#{RGenJ.entidades}" filterStyle="font-family:Arial;font-size: 12px;width:170px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;">
+                                        <h:outputText value="#{RGenJ.entidades}" />
+                                    </p:column>
+                                     <p:column headerText="Detalle"  filterBy="#{RGenJ.observacion}" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                        <h:outputText value="#{RGenJ.observacion}" />
+                                    </p:column>
+                                    <p:column headerText="Seguimiento Asignado a"  filterBy="#{RGenJ.empSeguimiento}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                        <h:outputText value="#{RGenJ.empSeguimiento}" />
+                                    </p:column> 
+                                     <p:column headerText="Avaluador(es)"  filterBy="#{RGenJ.nombreCPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                        <h:outputText value="#{RGenJ.nombreCPerito}" />
+                                    </p:column>                                        
+                                    <p:column headerText="Ubicación" filterBy="#{RGenJ.ubicacionAva}" filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                        <h:outputText value="#{RGenJ.ubicacionAva}" />
+                                    </p:column>
+                                    <p:column headerText="Valor comercial del avaluador"  filterBy="#{RGenJ.valorPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                        <h:outputText value="$ #{RGenJ.valorPerito}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de entrega"  filterBy="#{RGenJ.fechaEntrega}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                        <h:outputText value="#{RGenJ.fechaEntrega}" />
+                                    </p:column>
+                                    <p:column headerText="Estado"  filterBy="#{RGenJ.estadoAva}" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                        <h:outputText value="#{RGenJ.estadoAva}" />
+                                    </p:column>
+                                    <p:column headerText="Tiempo transcurrido desde radicación" filterBy="#{RGenJ.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                        <h:outputText value="#{RGenJ.tiempoTranscurridoRad}" />
+                                    </p:column>
+                                    <p:column headerText="Tiempo transcurrido desde cita confirmada" filterBy="#{RGenJ.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 300px;">
+                                        <h:outputText value="#{RGenJ.tiempoTranscurridoVisCit}" />
+                                    </p:column>
+                                    <p:column headerText="Tiempo transcurrido desde entrega" filterBy="#{RGenJ.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                        <h:outputText value="#{RGenJ.tiempoTranscurridoEnt}" />
+                                    </p:column>                                                        
+                                   
+                                </p:dataTable>
+                            </c:when>
+                            <c:otherwise>
+                                <c:choose>
+                                    <c:when test="#{beanDireccionar.nombre_pagina_interna=='MisAsignadosTec'}">
+
+                                        <!--PARA LA ASIGNACION DE REVISION TECNICA-->
+                                        <p:dataTable selectionMode="single" var="RGenT" widgetVar="MisAsigRevTec"  id="RevTecTable" emptyMessage="No se encontraron Avaluos para revisión técnica"
+                                                     rowKey="#{RGenT.codSeguimiento}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" value="#{MBEntregaYRevision.lisAsignadotRevTec}"
+                                                     scrollable="true" scrollHeight="100%;" frozenColumns="1" styleClass="FirstCol">
+                                            <p:column headerText="N* Avaluo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGenT.codAvaluo}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                                <h:outputText value="#{RGenT.codAvaluo}" />
+                                            </p:column>
+                                            <p:column headerText="N* Bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGenT.codNBien}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                                <h:outputText value="#{RGenT.codNBien}" />
+                                            </p:column>
+                                            <p:column headerText="Tipo de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{RGenT.tipoAva}" filterMatchMode="startsWith"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                                <h:outputText value="#{RGenT.tipoAva}" />
+                                            </p:column>
+                                            <p:column headerText="Producto entidad" filterBy="#{RGenT.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                                <h:outputText value="#{RGenT.producEntidAva}" />
+                                            </p:column>
+                                            <p:column headerText="Ubicacion" filterBy="#{RGenT.ubicacionAva}" filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                                <h:outputText value="#{RGenT.ubicacionAva}" />
+                                            </p:column>
+                                            <p:column headerText="Valor Avaluo Perito"  filterBy="#{RGenT.valorPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                <h:outputText value="#{RGenT.valorPerito}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha Entrega"  filterBy="#{RGenT.fechaEntrega}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                                <h:outputText value="#{RGenT.fechaEntrega}" />
+                                            </p:column>
+                                            <p:column headerText="Estado"  filterBy="#{RGenT.estadoAva}" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                                <h:outputText value="#{RGenT.estadoAva}" />
+                                            </p:column>
+                                            <p:column headerText="Tiempo transcurrido desde radicación" filterBy="#{RGenT.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                                <h:outputText value="#{RGenT.tiempoTranscurridoRad}" />
+                                            </p:column>
+                                            <p:column headerText="Tiempo transcurrido desde cita confirmada" filterBy="#{RGenT.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 300px;">
+                                                <h:outputText value="#{RGenT.tiempoTranscurridoVisCit}" />
+                                            </p:column>
+                                            <p:column headerText="Tiempo transcurrido desde entrega" filterBy="#{RGenT.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                                <h:outputText value="#{RGenT.tiempoTranscurridoEnt}" />
+                                            </p:column>
+                                            <p:column headerText="Avaluador (es)"  filterBy="#{RGenT.nombreCPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                                <h:outputText value="#{RGenT.nombreCPerito}" />
+                                            </p:column>
+                                            <p:column headerText="Seguimiento Asignado A"  filterBy="#{RGenT.empSeguimiento}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                                <h:outputText value="#{RGenT.empSeguimiento}" />
+                                            </p:column>                           
+                                            <p:column headerText="Detalle"  filterBy="#{RGenT.observacion}" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                                <h:outputText value="#{RGenT.observacion}" />
+                                            </p:column>
+                                            <p:column headerText="Solicitante" filterBy="#{RGenT.clientes}"  filterStyle="font-family:Arial;font-size: 12px;width:170px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;" >
+                                                <h:outputText value="#{RGenT.clientes}" />
+                                            </p:column>
+                                            <p:column headerText="Entidad" filterBy="#{RGenT.entidades}" filterStyle="font-family:Arial;font-size: 12px;width:170px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;">
+                                                <h:outputText value="#{RGenT.entidades}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </c:when>
+                                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+
+                </tr>
+            </table>
+
+
+        </h:form>
+    </h:body>
+</html>
+

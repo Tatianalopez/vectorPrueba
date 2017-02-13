@@ -1,0 +1,137 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Informes pendientes por Entregar del Perito</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMEntregInf" >
+
+            <table cellspacing="4" cellpadding="4"  border="0">
+                <tr>
+                    <td><big><big><b><p class="Title" >Avaluadores pendientes por entrega de informe</p></b></big></big></td>
+                </tr>
+                <tr>
+                    <td colspan="2" > <p:separator /></td>
+                </tr>
+                <tr>
+                    <td> 
+                        <p:outputLabel value="Seleccione un registro de la tabla:" style="font-family: Arial;font-size: 12px;"/>
+                    </td> 
+                </tr>
+                <tr>
+                    <td>
+                        <p:outputPanel id="PNLPendientes">
+                            <p:panel style="border: none;">
+                                <p:dataTable id="PendientInforTable" var="EntInf" value="#{MBEntregaYRevision.listEntreg}" selection="#{MBEntregaYRevision.entRevInfomPendi}" rowKey="#{EntInf.codPerito}"  widgetVar="InformeEntrega" selectionMode="single" emptyMessage="No hay avalúos pendientes por subir informe" >
+                                    <p:column headerText="N° Avaluos"   filterBy="#{EntInf.navaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                        <h:outputText value="#{EntInf.navaluo}" />
+                                    </p:column>
+                                    <p:column headerText="Documento avaluador"  filterBy="#{EntInf.numDocPerito}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                        <h:outputText value="#{EntInf.numDocPerito}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre avaluador"   filterBy="#{EntInf.nombreCPerito}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                        <h:outputText value="#{EntInf.nombreCPerito}" />
+                                    </p:column>
+                                    <p:column headerText="Avaluos Pendientes"  filterBy="#{EntInf.totalAvaluosPenInf}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                        <h:outputText value="#{EntInf.totalAvaluosPenInf}" />
+                                    </p:column>
+                                    <p:column headerText="Avaluos Impedidos"  filterBy="#{EntInf.totalAvaluosPenImpe}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                        <h:outputText value="#{EntInf.totalAvaluosPenImpe}" />
+                                    </p:column> <!--GCH NOV 2016-->
+                                    <p:column headerText="Paquetes"  filterBy="#{EntInf.toalAvaluXPaquet}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                        <h:outputText value="#{EntInf.toalAvaluXPaquet}" />
+                                    </p:column>                                   
+                                </p:dataTable>
+                                <br/>
+                                <center>
+                                    <p:commandButton  id="BTN1"  value="Seleccionar" update=":contenedorGeneral:Contenedor:growl_General,:contenedorGeneral:Contenedor:FRMEntregInf:PNLPeritoAvaluos,DlgPerito,PNLPeritoAvaluos"   
+                                                      style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" iconPos="left" action="#{MBEntregaYRevision.verificacion(1)}" />
+                                </center>
+                                <br/>
+                            </p:panel>
+                        </p:outputPanel>
+                    </td>
+                </tr>
+            </table>
+
+            <p:dialog id="DlgPerito" widgetVar="DlgAvaluosPerito" header="Avaluos del perito:  #{MBEntregaYRevision.entRevInfomPendi.nombreCPerito}" hideEffect="fade" showEffect="fade" minHeight="300" minWidth="600" modal="false" width="1000" height="500"  style="font-family:Arial;font-size: 12px;">
+                <p:outputPanel id="PNLPeritoAvaluos">
+                   <br/>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                    <p:dataTable id="InfmePeritoTable" var="EntInfP" value="#{MBEntregaYRevision.listSeleccionPerito}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" rowKey="#{EntInfP.codSeguimiento}"  
+                                                 widgetVar="InformesPerit" selectionMode="single" emptyMessage="No se encontraron registros"  scrollable="true" scrollHeight="380" liveScroll="true" scrollRows="15" frozenColumns="1" styleClass="FirstCol"
+                                                 rowStyleClass="#{Rad.estadoAvaluo eq 'IMPEDIDO' ? 'highlight' :                                                      
+                                                      null}">
+
+                                        <p:column headerText="N* Avaluo" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{EntInfP.codAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 60px;">
+                                            <h:outputText value="#{EntInfP.codAvaluo}" />
+                                        </p:column>
+                                        <p:column headerText="N Seguimiento" filterStyle="font-family:Arial;font-size: 12px;width:60px;"   rendered="false">
+                                            <h:outputText value="#{EntInfP.codSeguimiento}" />  
+                                        </p:column>
+                                        <p:column headerText="N* Bien"  filterBy="#{EntInfP.codNBien}" filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 60px;"  >
+                                            <h:outputText value="#{EntInfP.codNBien}" />  
+                                        </p:column>
+                                        <p:column headerText="Tipo Avaluo"  filterBy="#{EntInfP.tipoAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 110px;" filterStyle="font-family:Arial;font-size: 12px;width: 100px" >
+                                            <h:outputText value="#{EntInfP.tipoAva}" />  
+                                        </p:column>
+                                        <p:column headerText="Cliente(s)"  filterBy="#{EntInfP.clientes}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 500px;">
+                                            <h:outputText value="#{EntInfP.clientes}" />
+                                        </p:column>
+                                        <p:column headerText="Entidad(es)"  filterBy="#{EntInfP.entidades}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 500px;">
+                                            <h:outputText value="#{EntInfP.entidades}" />
+                                        </p:column>
+                                        <p:column headerText="Fecha Asignacion Perito"  filterBy="#{EntInfP.fechaAsigPer}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{EntInfP.fechaAsigPer}" />
+                                        </p:column>
+                                        <p:column headerText="Producto Entidad "  filterBy="#{EntInfP.producEntidAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 300px;">
+                                            <h:outputText value="#{EntInfP.producEntidAva}" />
+                                        </p:column>
+                                        <p:column headerText="Tiempo transcurrido desde radicacion" filterBy="#{EntInfP.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 220px;">
+                                            <h:outputText value="#{EntInfP.tiempoTranscurridoRad}" />
+                                        </p:column>
+                                        <p:column headerText="Tiempo transcurrido desde confirmación de cita" filterBy="#{EntInfP.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                            <h:outputText value="#{EntInfP.tiempoTranscurridoVisCit}" />
+                                        </p:column>
+                                        <p:column headerText="Tiempo transcurrido desde entrega" filterBy="#{EntInfP.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 220px;">
+                                            <h:outputText value="#{EntInfP.tiempoTranscurridoEnt}" />
+                                        </p:column>
+                                        <p:column headerText="Ubicacion"  filterBy="#{EntInfP.ubicacionAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 250px;">
+                                            <h:outputText value="#{EntInfP.ubicacionAva}" />
+                                        </p:column>
+                                        <p:column headerText="Direccion"  filterBy="#{EntInfP.direccAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 290px;">
+                                            <h:outputText value="#{EntInfP.direccAva}" />
+                                        </p:column>
+                                        <p:column headerText="Estado"  filterBy="#{EntInfP.estadoAva} " filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 180px;">
+                                            <h:outputText value="#{EntInfP.estadoAva}" />
+                                        </p:column>
+                                        
+
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br/>
+                        <center>
+                            <p:commandButton  value="Seleccionar avaluo"  actionListener="#{MBEntregaYRevision.verificacion(2)}"  action="#{beanDireccionar.url_Menu_Entrega('InformeAvaluo')}"  ajax="false"  icon="ui-icon-check" iconPos="left"  
+                                              update=":contenedorGeneral:Contenedor:growl_General"/>
+                        </center>   
+                  
+                </p:outputPanel>
+            </p:dialog>
+            
+           
+        </h:form>
+    </h:body>
+</html>
+

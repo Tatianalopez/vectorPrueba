@@ -1,0 +1,856 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Factura Anticipo</title>
+    </h:head>
+    <h:body>
+        <h:form id="FormFactCopia" >
+
+            <table border="0" cellspacing="4" cellpadding="4">
+                <tr>
+                    <td><big><big><b><p class="Title">Factura Copia</p></b></big></big></td>
+                </tr>
+                <tr>
+                    <td colspan="10" style="width: 1200px"> <p:separator /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <center>
+                            <p:outputLabel   value="Digite el No de Avaluo:  " style="font-family:Arial;font-size: 12px;"/>
+                            <p:spacer height="10"/>
+                            <p:inputText  value="#{MBFacturacion.navaluoCopia}" style="font-family:Arial;font-size: 12px;"></p:inputText>
+                            <p:spacer height="10"/>
+                            <p:commandButton update=":contenedorGeneral:Contenedor:growl_General, generl" icon="ui-icon-search" action="#{beanDireccionar.url_Menu_Facturacion('CargueInfoFactCopia')}"
+                                             style="font-family: Arial;font-size: 13px;"/>
+
+                        </center>
+                    </td>
+                </tr>
+            </table>
+            <p:outputPanel id="generl">
+                <table>
+                    <tr>
+                        <td>
+                            <center>
+                                <p:outputPanel id="TabFact">
+
+                                    <p:tabView   effect="fade" effectDuration="fast" cache="true" style="width: 100%;font-family: Arial;font-size: 12px;border-radius: 5px;"  widgetVar="TabFacturacion" >
+                                        <!-- Informacion de observaciones --> 
+                                        <!-- Funcionando OK--> 
+                                        <p:tab  title="Información" disabled="#{!MBFacturacion.validarPanel}" >
+                                            <br/>
+
+                                            <p:panel style="font-size: 12px;font-family: Arial;border: none;" >                                              
+                                                <p:outputPanel id="InfoPeritos" autoUpdate="true">
+                                                    <center>
+                                                        <p:panel style="font-size: 13px;font-family: Arial; border: none;"  >
+                                                            <c:choose>
+                                                                <c:when test="#{MBPerito.listPeritAvaluadoresSeleccionadosForm.size() > 0 and MBFacturacion.validarPanel}">
+                                                                    <table border="0" style="width: auto">
+                                                                        <tr>
+                                                                            <td colspan="20">
+                                                                                <b><p:outputLabel value="» Avaluador(es) asignado(s)" style="font-size: 14px;font-family: Arial;" /></b>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="10">
+                                                                                <p:separator style="width: 900px"/>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+
+
+                                                                    <ui:repeat value="#{MBPerito.listPeritAvaluadoresSeleccionadosForm}" var="Perit" varStatus="status" >
+                                                                        <table border="0" cellspacing="4" cellpadding="4" style="font-size: 12px;font-family: Arial;">                                
+                                                                            <tbody>
+                                                                                <tr>                                    
+                                                                                    <td><b><p:outputLabel value="Numero de documento: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.numDocPerito}" /></td>
+
+                                                                                    <td><b><p:outputLabel value="Tipo de regimen" /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.adm.nombreCalificacion}" /></td>                                                                                        
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><b><p:outputLabel value="Nombres: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.nombrePerito}" /></td>
+
+                                                                                    <td><b><p:outputLabel value="Apellidos: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.apellidoPerito}" /></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><b><p:outputLabel value="Telefono: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.telefonoPerito}" /></td>
+
+                                                                                    <td><b><p:outputLabel value="Celular: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.celularPerito}" /></td>
+
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><b><p:outputLabel value="Dirección: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.direccionPerito}" /></td>
+
+                                                                                    <td><b><p:outputLabel value="Email: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.emailPerito}" /></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><b><p:outputLabel value="Departamento: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.ubi.nomDep}" /></td>
+
+                                                                                    <td><b><p:outputLabel value="Ciudad: " /></b></td>
+                                                                                    <td><p:outputLabel value="#{Perit.ubi.nomCiu}" /></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </ui:repeat>
+                                                                </c:when>
+                                                            </c:choose>
+
+                                                        </p:panel>
+                                                    </center>
+                                                </p:outputPanel>
+
+                                            </p:panel>    
+
+                                            <p:panel   style="font-size: 12px;font-family: Arial;border: none;">
+                                                <p:outputPanel id="InfoGeneralRadicacion"  autoUpdate="true">
+
+                                                    <p:panel style="font-size: 13px;font-family: Arial;border: none;"  >
+                                                        <c:choose>
+                                                            <c:when test="#{MBFacturacion.validarPanel}">
+
+                                                                <table border="0" >               
+                                                                    <tr>
+                                                                        <td colspan="20">
+                                                                            <b><p:outputLabel value="» Información general" style="font-size: 14px;font-family: Arial;" /></b>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="10">
+                                                                            <p:separator style="width: 900px"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                <table border="0" cellspacing="4" cellpadding="4" style="font-size: 12px;font-family: Arial;">                                
+                                                                    <tr>
+                                                                        <td> <b><p:outputLabel for="FecSolAval" value="Fecha de solicitud: " style="font-family: Arial;font-size: 12px;" /> </b></td>
+                                                                        <td colspan="1">
+                                                                            <p:outputLabel id="FecSolAval" value="#{MBRadicacion.fechaSolicRadic}" style="font-family: Arial;font-size: 12px;" />
+                                                                        </td>
+                                                                        <td colspan="1" style="width: 100px">
+                                                                            <b><p:outputLabel for="Horasoli" value="Hora de solicitud: " style="font-family: Arial;font-size: 12px;" /> </b>
+                                                                        </td>
+                                                                        <td colspan="1">
+                                                                            <p:outputLabel  id="Horasoli" value="#{MBRadicacion.horaSol}"  style="font-family: Arial;font-size: 12px;" />                                       
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td> <b><p:outputLabel for="NumHoj" value="Numero de hojas: " style="font-family: Arial;font-size: 12px;"/> </b></td>
+                                                                        <td>
+                                                                            <p:outputLabel value="#{MBRadicacion.numeroHojas}"  id="NumHoj" style="font-family: Arial;font-size: 12px;"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td> <b><p:outputLabel for="SoliPor" value="Remitido por: " style="font-family: Arial;font-size: 12px;"/> </b> </td>
+                                                                        <td>       
+                                                                            <p:outputLabel id="SoliPor"  style="font-family: Arial;font-size: 12px;" value="#{MBRadicacion.solicitante}" />
+
+                                                                        </td>
+
+                                                                        <td> <b><p:outputLabel for="EnviA" value="Enviar a : " style="font-family: Arial;font-size: 12px;"/> </b></td>
+                                                                        <td>      
+                                                                            <p:outputLabel id="EnviA"  style="font-family: Arial;font-size: 12px;" value="#{MBRadicacion.envioInformacion}"  />
+                                                                        </td>                                                             
+
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td> <b><p:outputLabel for="combo1" value="Producto entidad : " style="font-family: Arial;font-size: 12px;"/> </b></td>
+                                                                        <td>
+                                                                            <p:outputLabel style="font-family: Arial;font-size: 12px;" value="#{MBRadicacion.nombreProEnt}" id="combo1"/>
+                                                                        </td>
+                                                                        <td>  <b><p:outputLabel for="TipProEnti" value="Tipo de producto entidad: " style="font-family: Arial;font-size: 12px;" /></b></td>
+                                                                        <td>
+                                                                            <p:outputLabel  id="TipProEnti" style="font-family: Arial;font-size: 12px;" value="#{MBRadicacion.nombreTipProEnt}" />
+
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td colspan="4">
+                                                                            <b> <p:outputLabel value="¿Indica ubicación del avalúo? :" style="font-size: 12px;font-family: Arial;" /></b>
+                                                                            <p:spacer height="5"/>
+                                                                            <c:choose>
+                                                                                <c:when test="#{MBRadicacion.requierUbicacion}">
+                                                                                    <p:outputLabel value="Si" style="font-size: 12px;font-family: Arial;"/>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <p:outputLabel value="No" style="font-size: 12px;font-family: Arial;"/>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    <tr>
+                                                                        <td colspan="4">
+                                                                            <b> <p:outputLabel value="¿Proviene de una cotización? :" style="font-size: 12px;font-family: Arial;" /></b>
+                                                                            <p:spacer height="5"/>
+                                                                            <c:choose>
+                                                                                <c:when test="#{MBRadicacion.provieneCotizacion}">
+                                                                                    <p:outputLabel value="Si" style="font-size: 12px;font-family: Arial;"/>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <p:outputLabel value="No" style="font-size: 12px;font-family: Arial;"/>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    <tr>
+                                                                        <td><b><p:outputLabel for="DeptoSolic" value="Departamento: " style="font-family: Arial;font-size: 12px;"  rendered="#{MBRadicacion.requierUbicacion}" /></b></td>
+                                                                        <td><p:outputLabel id="DeptoSolic" value="#{MBAvaluo.nombreDeptoSol}" style="font-family: Arial;font-size: 12px;"  rendered="#{MBRadicacion.requierUbicacion}" /></td>                                                            
+
+
+                                                                        <td><b>  <p:outputLabel for="CiudadesSolici" value="Ciudad: " style="font-family: Arial;font-size: 12px;" rendered="#{MBRadicacion.requierUbicacion}" /></b></td>
+                                                                        <td>
+                                                                            <p:outputLabel id="CiudadesSolici" value="#{MBAvaluo.nombreCiudadSol}" style="font-family: Arial;font-size: 12px;" rendered="#{MBRadicacion.requierUbicacion}" />
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </table>
+                                                            </c:when>
+                                                        </c:choose>
+                                                    </p:panel>
+
+                                                </p:outputPanel>
+                                            </p:panel>
+
+                                            <p:outputPanel id="InfoAvaluos" autoUpdate="true">
+                                                <!-- Informacion del bien (tipo de avaluo) -->
+                                                <p:panel style="font-size: 12px;font-family: Arial;border: none;" >                                              
+                                                    <p:outputPanel id="InfoTipoAvaluoPre" >
+                                                        <p:panel style="font-size: 13px;font-family: Arial; border: none;"  rendered="#{MBAvaluo.estadoPanelAvalRadic and MBFacturacion.validarPanel}">
+                                                            <table>
+                                                                <tr>
+                                                                    <td colspan="20">
+                                                                        <b><p:outputLabel value="» Información del Bien" style="font-size: 14px;font-family: Arial;" /></b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="10">
+                                                                        <p:separator style="width: 900px"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table cellspacing="4" cellpadding="4">
+                                                                <c:choose>
+                                                                    <c:when test="#{MBAvaluo.estadoInfoPred}">
+                                                                        <tr>
+                                                                            <td><b> <p:outputLabel for="LblTipAval" value="Tipo de bien: " style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoTipoAvalRadic}"/></b></td>
+                                                                            <td colspan="2"> <p:outputLabel id="LblTipAval" value="#{MBAvaluo.nombreTipAvaluoRadic}" style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoTipoAvalRadic}"/></td>       
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b><p:outputLabel value="Tipo de predio: " style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoPred}" /></b></td>
+                                                                            <td><p:outputLabel  value="#{MBAvaluo.nombreTipoBienRadic}" style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoPred}" /></td>
+                                                                        </tr>
+                                                                        <tr>                               
+                                                                            <td>
+                                                                                <b><p:outputLabel  value="Matrícula: " style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoPred}" styleClass="Texto"/></b>                                                                           
+                                                                            </td>
+                                                                            <td colspan="6" style=" width: 220px">
+                                                                                <p:outputLabel  value="#{MBAvaluo.matriculaAvalRadic}" style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoPred}" styleClass="Texto"/>                                                                         
+                                                                            </td>
+                                                                        </tr>
+                                                                    </c:when>
+
+                                                                </c:choose>
+
+                                                                <c:choose>
+                                                                    <c:when test="#{MBAvaluo.estadoInfoMaqui}">
+                                                                        <tr>
+                                                                            <td><b><p:outputLabel value="Tipo de maquinaria: " style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}" /></b></td>
+                                                                            <td><p:outputLabel  value="#{MBAvaluo.nombreTipoBienRadic}" style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}" /></td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td><b><p:outputLabel  value="Marca: " style="font-family: Arial;font-size: 12px;"  rendered="#{MBAvaluo.estadoInfoMaqui}"/></b></td>
+                                                                            <td><p:outputLabel id="MarcaMaquinPreRadi" value="#{MBAvaluo.marcaMaquinRadic}" style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}" /></td>
+
+                                                                            <td><b><p:outputLabel  value="Modelo: " style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}"/></b></td>
+                                                                            <td><p:outputLabel id="ModeloMaquinPreRadi" value="#{MBAvaluo.modeloMaquinRadic}" style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}" /></td>
+                                                                        </tr>
+                                                                        <tr>                               
+                                                                            <td>                                                                         
+                                                                                <b><p:outputLabel  value="Serie: " style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}" styleClass="Texto" /></b>                                                                           
+                                                                            </td>
+                                                                            <td>                                                                            
+                                                                                <p:outputLabel  value="#{MBAvaluo.serieAvalRadic}"  style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}" styleClass="Texto" />                                                                           
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b><p:outputLabel  value="Observación: " style="font-family: Arial;font-size: 12px;" styleClass="Texto" rendered="#{MBAvaluo.estadoInfoMaqui}"/></b></td>
+                                                                            <td><p:outputLabel  value="#{MBAvaluo.observacMaquinRadic}"  style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoMaqui}" styleClass="Texto" /></td>
+                                                                        </tr>                                                                  
+
+                                                                    </c:when>
+
+                                                                </c:choose>
+                                                                <c:choose>
+                                                                    <c:when test="#{MBAvaluo.estadoInfoResulEnser}">
+                                                                        <tr>                               
+                                                                            <td>                                                                          
+                                                                                <b><p:outputLabel  value="Observación: " style="font-family: Arial;font-size: 12px;"  styleClass="Texto" rendered="#{MBAvaluo.estadoInfoResulEnser}" /></b>
+                                                                            </td>
+                                                                            <td>                                                                            
+                                                                                <p:outputLabel  value="#{MBAvaluo.observacAvalRadic}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto" rendered="#{MBAvaluo.estadoInfoResulEnser}" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </c:when>
+
+                                                                </c:choose>
+                                                                <tr>
+                                                                    <td><b><p:outputLabel value="Tipo de dirección: " style="font-family: Arial;font-size: 12px;" styleClass="Texto"/></b></td>
+                                                                    <td><p:outputLabel   value="#{MBAvaluo.tipoDireccionAvalRadic}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto"/></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><b><p:outputLabel value="Dirección: " style="font-family: Arial;font-size: 12px;" styleClass="Texto"/></b></td>
+                                                                    <td style="width: 250px;"><p:outputLabel   value="#{MBAvaluo.direccionAvalRadic}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto"/></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><b><p:outputLabel  value="Departamento: " style="font-family: Arial;font-size: 12px;" /></b></td>
+                                                                    <td><p:outputLabel  value="#{MBAvaluo.nombreDeptoAvalRadic}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto"/></td>
+
+                                                                    <td><b><p:outputLabel value="Ciudad: " style="font-family: Arial;font-size: 12px;" /></b></td>
+                                                                    <td><p:outputLabel  value="#{MBAvaluo.nombreCiudAvalRadic}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto"/></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><b><p:outputLabel value="Barrio: " style="font-family: Arial;font-size: 12px;" rendered="#{MBAvaluo.estadoInfoPred}"/></b></td>
+                                                                    <td><p:outputLabel  value="#{MBAvaluo.barrioAvalRadic}" style="font-family: Arial;font-size: 12px;"  styleClass="Texto" rendered="#{MBAvaluo.estadoInfoPred}"/></td>
+                                                                </tr>
+                                                            </table>
+                                                        </p:panel>
+                                                    </p:outputPanel>
+
+                                                </p:panel>
+                                            </p:outputPanel>
+
+                                            <p:panel style="font-size: 12px;font-family: Arial;border: none;" >                                              
+                                                <p:outputPanel id="InfoClientesGeneral" autoUpdate="true" >
+                                                    <c:choose>
+                                                        <c:when test="#{MBCliente.estadoPanelClienteGeneral and MBFacturacion.validarPanel}">
+                                                            <center>
+                                                                <p:panel style="font-size: 13px;font-family: Arial;border: none;"  >
+
+                                                                    <table border="0" style="width: 770px;">
+                                                                        <tr>
+                                                                            <td colspan="20">
+                                                                                <b><p:outputLabel value="» Información de cliente(es):" style="font-size: 14px;font-family: Arial;" /></b>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="10">
+                                                                                <p:separator style="width: 900px"/>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+
+                                                                    <center>                                                     
+                                                                        <table border="0" cellpadding="3" cellspacing="3">                                                    
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <b><p:outputLabel value="Numero Documento: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <p:outputLabel value="#{MBCliente.numeroDoccliente1}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                    </td>
+
+                                                                                    <td>
+                                                                                        <b><p:outputLabel value="Nombre Completo: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                      
+                                                                                    </td>
+                                                                                    <td>                                                                                        
+                                                                                        <p:outputLabel value="#{MBCliente.nombreCliente1}" style="font-size: 12px;font-family: Arial;" /> 
+                                                                                    </td>
+
+                                                                                    <td>
+                                                                                        <b><p:outputLabel value="Telefono: " style="font-size: 12px;font-family: Arial;" /></b>                                                                       
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <p:outputLabel value="#{MBCliente.telefonoCliente1}" style="font-size: 12px;font-family: Arial;" />                                                                                       
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <!-- separador y elementos de la fila 2 ______________-->   
+                                                                                <c:choose>
+                                                                                    <c:when test="#{MBCliente.estadocajasAgregarF1}">
+                                                                                        <tr>
+                                                                                            <td colspan="10">
+                                                                                                <p:separator rendered="#{MBCliente.estadocajasAgregarF1}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <!-- elementos de la fila 2 -->   
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <b><p:outputLabel value="Numero Documento: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <p:outputLabel value="#{MBCliente.numeroDoccliente2}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                            </td>
+
+                                                                                            <td>
+                                                                                                <b><p:outputLabel value="Nombre Completo: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                      
+                                                                                            </td>
+                                                                                            <td>                                                                                        
+                                                                                                <p:outputLabel value="#{MBCliente.nombreCliente2}" style="font-size: 12px;font-family: Arial;" /> 
+                                                                                            </td>
+
+                                                                                            <td>
+                                                                                                <b><p:outputLabel value="Telefono: " style="font-size: 12px;font-family: Arial;" /></b>                                                                       
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <p:outputLabel value="#{MBCliente.telefonoCliente2}" style="font-size: 12px;font-family: Arial;" />                                                                                       
+                                                                                            </td>
+
+                                                                                        </tr>
+                                                                                    </c:when>
+                                                                                </c:choose>    
+                                                                            </tbody> 
+                                                                        </table>  
+                                                                    </center>  
+                                                                </p:panel>
+                                                            </center>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </p:outputPanel >
+                                            </p:panel>
+
+                                            <p:panel style="font-size: 12px;font-family: Arial;border: none;" >                                              
+                                                <p:outputPanel id="InfoEntidad" autoUpdate="true">
+                                                    <c:choose>
+                                                        <c:when test="#{MBEntidad.estPanelEntidad and MBFacturacion.validarPanel}">
+                                                            <center>
+                                                                <p:panel style="font-size: 13px;font-family: Arial;border: none;"  >
+                                                                    <table border="0">
+                                                                        <tr>
+                                                                            <td colspan="20">
+                                                                                <b><p:outputLabel value="» Información de entidad(es):" style="font-size: 14px;font-family: Arial;" /></b>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="10">
+                                                                                <p:separator style="width: 900px"/>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+
+                                                                    <center>
+                                                                        <table border="0"  cellspacing="4" cellpadding="4">
+
+                                                                            <!-- entidades de la fila 1-->
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <b><p:outputLabel rendered="#{!MBEntidad.nombreEntidad1.equalsIgnoreCase('')}" value="Entidad: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                </td>
+                                                                                <td>
+                                                                                    <p:outputLabel    value="#{MBEntidad.nombreEntidad1}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                </td>     
+
+                                                                                <td>
+                                                                                    <b><p:outputLabel  rendered="#{!MBEntidad.nombreSucursal1.equalsIgnoreCase('')}"  value="Sucursal: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                </td>
+                                                                                <td>
+                                                                                    <p:outputLabel    value="#{MBEntidad.nombreSucursal1}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                </td>     
+
+                                                                                <td>
+                                                                                    <b><p:outputLabel  rendered="#{!MBEntidad.nombreAsesor1.equalsIgnoreCase('')}"  value="Asesor: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                </td>
+                                                                                <td>
+                                                                                    <p:outputLabel value="#{MBEntidad.nombreAsesor1}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                </td>     
+                                                                            </tr>
+                                                                            <c:choose>
+                                                                                <c:when test="#{MBEntidad.estadoAgregarFilasEntidad2}">
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <b><p:outputLabel value="Entidad: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <p:outputLabel value="#{MBEntidad.nombreEntidad2}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                        </td>     
+
+                                                                                        <td>
+                                                                                            <b><p:outputLabel value="Sucursal: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <p:outputLabel value="#{MBEntidad.nombreSucursal2}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                        </td>     
+
+                                                                                        <td>
+                                                                                            <b><p:outputLabel value="Asesor: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <p:outputLabel value="#{MBEntidad.nombreAsesor2}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                                                                        </td>     
+                                                                                    </tr>
+                                                                                </c:when>
+                                                                            </c:choose>
+                                                                        </table> 
+                                                                    </center>
+                                                                </p:panel>
+                                                            </center>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </p:outputPanel>
+
+                                            </p:panel>
+
+                                        </p:tab>
+                                        <p:tab title="Facturar Copia" disabled="#{!MBFacturacion.validarPanel}">
+
+
+                                            <center>
+                                                <p:outputPanel    autoUpdate="true">
+                                                    <c:choose>
+                                                        <c:when  test="#{MBFacturacion.validarPanel}">
+                                                            <table border="0" cellspacing="4" cellpadding="4">
+                                                                <tr>
+                                                                    <td colspan="10" style="width: 1200px"> <p:separator /></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td> <b><h:outputLabel styleClass="Texto" style="color: red;" value="Campos obligatorios (*)" /></b></td>
+                                                                </tr>
+
+                                                            </table>
+
+                                                            <table style="font-family: Arial;font-size: 12px;">
+                                                                <tr>
+                                                                    <b> <p:outputLabel  value="¿A que persona desea Facturar?" rendered="#{MBFacturacion.validarPanel}"   for="OPCons" style="font-family: Arial;font-size: 13px;"/></b>
+                                                                    <br/>
+                                                                    <!-- Radios para mostrar ya sea el panel de entidades, sucursales o asesores ok--> 
+                                                                    <p:panel style="border: none;">
+                                                                        <td><p:selectOneRadio id="OPCons" value="#{MBFacturacion.opcionFacturarA}" >
+                                                                                <f:selectItem itemLabel="Entidad" itemValue="Entidad" />
+                                                                                <f:selectItem itemLabel="Cliente"  itemValue="Cliente"/>
+                                                                                <p:ajax event="change" update="
+                                                                                        InfoCliente" 
+                                                                                        listener="#{MBFacturacion.ConsultarPersona(7)}" />
+                                                                            </p:selectOneRadio></td>
+                                                                    </p:panel>
+                                                                </tr>
+                                                            </table>
+                                                        </c:when></c:choose>
+                                                </p:outputPanel>
+                                            </center>
+                                            <p:outputPanel  id="PnlPersona" autoUpdate="true">
+                                                <center>
+                                                    <c:choose>
+                                                        <c:when  test="#{MBFacturacion.validarPanel}">
+                                                            <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="3" cellspacing="3">
+                                                                <tr>
+                                                                    <td>
+                                                                        <center>
+                                                                            <p:outputLabel value="Seleccione los filtros que considere necesarios para realizar la consulta" style="font-weight: bold;"/>
+                                                                        </center>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>                                                    
+                                                                        <p:separator/>                                                    
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <c:choose>
+                                                                            <c:when  test="#{MBFacturacion.opcionFacturarA=='Entidad'}">
+                                                                                <center>
+                                                                                    <table style="font-family: Arial;font-size: 12px;" cellpadding="4" cellspacing="4">
+                                                                                        <p:outputPanel id="pnlEntidad">
+                                                                                            <tr>                   
+                                                                                                <td>
+                                                                                                    <p:selectOneMenu  id="CmbEntidadRadic1" filter="true" style="width: 185px;font-size: 12px;" effect="fade" value="#{MBEntidad.codEntidad1}" >
+                                                                                                        <p:ajax listener="#{MBEntidad.onSucursalRadic(1)}" update="CmbSucursalRadic1,:contenedorGeneral:Contenedor:growl_General" />
+                                                                                                        <f:selectItem  itemValue="0" itemLabel="--Seleccione Entidad--"  noSelectionOption="true"/>
+                                                                                                        <f:selectItems  value="#{MBEntidad.cargaEnt1}" />
+                                                                                                    </p:selectOneMenu> 
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <p:selectOneMenu id="CmbSucursalRadic1" style="width: 185px;font-size: 12px;" effect="fade" value="#{MBEntidad.codSucursal1}" filter="true" >
+                                                                                                        <p:ajax listener="#{MBEntidad.onAsesorRadic(1)}" update="CmbSucursalRadic1,:contenedorGeneral:Contenedor:growl_General"/>
+                                                                                                        <f:selectItem  itemValue="0" itemLabel="--Seleccione Sucursal--" noSelectionOption="true"/>
+                                                                                                        <f:selectItems  value="#{MBEntidad.cargaSucur1}" />
+                                                                                                    </p:selectOneMenu> 
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <p:selectOneMenu id="CmbAsesorRadic1" style="width: 185px;font-size: 12px;" filter="true" effect="fade" value="#{MBEntidad.codAsesor1}" disabled="#{MBEntidad.deshabilitarAsesor1}">
+                                                                                                        <p:ajax listener="#{MBEntidad.InfoAsesor(1)}" 
+                                                                                                                update=":contenedorGeneral:Contenedor:growl_General"/>
+                                                                                                        <f:selectItem  itemValue="0" itemLabel="--Seleccione Asesor--" noSelectionOption="true"/>
+                                                                                                        <f:selectItems  value="#{MBEntidad.cargaAses1}" />
+                                                                                                    </p:selectOneMenu> 
+                                                                                                    <p:tooltip  for="CmbAsesorRadic1" showEffect="clip" value="Seleccione Asesor: *" style=" font-size: 12px;font-family: Arial;" />
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <center>
+                                                                                                        <p:commandButton update=":contenedorGeneral:Contenedor:growl_General" icon="ui-icon-check" action="#{MBFacturacion.ConsultarPersona(1)}"
+                                                                                                                         style="font-family: Arial;font-size: 13px;"/>
+                                                                                                    </center>
+                                                                                                </td>
+                                                                                            </tr>
+
+                                                                                        </p:outputPanel>
+                                                                                    </table>
+                                                                                </center>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <c:choose>
+                                                                                    <c:when test="#{MBFacturacion.opcionFacturarA=='Cliente'}">
+                                                                                        <center>
+                                                                                            <p:outputPanel id="PNLcllnte">
+                                                                                                <table style="font-family: Arial;font-size: 12px;" border="0" cellpadding="3" cellspacing="3">
+                                                                                                    <tr>
+                                                                                                        <td><p:outputLabel value="Cliente:" style="font-weight: bold;"/></td>
+                                                                                                        <td> <p:selectOneMenu id="CmbCliente"  style="width:135px;font-size: 12px;" value="#{MBFacturacion.opcCliente}" >
+                                                                                                                <f:selectItem itemLabel="Seleccione.." itemValue=""  />
+                                                                                                                <f:selectItem itemLabel="Nombre" itemValue="Nombre" />
+                                                                                                                <f:selectItem itemLabel="Identificacion" itemValue="Identificacion"  />
+                                                                                                                <p:ajax event="change" update="PNLcllnte,PnlPersona"/>
+                                                                                                            </p:selectOneMenu></td>
+                                                                                                        <td>
+                                                                                                            <c:choose>
+                                                                                                                <c:when test="#{MBFacturacion.opcCliente=='Nombre'}">
+                                                                                                                    <td><p:outputLabel value="Nombre:" style="font-weight: bold;"/></td>             
+                                                                                                                    <td> <p:inputText value="#{MBFacturacion.nomPers}" style="width: 250px;"  rendered="#{MBFacturacion.opcCliente=='Nombre'}" /></td>
+                                                                                                                </c:when>
+                                                                                                                <c:otherwise>
+                                                                                                                    <c:choose>
+                                                                                                                        <c:when test="#{MBFacturacion.opcCliente=='Identificacion'}">
+                                                                                                                            <td><p:outputLabel value="Identificacion: " style="font-weight: bold;"/></td>
+                                                                                                                            <td><p:inputText value="#{MBFacturacion.identfPersona}" style="width: 250px;"  rendered="#{MBFacturacion.opcCliente=='Identificacion'}"  /> </td>
+                                                                                                                        </c:when>
+                                                                                                                    </c:choose>
+                                                                                                                </c:otherwise>
+                                                                                                            </c:choose>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <br/>
+                                                                                                        <td colspan="6">
+                                                                                                            <center>
+                                                                                                                <p:commandButton update=":contenedorGeneral:Contenedor:growl_General" icon="ui-icon-check" value="Consultar"  action="#{MBFacturacion.ConsultarPersona(1)}" 
+                                                                                                                                 style="font-family: Arial;font-size: 13px;"/>
+                                                                                                            </center>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </p:outputPanel>
+                                                                                        </center>
+                                                                                    </c:when>
+                                                                                </c:choose>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </c:when>
+                                                    </c:choose>
+                                                    <p:spacer height="10"></p:spacer>
+                                                    <!--Cargar la informacion seleccionada del Cliente-->
+                                                    <p:outputPanel id="InfoCliente" autoUpdate="true">
+                                                        <c:choose>
+                                                            <c:when test="#{MBFacturacion.selectPersFactAnti.size()>0}">
+
+                                                                <center>
+                                                                    <br/>
+                                                                    <p:dataTable id="PerSel" var="Perslt" value="#{MBFacturacion.selectPersFactAnti}" 
+                                                                                 style=" width: 600px" emptyMessage="No ha realizado la busqueda">
+                                                                        <p:column headerText="Codigo" style="font-family: Arial;font-size: 12px ;width:35px;" >
+                                                                            <h:outputText value="#{Perslt.codCliente}"/>
+                                                                        </p:column>
+                                                                        <p:column headerText="N° Documento" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                                                            <h:outputText value="#{Perslt.numeroDoccliente}"/>
+                                                                        </p:column>
+                                                                        <p:column headerText="Persona Entidad/Cliente" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                                                            <h:outputText value="#{Perslt.nombreCliente}"/>
+                                                                        </p:column>
+                                                                    </p:dataTable> 
+                                                                </center>
+                                                            </c:when>
+                                                        </c:choose>
+                                                        <p:spacer height="20"></p:spacer>
+                                                        <c:choose>
+                                                            <c:when test="#{MBFacturacion.validarPanel and (MBFacturacion.selectPersFactAnti.size()>0 or MBFacturacion.validacion )}">
+                                                                <center>
+                                                                    <table cellspacing="3" cellpadding="3">
+                                                                        <tr>
+                                                                            <tr>
+                                                                                <td><b><p:outputLabel value="Valor a Facturar:*" style="font-family: Arial;font-size: 13px;" /></b></td>
+                                                                                <td ><b>
+                                                                                        <p:inputText value="#{MBFacturacion.totalpagarFactAnt}"   style="font-family: Arial;font-size: 13px; text-align:  right; " onkeypress="return validarnumeros(event);"  onkeyup="formatoNum(this)">
+                                                                                            <f:convertNumber locale="en_US"/>
+                                                                                        </p:inputText>
+                                                                                        <p:commandButton update="InfoCliente" icon="ui-icon-check"   action="#{MBFacturacion.ConsultarPersona(4)}"  
+                                                                                                         style="font-family: Arial;font-size: 12px;"  />
+                                                                                    </b>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tr>
+
+
+                                                                        <tr>
+                                                                            <td><b><p:outputLabel value="N° Factura:*" style="font-family: Arial;font-size: 13px; " /></b></td>
+                                                                            <td>
+                                                                                <p:inputText value="#{MBFacturacion.nfactAnticpo}"   style="font-family: Arial;font-size: 13px;  text-align:right;"  >
+                                                                                </p:inputText>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b><p:outputLabel value="Observaciones:*" style="font-family: Arial;font-size: 13px; " /></b></td>
+                                                                            <td>
+                                                                                <p:inputTextarea value="#{MBFacturacion.obserFactAnti}"   style="font-family: Arial;font-size: 13px; width: 200px ; height: 55px"  placeholder="Ingrese las observaciones" />
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr><td><p:spacer height="10"/></td></tr>
+                                                                        <tr>
+                                                                            <td colspan="3"><center>
+                                                                                    <p:commandButton update=":contenedorGeneral:Contenedor:growl_General,DlgConfi" icon="ui-icon-check" value="Facturar"  
+                                                                                                     action="#{MBFacturacion.ConsultarPersona(5)}" style="font-family: Arial;font-size: 12px;"  />
+                                                                                </center>  </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </center>
+
+                                                            </c:when>
+                                                        </c:choose>
+                                                        <br/>
+                                                        <br/>
+
+                                                    </p:outputPanel>
+                                                    <p:dialog  header="Informacion Entidad / Cliente" style="font-family: Arial; font-size: 12px" widgetVar="DlgPers" minHeight="100" resizable="false">
+                                                        <p:outputPanel  autoUpdate="true">
+                                                            <p:dataTable id="PersFactAnti" var="PersFact" value="#{MBFacturacion.listPersFacAnti}" scrollable="true" scrollHeight="150" 
+                                                                         rowKey="#{PersFact.codCliente}"
+                                                                         selectionMode="multiple" selection="#{MBFacturacion.selectPersFactAnti}"
+                                                                         style=" width: 600px" emptyMessage="No ha realizado la busqueda">
+                                                                <p:column headerText="Codigo" style="font-family: Arial;font-size: 12px ;width:35px;" >
+                                                                    <h:outputText value="#{PersFact.codCliente}"/>
+                                                                </p:column>
+                                                                <p:column headerText="N° Documento" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                                                    <h:outputText value="#{PersFact.numeroDoccliente}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Cliente" style="font-family: Arial;font-size: 12px ;width:70px;" >
+                                                                    <h:outputText value="#{PersFact.nombreCliente}"/>
+                                                                </p:column>
+                                                            </p:dataTable> 
+                                                        </p:outputPanel>
+                                                        <center>
+                                                            <br/>
+                                                            <br/>
+                                                            <p:commandButton  style="font-family: Arial;font-size: 13px;"  ajax="true"                                     
+                                                                              icon="ui-icon-check" value="Seleccionar" action="#{MBFacturacion.ConsultarPersona(2)}"
+                                                                              update=":contenedorGeneral:Contenedor:growl_General,InfoCliente"  />
+                                                        </center>
+                                                    </p:dialog>
+
+                                                    <!-- Confirmacion de la factura anticipo !-->
+                                                    <p:dialog id="DlgConfi" header="Confirmar Información" style="font-family: Arial; font-size: 12px" widgetVar="FactuCopia" minHeight="100" resizable="false">
+                                                        <p:outputPanel  autoUpdate="true"  >
+                                                            <br/>
+                                                            <center>
+                                                                <h:panelGrid>                                                                       
+                                                                    <h:outputText  style="font-family:cursive; font-size: 14px;" value="La información pasara a Impresion de factura con los siguientes datos:"  />
+                                                                </h:panelGrid>
+                                                                <br/>
+                                                                <table cellspacing="9">                           
+                                                                    <!--Informacion de persona natural -->
+
+                                                                    <tr>
+                                                                        <td>
+                                                                            <b>  <p:outputLabel  value="No Factura " style="font-family: Arial;font-size: 12px" /></b>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p:outputLabel value="#{MBFacturacion.nfactAnticpo}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px" onkeyup="formatoNum(this)"  >
+                                                                            </p:outputLabel>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <c:choose>
+                                                                        <c:when test="#{MBFacturacion.selectPersFactAnti.size() > 0}" >
+                                                                            <ui:repeat  value="#{MBFacturacion.selectPersFactAnti}" var="PerFactCli" >
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <b>  <p:outputLabel  value="No Documento " style="font-family: Arial;font-size: 12px" /></b>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <p:outputLabel value="#{PerFactCli.numeroDoccliente}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px"   >
+                                                                                        </p:outputLabel>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <b>  <p:outputLabel  value="Nombre " style="font-family: Arial;font-size: 12px" /></b>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <p:outputLabel value="#{PerFactCli.nombreCliente}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px"   >
+                                                                                        </p:outputLabel>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </ui:repeat>
+                                                                        </c:when>
+                                                                    </c:choose>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <b>  <p:outputLabel  value="Valor Total Factura " style="font-family: Arial;font-size: 12px" /></b>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p:outputLabel value="#{MBFacturacion.totalpagarFactAnt}" style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px"   >
+                                                                                <f:convertNumber locale="en_US" />
+                                                                            </p:outputLabel>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <b>  <p:outputLabel  value="Observaciones" style="font-family: Arial;font-size: 12px" /></b>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p:outputLabel value="#{MBFacturacion.obserFactAnti}"  style="font-family: Arial;font-size: 12px; text-transform: uppercase; width: 50px"   >
+                                                                            </p:outputLabel>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </table>
+                                                            </center>
+                                                        </p:outputPanel>
+                                                        <br/>
+                                                        <center>
+                                                            <h:panelGrid>
+                                                                <p:commandButton icon="ui-icon-disk" value="Grabar"  action="#{MBFacturacion.ConsultarPersona(9)}" update=":contenedorGeneral:Contenedor:growl_General" style="font-family: Arial;font-size: 13px;" /> 
+                                                            </h:panelGrid>
+                                                        </center>
+                                                    </p:dialog>
+                                                </center>
+                                            </p:outputPanel>
+
+                                        </p:tab>
+                                    </p:tabView>
+
+                                </p:outputPanel>
+                            </center>
+                        </td>
+                    </tr>
+
+
+                </table>
+
+            </p:outputPanel>
+        </h:form>
+    </h:body>
+</html>
+

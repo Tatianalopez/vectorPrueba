@@ -1,0 +1,160 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Consulta informacion de avaluos que se encuentran en entrega</title>
+        <style>
+            .FirstCol td:nth-child(1) {
+                width: 85px !important  ;
+                height: 50px !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMAsigEntr">
+            <table style="width: 100%;">
+                <tr>
+                    <td><big><big><big><b><p class="Title">#{beanDireccionar.tituloMenu} > Cambio de analistas </p></b></big></big></big></td>
+                </tr>
+                <tr>
+                    <td colspan="10" > <p:separator /></td>
+                </tr>
+            </table>           
+            
+            <br/>
+
+            <p:outputPanel id="PNLAsigEnt">
+                <!--Selecciona el producto entidad con los cuales se desea buscar el avaluo-->
+                <table style="font-family: Arial;font-size: 12px;">
+                    <tr>
+                        <td><p:outputLabel value="Seleccione Producto Entidad:" /></td>
+                        <td> <p:selectOneMenu  style="font-family: Arial;font-size: 12px; width:210px;" value="#{MBEntregaYRevision.codProEnt}" id="CMBPE">
+                                <p:ajax listener="#{MBEntregaYRevision.consultTipoCambio(1)}" update="PNLDatEnt"/>
+                                <f:selectItem id="PrEnt" itemValue="" itemLabel="Seleccione.."/>
+                                <f:selectItems id="SelItemTDoc"  value="#{MBAdministacion.proEntAll}" />
+                            </p:selectOneMenu> </td>
+                    </tr>
+                </table>
+                <br/><br/>
+                <!--Consulta la informacion segun los avaluos que se encuentran en entrega o impresion-->
+                <p:outputPanel id="PNLDatEnt" autoUpdate="true">
+                    <c:choose>
+                        <c:when test="#{MBEntregaYRevision.listAsigEntrega.size()>0}">
+                            <table style="width: 100%;">
+                                <tr> <!--GCH NOV2016 -->
+                                    <td>
+                                        <br/>
+                                        <b> <p:outputLabel value="Total de registros encontrados: #{MBEntregaYRevision.listAsigEntrega.size()}" style="font-family: Arial;font-size: 13px;" /></b>
+                                        <br/>
+                                        <br/>
+                                    </td>
+                                </tr> <!--GCH NOV2016 -->
+                                <tr>
+                                    <td>
+                                        <p:dataTable id="AsigEntregaTable" widgetVar="AsigEntr" var="Ent" value="#{MBEntregaYRevision.listAsigEntrega}" selectionMode="multiple" selection="#{MBEntregaYRevision.listSeleccAsigEntrega}" 
+                                                     rowKey="#{Ent.codSeguimiento}" frozenColumns="1" scrollable="true"  scrollHeight="100%;"  styleClass="FirstCol" style=" height: 300px;"> <!--GCH NOV2016-->
+                                            <p:column headerText="N* Avaluo" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.codAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 60px;">
+                                                <h:outputText value="#{Ent.codAvaluo}" />
+                                            </p:column>
+                                            <p:column headerText="N Seguimiento"   style="font-family:Arial;font-size: 12px;width: 60px;" rendered="false">
+                                                <h:outputText value="#{Ent.codSeguimiento}" />
+                                            </p:column>
+                                            <p:column headerText="N* Bien" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.codNBien}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 60px;">
+                                                <h:outputText value="#{Ent.codNBien}" />
+                                            </p:column>
+                                            <p:column headerText="Tipo Avaluo" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.tipoAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                                <h:outputText value="#{Ent.tipoAva}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha Entrega" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.fechaEntrega}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{Ent.fechaEntrega}" />
+                                            </p:column>
+                                            <p:column headerText="Producto Entidad" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.producEntidAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 290px;">
+                                                <h:outputText value="#{Ent.producEntidAva}" />
+                                            </p:column>
+                                            <p:column headerText="Estado" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.estadoAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 210px;">
+                                                <h:outputText value="#{Ent.estadoAva}" />
+                                            </p:column>
+                                            <p:column headerText="Revision Juridica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.fechaRevJuridi}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{Ent.fechaRevJuridi}" />
+                                            </p:column>
+                                            <p:column headerText="Revision Tecnica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.fechaRevTecnic}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{Ent.fechaRevTecnic}" />
+                                            </p:column>
+                                            <p:column headerText="Valor Perito" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.valorPerito}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{Ent.valorPerito}" />
+                                            </p:column>
+                                            <p:column headerText="Valor final avaluo" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.valorComercAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{Ent.valorComercAvaluo}" />
+                                            </p:column>
+                                            <p:column headerText="Responsable Entrega" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.analistEntrega}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 220px;">
+                                                <h:outputText value="#{Ent.analistEntrega}" />
+                                            </p:column>
+                                            <p:column headerText="Responsable Juridica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.analistJuridico}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 220px;">
+                                                <h:outputText value="#{Ent.analistJuridico}" />
+                                            </p:column>
+                                            <p:column headerText="Responsable Tecnica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Ent.analistTecnico}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 220px;">
+                                                <h:outputText value="#{Ent.analistTecnico}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+
+                            <center>
+                                <table style="font-family: Arial;font-size: 13px;">
+                                    <tr>
+                                        <td><p:commandButton value="Seleccionar Avaluos" action="#{MBEntregaYRevision.consultCambioAnalista(1)}" update=":contenedorGeneral:Contenedor:growl_General,PNLAnalist" icon="ui-icon-newwin" /></td>
+                                    </tr>
+                                </table>
+                            </center>
+
+                        </c:when>
+                        <c:when test="#{MBEntregaYRevision.listAsigEntrega.size()==0}"> <!--GCH NOV2016-->
+                            <table style="width: 100%;">
+                                <tr> 
+                                    <td>
+                                        <br/>
+                                        <b> <p:outputLabel value="No se encontraron avaluos" style="font-family: Arial;font-size: 13px;" /></b>
+                                        <br/>
+                                    </td>
+                                </tr> 
+                            </table>    <!--GCH NOV2016 -->
+                        </c:when>
+                    </c:choose>
+                </p:outputPanel>
+
+                <!--DIALOG PARA LA INFORMACION DEL EMPLEADO QUE TIENE PERMISOS PARA ENTREGA-->
+                <p:dialog header="Analistas Entrega" widgetVar="DlgAnalistaE" modal="false" height="450" width="500" showEffect="fade" hideEffect="fade" id="DlgEmpE">
+                    <br/>
+                    <p:outputPanel id="PNLAnalist">
+                        <p:dataTable var="EmpE" selectionMode="single" value="#{MBEntregaYRevision.listAnalistEntrega}" widgetVar="AnalistaE" 
+                                     rows="50" id="AnalistaJurTable" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" 
+                                     rowKey="#{EmpE.codEmpl}" frozenRows="0" emptyMessage="No se encontraron Analistas relacionados con este Producto Entidad"  >
+                            <p:column headerText="Nombre" filterBy="#{EmpE.nomEmp}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                <h:outputText value="#{EmpE.nomEmp}" />
+                            </p:column>
+                            <p:column headerText=" Asignados Hoy"  filterBy="#{EmpE.totalHoy}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                <h:outputText value="#{EmpE.totalHoy}" />
+                            </p:column>
+                            <p:column headerText="Total Asignados"  filterBy="#{EmpE.total}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                <h:outputText value="#{EmpE.total}" />
+                            </p:column>                   
+                        </p:dataTable>
+                    </p:outputPanel>
+                    <br/>
+                    <center>
+                          <p:commandButton  value="Seleccionar Analista" action="#{MBEntregaYRevision.cambioAnalista(1)}"  icon="ui-icon-check" 
+                                            update=":contenedorGeneral:Contenedor:growl_General,PNLAsigEnt" style="font-family:Arial;font-size: 13px;" /> 
+                    </center>
+                    <br/>
+                </p:dialog>
+
+            </p:outputPanel>
+
+        </h:form>
+    </h:body>
+</html>
+

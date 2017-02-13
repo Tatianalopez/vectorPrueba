@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Pendiente por la impresion del avaluo</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 110px !important  ;
+                height: 50px !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FormAvaluosDevueltosEntrega">
+            <table cellpadding="4" cellspacing="4" style="font-family: Arial;" >
+                <tr> 
+                    <td style="width: 350px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Avalúos devueltos</font></big></big></b></td>
+                    <td>
+                        <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                    </td>
+                    <td style="width: 180px;">
+                         <p:commandButton  value="Seleccionar avaluo"  style="font-family: Arial;font-size: 13px;" actionListener="#{MBEntregaYRevision.verificacion(2)}"  action="#{beanDireccionar.url_Menu_Entrega('InformeAvaluo')}"  ajax="false"  icon="ui-icon-check" iconPos="left"  
+                                              update=":contenedorGeneral:Contenedor:growl_General" />
+                    </td>
+                </tr>                
+            </table>
+            <table cellpadding="4" cellspacing="4" style="font-family: Arial;font-size: 12px;">
+                <tr>  
+                    <td colspan="3"><p:separator /></td>
+                </tr>
+                <tr>  
+                    <td>
+                        <!-- Informacion de mis asignados-->
+                        <p:outputPanel id="MisAsignadosDevolucion" >  
+                            <p:dataTable selectionMode="single" var="DevolEntrega" widgetVar="PendiPrint"  id="TableDevolucEntrega" emptyMessage="No se encontraron avalúos devueltos"
+                                         rowKey="#{DevolEntrega.codSeguimiento}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" value="#{MBEntregaYRevision.listEntregDevoluc}"
+                                         scrollable="true" scrollHeight="100%;" scrollRows="15" frozenColumns="1" styleClass="FirstCol" style="height:380px;">
+                                <p:column headerText="N° de avalúo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{DevolEntrega.codAvaluo}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{DevolEntrega.codAvaluo}" />
+                                </p:column>
+                                <p:column headerText="N° de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{DevolEntrega.codNBien}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{DevolEntrega.codNBien}" />
+                                </p:column>
+                                <p:column headerText="Avaluador(es)"  filterBy="#{DevolEntrega.nombreCPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:120px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{DevolEntrega.nombreCPerito}" />
+                                </p:column>
+                                <p:column headerText="Producto entidad" filterBy="#{DevolEntrega.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{DevolEntrega.producEntidAva}" />
+                                </p:column>
+                                  <p:column headerText="Tipo de avalúo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{DevolEntrega.tipoAva}" filterMatchMode="startsWith"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{DevolEntrega.tipoAva}" />
+                                </p:column>
+                                <p:column headerText="Ubicación" filterBy="#{DevolEntrega.ubicacionAva}" filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{DevolEntrega.ubicacionAva}" />
+                                </p:column>                               
+                                <p:column headerText="Tiempo transcurrido desde radicación" filterBy="#{DevolEntrega.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 220px;">
+                                    <h:outputText value="#{DevolEntrega.tiempoTranscurridoRad}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido desde confirmar cita" filterBy="#{DevolEntrega.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{DevolEntrega.tiempoTranscurridoVisCit}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido desde entrega" filterBy="#{DevolEntrega.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 210px;">
+                                    <h:outputText value="#{DevolEntrega.tiempoTranscurridoEnt}" />
+                                </p:column>                              
+                                <p:column headerText="Estado"  filterBy="#{DevolEntrega.estadoAva}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{DevolEntrega.estadoAva}" />
+                                </p:column>                                
+                                <p:column headerText="Cliente" filterBy="#{DevolEntrega.clientes}"  filterStyle="font-family:Arial;font-size: 12px;width:150px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;" >
+                                    <h:outputText value="#{DevolEntrega.clientes}" />
+                                </p:column>
+                                <p:column headerText="Entidad" filterBy="#{DevolEntrega.entidades}" filterStyle="font-family:Arial;font-size: 12px;width:150px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;">
+                                    <h:outputText value="#{DevolEntrega.entidades}" />
+                                </p:column>
+                                <p:column headerText="Detalle"  filterBy="#{DevolEntrega.observacion}" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                    <h:outputText value="#{DevolEntrega.observacion}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:outputPanel>             
+                    </td>
+                </tr>                                 
+            </table>
+        </h:form>
+    </h:body>
+</html>
+

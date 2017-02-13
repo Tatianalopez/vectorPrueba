@@ -1,0 +1,101 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Son los que se encuentran aprobados y pendientes para realizar la impresion</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: 50px !important ;
+            }
+
+            .ui-datatable .ui-state-highlight { 
+                border: 2px inset  #e3a1a1 !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+          <h:form id="FRMAprobadosImpres">
+            <table style="font-family: Arial;" cellpadding="3" cellspacing="4" >
+                <tr> 
+                    <td style="width: 450px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Avalúos aprobados</font></big></big></b></td>
+                    <td>
+                        <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                    </td>
+                    <td style="width: 180px;" >
+                        <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Abrir avalúo" ajax="false" 
+                                         actionListener="#{MBEntregaYRevision.cargarInformaAvaluo()}" action="#{beanDireccionar.url_Menu_Entrega('AprobadosParaImpresion')}" update=":contenedorGeneral:Contenedor:growl_General"/>
+                        <!--actionListener="{MBEntregaYRevision.consultaInformacionEntrega()}"-->
+                    </td>
+                </tr>
+            </table>
+            <p:outputPanel id="MisAsignadosRGen" >
+                <table style="font-family: Arial;font-size: 12px;width: 100%;" cellpadding="3" cellspacing="4" >
+                    <tr>  
+                        <td colspan="3"><p:separator /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- Informacion de mis asignados-->
+                            <p:dataTable selectionMode="single" var="Aprob" widgetVar="MisAsigPend"  id="TableAprobadosImpres" emptyMessage="No se encontraron Avaluos para revisar asignados" value="#{MBEntregaYRevision.listAprobados}"
+                                         rowKey="#{Aprob.codSeguimiento}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" 
+                                     scrollable="true" scrollHeight="100%;" frozenColumns="1"  styleClass="FirstCol" >
+                                <p:column headerText="N° de avaluo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{Aprob.codAvaluo}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{Aprob.codAvaluo}" />
+                                </p:column>
+                                <p:column headerText="N° de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{Aprob.codNBien}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{Aprob.codNBien}" />
+                                </p:column>
+                                <p:column headerText="Tipo de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{Aprob.tipoAva}" filterMatchMode="startsWith"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{Aprob.tipoAva}" />
+                                </p:column>
+                                 <p:column headerText="Producto entidad" filterBy="#{Aprob.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                    <h:outputText value="#{Aprob.producEntidAva}" />
+                                </p:column>
+                                 <p:column headerText="Solicitante" filterBy="#{Aprob.clientes}"  filterStyle="font-family:Arial;font-size: 12px;width:180px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;" >
+                                    <h:outputText value="#{Aprob.clientes}" />
+                                </p:column>
+                                <p:column headerText="Entidad" filterBy="#{Aprob.entidades}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;">
+                                    <h:outputText value="#{Aprob.entidades}" />
+                                </p:column>
+                                <p:column headerText="Detalle"  filterBy="#{Aprob.observacion}" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{Aprob.observacion}" />
+                                </p:column>                               
+                                <p:column headerText="Ubicación" filterBy="#{Aprob.ubicacionAva}" filterStyle="font-family:Arial;font-size: 12px;width:150px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 320px;">
+                                    <h:outputText value="#{Aprob.ubicacionAva}" />
+                                </p:column>
+                                <p:column headerText="Seguimiento asignado a"  filterBy="#{Aprob.empSeguimiento}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{Aprob.empSeguimiento}" />
+                                </p:column> 
+                                <p:column headerText="Valor del avaluador"  filterBy="#{Aprob.valorPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:60px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{Aprob.valorPerito}" />
+                                </p:column>
+                                <p:column headerText="Fecha de entrega"  filterBy="#{Aprob.fechaEntrega}" style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{Aprob.fechaEntrega}" />
+                                </p:column>
+                                <p:column headerText="Estado"  filterBy="#{Aprob.estadoAva}" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                    <h:outputText value="#{Aprob.estadoAva}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido radicación" filterBy="#{Aprob.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 350px;">
+                                    <h:outputText value="#{Aprob.tiempoTranscurridoRad}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido visita cita" filterBy="#{Aprob.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 350px;">
+                                    <h:outputText value="#{Aprob.tiempoTranscurridoVisCit}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido entrega" filterBy="#{Aprob.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 350px;">
+                                    <h:outputText value="#{Aprob.tiempoTranscurridoEnt}" />
+                                </p:column>
+                                <p:column headerText="Avaluador(es)"  filterBy="#{Aprob.nombreCPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:120px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{Aprob.nombreCPerito}" />
+                                </p:column>                                                              
+                                
+                            </p:dataTable>
+
+                        </td>
+                    </tr>                              
+                </table>
+            </p:outputPanel>             
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Pendiente por la impresion del avaluo</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 110px !important  ;
+                height: 50px !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FormAvaluosDevueltosRevision">
+            <table cellpadding="4" cellspacing="4" style="font-family: Arial;" >
+                <tr> 
+                    <td style="width: 350px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Avalúos devueltos</font></big></big></b></td>
+                    <td>
+                        <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                    </td>
+                    <td style="width: 180px;">
+                    </td>
+                </tr>                
+            </table>
+            <table cellpadding="4" cellspacing="4" style="font-family: Arial;font-size: 12px;">
+                <tr>  
+                    <td colspan="3"><p:separator /></td>
+                </tr>
+                <tr>  
+                    <td>
+                        <p:outputPanel id="DevolucionRevision" >  
+                            <!-- Muestra la tabla con las devoluciones tanto de rev tecnica como juridica (general)-->
+                            <p:dataTable selectionMode="single" var="DevolReviGeneral" widgetVar="TableDevolRevGener"  id="TableDevolucRevisGener" emptyMessage="No se encontraron avalúos devueltos"
+                                         rowKey="#{DevolReviGeneral.codSeguimiento}" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" value="#{MBEntregaYRevision.listMisDevolucRevGeneral}"
+                                         scrollable="true" scrollHeight="100%;" scrollRows="15" frozenColumns="1" styleClass="FirstCol">
+                                <p:column headerText="N° de avalúo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{DevolReviGeneral.codAvaluo}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{DevolReviGeneral.codAvaluo}" />
+                                </p:column>
+                                <p:column headerText="N° de bien"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{DevolReviGeneral.codNBien}" filterMatchMode="startsWith" style="font-family:Arial;font-size: 12px;width: 80px;">
+                                    <h:outputText value="#{DevolReviGeneral.codNBien}" />
+                                </p:column>
+                                <p:column headerText="Avaluador(es)"  filterBy="#{DevolReviGeneral.nombreCPerito}"  filterStyle="font-family:Arial;font-size: 12px;width:120px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{DevolReviGeneral.nombreCPerito}" />
+                                </p:column>
+                                <p:column headerText="Producto entidad" filterBy="#{DevolReviGeneral.producEntidAva}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{DevolReviGeneral.producEntidAva}" />
+                                </p:column>
+                                <p:column headerText="Cliente" filterBy="#{DevolReviGeneral.clientes}"  filterStyle="font-family:Arial;font-size: 12px;width:150px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;" >
+                                    <h:outputText value="#{DevolReviGeneral.clientes}" />
+                                </p:column>
+                                <p:column headerText="Entidad" filterBy="#{DevolReviGeneral.entidades}" filterStyle="font-family:Arial;font-size: 12px;width:150px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 520px;">
+                                    <h:outputText value="#{DevolReviGeneral.entidades}" />
+                                </p:column>
+                                <p:column headerText="Detalle"  filterBy="#{DevolReviGeneral.observacion}" style="font-family:Arial;font-size: 12px;width: 180px;">
+                                    <h:outputText value="#{DevolReviGeneral.observacion}" />
+                                </p:column>
+                                <p:column headerText="Tipo de avalúo"  filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterBy="#{DevolReviGeneral.tipoAva}" filterMatchMode="startsWith"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{DevolReviGeneral.tipoAva}" />
+                                </p:column>
+                                <p:column headerText="Ubicación" filterBy="#{DevolReviGeneral.ubicacionAva}" filterStyle="font-family:Arial;font-size: 12px;width:70px;" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 280px;">
+                                    <h:outputText value="#{DevolReviGeneral.ubicacionAva}" />
+                                </p:column>                               
+                                <p:column headerText="Tiempo transcurrido desde radicación" filterBy="#{DevolReviGeneral.tiempoTranscurridoRad}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 220px;">
+                                    <h:outputText value="#{DevolReviGeneral.tiempoTranscurridoRad}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido desde confirmar cita" filterBy="#{DevolReviGeneral.tiempoTranscurridoVisCit}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 250px;">
+                                    <h:outputText value="#{DevolReviGeneral.tiempoTranscurridoVisCit}" />
+                                </p:column>
+                                <p:column headerText="Tiempo transcurrido desde entrega" filterBy="#{DevolReviGeneral.tiempoTranscurridoEnt}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 210px;">
+                                    <h:outputText value="#{DevolReviGeneral.tiempoTranscurridoEnt}" />
+                                </p:column>                              
+                                <p:column headerText="Estado"  filterBy="#{DevolReviGeneral.estadoAva}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{DevolReviGeneral.estadoAva}" />
+                                </p:column>                            
+                            </p:dataTable>
+                        </p:outputPanel>             
+                    </td>
+                </tr>                                 
+            </table>
+        </h:form>
+    </h:body>
+</html>
+

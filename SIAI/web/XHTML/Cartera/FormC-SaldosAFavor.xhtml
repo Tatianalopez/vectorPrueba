@@ -1,0 +1,183 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Facturas: Saldo a Favor </title>
+        <style>
+            .ui-breadcrumb{
+                background: white !important;
+                color:blue !important;
+                text-decoration-color: #F9AE6C !important;}
+
+            .ui-breadcrumb ul{
+                background: blue !important;
+                color: blue !important;
+                margin: 0;
+                padding: 0;
+                height: 21px;
+                display: block;
+                width: auto;
+            }
+
+            .ui-breadcrumb ul li{
+                background: yellow !important;
+                color: blue !important;
+                margin: 0;
+                padding: 0;
+                height: 21px;
+                display: block;
+                width: auto;
+            }
+
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+
+        </style>
+    </h:head>
+    <h:body >
+        <h:form id="FormSaldoFavor"> 
+            <center>
+                <p:panel>
+                    <p:outputPanel id="SaldoaFavor" autoUpdate="true">
+                        <table cellpadding="4" cellspacing="4" border="0" style="width: 1000px;">
+                            <tr> 
+                                <td style="width: 850px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Saldos a favor</font></big></big></b></td>
+                                <td>
+                                    <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                                </td>
+                                <td style="width: 150px;">
+                                    <p:commandButton style="font-family:Arial;font-size: 13px;" icon="ui-icon-check" value="Reintegro" update=":contenedorGeneral:Contenedor:growl_General,PnlSaldoAFavor"  ajax="true" actionListener="#{MBCartera.saldoFavor('Reintegro')}" />
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table cellpadding="5" cellspacing="5" border="0">
+                            <tr>
+                                <td colspan="3"><p:separator /></td>
+                            </tr>                  
+
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBCartera.listaSaldoAFavor)}" style="font-family: Arial;font-size: 13px;" /></b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br/>                      
+                                    <p:dataTable id="SaldoaFavorTable" var="Carte" value="#{MBCartera.listaSaldoAFavor}"  selection="#{MBCartera.selectSaldoFavor}" 
+                                                 rowKey="#{Carte.codFactura}" scrollable="true" scrollWidth="1010"  emptyMessage="No hay pendientes por cobrar"
+                                                 rowStyleClass="#{ Carte.estadoDias eq '30' ? 'highlight':
+                                                                   Carte.estadoDias eq '60' ? 'EstadoRadicadoOK':   
+                                                                   Carte.estadoDias eq '90' ? 'EstadoAnulado':
+                                                                   Carte.estadoDias eq '91+' ? 'FaltaInforma':     
+                                                                   null}"
+                                                 >
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                        <p:column headerText="Factura N°"  filterBy="#{Carte.codFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                            <h:outputText value="#{Carte.codFactura}" />
+                                        </p:column>
+                                        <p:column headerText="Tipo"  filterBy="#{Carte.tipoFactura}" filterMatchMode="contains"  filterStyle="width: 60px;" style="font-family:Arial;font-size: 12px;width: 70px;">
+                                            <h:outputText value="#{Carte.tipoFactura}" />
+                                        </p:column>
+                                        <p:column headerText="Cliente"  filterBy="#{Carte.nombreEntidad} #{Carte.nombrecliente}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;" filterStyle="width: 90px;" >
+                                            <h:outputText value="#{Carte.nombreEntidad} #{Carte.nombrecliente}" />
+                                        </p:column>
+                                        <p:column headerText="Fecha Facturación"  filterBy="#{Carte.fechaFacturacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.fechaFacturacion}" />
+                                        </p:column>      
+                                        <p:column headerText="Valor Factura"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.valorFactura}" >
+                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                            </h:outputText>
+                                        </p:column>  
+                                        <p:column headerText="Saldo a Favor"  filterBy="#{Carte.subtotal}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.subtotal}" >
+                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                            </h:outputText>
+                                        </p:column>  
+                                        <p:column headerText="Observación"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.valorFactura}" >
+                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                            </h:outputText>
+                                        </p:column> 
+                                        <p:column headerText="Fecha Seguimiento"  filterBy="#{Carte.fechaFacturacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.fechaFacturacion}" />
+                                        </p:column>    
+                                    </p:dataTable>
+                                </td>
+                            </tr>                      
+                        </table>
+                    </p:outputPanel>   
+                </p:panel>
+            </center>
+            <!--Dialog para realizar el proceso del Reintegro  -->
+            <p:outputPanel id="PnlSaldoAFavor" >
+                <p:dialog widgetVar="Reintegro" header="Reintegro saldo a favor"  width="463px" height="242px">
+                    <center>
+                        <table style="width:400px;font-family: Arial;font-size: 13px;position: relative;">
+                            <tr>
+                                <td><p:outputLabel value="» Saldos a Favor" style="font-size: 13px;font-family: Arial; font-weight: bold;"/></td>
+                            </tr>
+                            <tr><td>
+                                    <p:separator />
+                                </td></tr>
+                        </table>
+                        <table style="font-family: Arial; font-size: 12px"  cellspacing="3" cellpadding="3">
+                            <ui:repeat value="#{MBCartera.selectSaldoFavor}" var="Slect" >
+                                <tr>
+                                    <td><b><p:outputLabel   value="Factura " style="width: 300px; text-align: left" /></b></td>
+                                    <td><p:outputLabel   value="#{Slect.codFactura}" /></td>
+                                    <td><b><p:outputLabel   value="Valor Factura: "  style="width: 800px;  text-align: left" /></b></td>
+                                    <td>
+                                        <p:outputLabel    value="#{Slect.valorFactura}" />
+                                    </td>
+                                    <td><b><p:outputLabel   value="Saldo a Favor: " /></b></td>
+                                    <td><p:outputLabel   value="#{Slect.subtotal * -1}" >
+                                            <f:convertNumber locale="en_US"/>
+                                        </p:outputLabel>
+                                    </td>
+                                </tr>
+                                <tr> 
+                                    <td colspan="6"><p:separator/></td>
+                                </tr>
+                            </ui:repeat>   
+                        </table>
+                        <table style="font-family: Arial;font-size: 12px;">
+                            <tr>
+                                <td><center><p:spacer height="11"/></center></td>
+                            </tr>
+                            <tr>     
+                                <td><center> <p:inputTextarea style=" width: 265px" placeholder="Ingrese observación"  value="#{MBCartera.observCobro}"/></center></td>
+                            </tr>        
+                            <tr>
+                                <td><center><p:spacer height="9"/></center></td>
+                            </tr>
+                            <tr>     
+                                <td>
+                                    <center> 
+                                        <p:commandButton  icon="ui-icon-check" value="Aceptar"    style="font-size: 13px;font-family: Arial;"   update=":contenedorGeneral:Contenedor:growl_General"
+                                                          action="#{MBCartera.GestionCartera('Reintegro')}"  />         
+                                    </center>         
+                                </td>
+                            </tr>  
+                        </table>
+                    </center>
+                    <br/>
+                </p:dialog>
+            </p:outputPanel>
+
+        </h:form>
+    </h:body>
+</html>
+

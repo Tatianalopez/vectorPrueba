@@ -1,0 +1,83 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pendientes por facturar</title>
+        <style type="text/css">
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMpENDfACT" >
+
+            <table cellspacing="4" cellpadding="4"  border="0">
+                <tr>
+                    <td><big><big><b><p class="Title" >Facturar Avalúos por grupo  |   </p></b></big></big></td>
+
+                    <td>
+                        <p:commandButton   action="#{beanDireccionar.url_Menu_Facturacion('PendienteXFact')}"  ajax="false"  icon="ui-icon-arrowreturn-1-w" iconPos="left"  
+                                           style="font-family:Arial;font-size: 13px;position: relative;"   update=":contenedorGeneral:Contenedor:growl_General, PNLTipoFact,Dlg2,p"/>        
+                        <p:spacer width="15"/> 
+                        <p:commandButton  value="Abrir avalúo"   action="#{beanDireccionar.url_Menu_Facturacion('FacGrupo')}"  ajax="false"  icon="ui-icon-check" iconPos="left"  
+                                          style="font-family:Arial;font-size: 13px;position: relative;"   update=":contenedorGeneral:Contenedor:growl_General, PNLTipoFact,Dlg2,p"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"> <p:separator /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"> 
+                        <p:outputLabel value="Seleccione un registro de la tabla:" style="font-family: Arial;font-size: 12px;"/>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:outputPanel id="PNLPendXFac">
+                            <p:dataTable id="PendXFactTable" var="Fact" value="#{MBFacturacion.listPendientXFact}"  selection="#{MBFacturacion.selectListPendientXFact}" 
+                                         rowKey="#{Fact.codSeg}" scrollable="true" scrollWidth="1010" scrollHeight="300" emptyMessage="No hay pendientes por cobrar" >
+                                <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                <p:column headerText="N° Avaluo"  filterBy="#{Fact.codAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{Fact.codAva}" />
+                                </p:column>
+                                <p:column headerText="N° Bien"  filterBy="#{Fact.numBienSeg}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;" filterStyle="width: 60px;" >
+                                    <h:outputText value="#{Fact.numBienSeg}" />
+                                </p:column>
+                                <p:column headerText="Tipo Avaluo"  filterBy="#{Fact.ava.nomTipAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                    <h:outputText value="#{Fact.ava.nomTipAvaluo}" />
+                                </p:column>
+                                <p:column headerText="Clientes"  filterBy="#{Fact.cliente}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 820px;">
+                                    <h:outputText value="#{Fact.cliente}"/>
+                                </p:column>
+                                <p:column headerText="Producto entidad"  filterBy="#{Fact.proEnt}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 320px;">
+                                    <h:outputText value="#{Fact.proEnt}" />
+                                </p:column>
+                                <p:column headerText="Fecha solicitud"  filterBy="#{Fact.ava.fechaSolicitud}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                    <h:outputText value="#{Fact.ava.fechaSolicitud}" />
+                                </p:column>
+                                <p:column headerText="Ubicacion"  filterBy="#{Fact.ciudadText}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 270px;">
+                                    <h:outputText value="#{Fact.ciudadText}" />
+                                </p:column>
+                                <p:column headerText="Radicado por:"  filterBy="#{Fact.rad.radicadoPor}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 310px;">
+                                    <h:outputText value="#{Fact.rad.radicadoPor}" />
+                                </p:column>
+                                <p:column headerText="Persona seguimiento"  filterBy="#{Fact.seg.asignado}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 310px;">
+                                    <h:outputText value="#{Fact.seg.asignado}" />
+                                </p:column>
+                                <p:column headerText="Dirección"  filterBy="#{Fact.ava.tipoDireccion} #{Fact.direccion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width:700px  ;">
+                                    <h:outputText value="#{Fact.ava.tipoDireccion} #{Fact.direccion}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </td>
+                </tr>
+            </table>
+
+        </h:form>
+    </h:body>
+</html>
+

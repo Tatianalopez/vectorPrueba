@@ -1,0 +1,160 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Cambio de analistas en el area tecnica</title>
+        <style>
+            .FirstCol td:nth-child(1) {
+                width: 85px !important  ;
+                height: 50px !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+         <h:form id="FRMAsigTec">
+            <table style="width: 100%;">
+                <tr>
+                    <td><big><big><big><b><p class="Title">#{beanDireccionar.tituloMenu} > Cambio de analista: Tecnico </p></b></big></big></big></td>
+                </tr>
+                <tr>
+                    <td colspan="10" > <p:separator /></td>
+                </tr>
+            </table>
+            <br/>
+
+            <p:outputPanel id="PNLAsigEnt">
+                <!--Selecciona el producto entidad con los cuales se desea buscar el avaluo-->
+                <table style="font-family: Arial;font-size: 12px;">
+                    <tr>
+                        <td><p:outputLabel value="Seleccione Producto Entidad:" /></td>
+                        <td> <p:selectOneMenu  style="font-family: Arial;font-size: 12px; width:210px;" value="#{MBEntregaYRevision.codProEnt}" id="CMBPE">
+                                <p:ajax listener="#{MBEntregaYRevision.consultTipoCambio(3)}" update="PNLDatTec"/>
+                                <f:selectItem id="PrEnt" itemValue="" itemLabel="Seleccione.."/>
+                                <f:selectItems id="SelItemTDoc"  value="#{MBAdministacion.proEntAll}" />
+                            </p:selectOneMenu> </td>
+                    </tr>
+                </table>
+
+                <!--Consulta la informacion segun los avaluos que se encuentran en entrega o impresion-->
+                <p:outputPanel id="PNLDatTec" autoUpdate="true"> 
+                    <c:choose>
+                        <c:when test="#{MBEntregaYRevision.listAsigRevisionTec.size()>0}">
+                            <table style="width: 100%;">
+                                <tr> <!--GCH NOV2016 -->
+                                    <td>
+                                        <br/>
+                                        <b> <p:outputLabel value="Total de registros encontrados: #{MBEntregaYRevision.listAsigRevisionTec.size()}" style="font-family: Arial;font-size: 13px;" /></b>
+                                        <br/>
+                                        <br/>
+                                    </td>
+                                </tr> <!--GCH NOV2016 -->
+                                <tr>
+                                    <td>
+                                        <p:dataTable id="AsigRevTecTable" widgetVar="AsigRT" var="Tec" value="#{MBEntregaYRevision.listAsigRevisionTec}" selectionMode="multiple" selection="#{MBEntregaYRevision.listSeleccAsigRevisionTec}" 
+                                                     rowKey="#{Tec.codSeguimiento}" frozenColumns="1" scrollable="true" scrollHeight="100%;" styleClass="FirstCol" style=" height: 300px;"> <!--GCH NOV2016 -->
+                                            <p:column headerText="N* Avaluo" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.codAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 60px;">
+                                                <h:outputText value="#{Tec.codAvaluo}" />
+                                            </p:column>
+                                            <p:column headerText="N Seguimiento"   style="font-family:Arial;font-size: 12px;width: 60px;" rendered="false">
+                                                <h:outputText value="#{Tec.codSeguimiento}" />
+                                            </p:column>
+                                            <p:column headerText="N* Bien" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.codNBien}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 60px;">
+                                                <h:outputText value="#{Tec.codNBien}" />
+                                            </p:column>
+                                            <p:column headerText="Tipo Avaluo" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.tipoAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                                <h:outputText value="#{Tec.tipoAva}" />
+                                            </p:column>
+                                            <p:column headerText="Responsable Entrega" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.analistEntrega}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 220px;">
+                                                <h:outputText value="#{Tec.analistEntrega}" />
+                                            </p:column>
+                                            <p:column headerText="Responsable Juridica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.analistJuridico}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 220px;">
+                                                <h:outputText value="#{Tec.analistJuridico}" />
+                                            </p:column>
+                                            <p:column headerText="Responsable Tecnica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.analistTecnico}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 220px;">
+                                                <h:outputText value="#{Tec.analistTecnico}" />
+                                            </p:column>
+                                            <p:column headerText="Fecha Entrega" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.fechaEntrega}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{Tec.fechaEntrega}" />
+                                            </p:column>
+                                            <p:column headerText="Producto Entidad" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.producEntidAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 290px;">
+                                                <h:outputText value="#{Tec.producEntidAva}" />
+                                            </p:column>
+                                            <p:column headerText="Estado" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.estadoAva}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 210px;">
+                                                <h:outputText value="#{Tec.estadoAva}" />
+                                            </p:column>
+                                            <p:column headerText="Revision Juridica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.fechaRevJuridi}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{Tec.fechaRevJuridi}" />
+                                            </p:column>
+                                            <p:column headerText="Revision Tecnica" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.fechaRevTecnic}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 130px;">
+                                                <h:outputText value="#{Tec.fechaRevTecnic}" />
+                                            </p:column>
+                                            <p:column headerText="Valor Perito" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.valorPerito}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{Tec.valorPerito}" />
+                                            </p:column>
+                                            <p:column headerText="Valor final avaluo" filterStyle="font-family:Arial;font-size: 12px;width:60px;"  filterBy="#{Tec.valorComercAvaluo}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 120px;">
+                                                <h:outputText value="#{Tec.valorComercAvaluo}" />
+                                            </p:column>                                            
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+
+                            <center>
+                                <table style="font-family: Arial;font-size: 13px;">
+                                    <tr>
+                                        <td><p:commandButton value="Seleccionar Avaluos" action="#{MBEntregaYRevision.consultCambioAnalista(3)}" update=":contenedorGeneral:Contenedor:growl_General,PNLAnalist" icon="ui-icon-newwin" /></td>
+                                    </tr>
+                                </table>
+                            </center>
+
+                        </c:when>
+                        <c:when test="#{MBEntregaYRevision.listAsigRevisionTec.size()==0}"> <!--GCH NOV2016-->
+                            <table style="width: 100%;">
+                                <tr> 
+                                    <td>
+                                        <br/>
+                                        <b> <p:outputLabel value="No se encontraron avaluos" style="font-family: Arial;font-size: 13px;" /></b>
+                                        <br/>
+                                    </td>
+                                </tr> 
+                            </table>    <!--GCH NOV2016 -->
+                        </c:when>
+                    </c:choose>
+                </p:outputPanel>
+
+                <!--DIALOG PARA LA INFORMACION DEL EMPLEADO QUE TIENE PERMISOS PARA REVISION TECNICA-->
+                <p:dialog header="Analistas Técnicos" widgetVar="DlgAnalistaE" modal="false" height="450" width="500" showEffect="fade" hideEffect="fade" id="DlgEmpE">
+                    <br/>
+                    <p:outputPanel id="PNLAnalist">
+                                               
+                        <p:dataTable var="EmpT" selectionMode="single" value="#{MBEntregaYRevision.listAnalistRevTec}" widgetVar="AnalistaE" 
+                                     rows="50" id="AnalistaTecTable" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" 
+                                     rowKey="#{EmpT.codEmpl}" frozenRows="0" emptyMessage="No se encontraron Analistas relacionados con este Producto Entidad"  >
+                            <p:column headerText="Nombre" filterBy="#{EmpT.nomEmp}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                <h:outputText value="#{EmpT.nomEmp}" />
+                            </p:column>
+                            <p:column headerText=" Asignados Hoy"  filterBy="#{EmpT.totalHoy}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                <h:outputText value="#{EmpT.totalHoy}" />
+                            </p:column>
+                            <p:column headerText="Total Asignados"  filterBy="#{EmpT.total}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                                <h:outputText value="#{EmpT.total}" />
+                            </p:column>                   
+                        </p:dataTable>
+                    </p:outputPanel>
+                    <br/>
+                    <center>
+                          <p:commandButton  value="Seleccionar Analista" action="#{MBEntregaYRevision.cambioAnalista(3)}"  icon="ui-icon-check" 
+                                            update=":contenedorGeneral:Contenedor:growl_General,PNLDatTec" style="font-family:Arial;font-size: 13px;" /> 
+                    </center>
+                    <br/>
+                </p:dialog>
+
+            </p:outputPanel>
+
+        </h:form>
+    </h:body>
+</html>
+

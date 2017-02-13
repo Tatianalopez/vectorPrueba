@@ -1,0 +1,361 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Pagos de Facturas</title>
+        <style>
+            .ui-breadcrumb{
+                background: white !important;
+                color:blue !important;
+                text-decoration-color: #F9AE6C !important;}
+
+            .ui-breadcrumb ul{
+                background: blue !important;
+                color: blue !important;
+                margin: 0;
+                padding: 0;
+                height: 21px;
+                display: block;
+                width: auto;
+            }
+
+            .ui-breadcrumb ul li{
+                background: yellow !important;
+                color: blue !important;
+                margin: 0;
+                padding: 0;
+                height: 21px;
+                display: block;
+                width: auto;
+            }
+
+            .FirstCol td:nth-child(1) {
+                width: 140px !important  ;
+                height: #{MBPreRadicacion.tamañoTablas} !important ;
+            }
+
+        </style>
+    </h:head>
+    <h:body >
+        <h:form id="FormFactPagas"> 
+            <center>
+                <p:panel>
+                    <p:outputPanel id="MisAsignadosInfoSegCita" autoUpdate="true">
+                        <table cellpadding="4" cellspacing="4" border="0" style="width: auto;">
+                            <tr> 
+                                <td style="width: 850px;"><b><big><big><font face="Arial" >#{beanDireccionar.tituloMenu} > Pagos a Facturas</font></big></big></b></td>
+                                <td>
+                                    <b><big><font face="Arial"><p:outputLabel value="|" /></font></big></b>
+                                </td>
+                                <td style="width: 150px;">
+                                    <p:commandButton style="font-family:Arial;font-size: 13px;" update=":contenedorGeneral:Contenedor:growl_General,AnulaPagoPopUp" icon="ui-icon-check" value="Anular Pago" action="#{MBCartera.anularPago()}"  />
+                                </td>   
+                                <td style="width: 450px;">
+                                    <table border="0" style="float: left;">
+                                        <tr>
+                                            <td style="background: #dcf2dc !important;" >
+                                                <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #dcf2dc !important;"/>
+                                            </td>
+                                            <td>
+                                                <p:outputLabel  value="Pagadas" style="font-size: 12px;font-family: Arial;"/>
+                                            </td>
+                                            <td style="background: #F9E6E6 !important;" >
+                                                <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F9E6E6 !important;"/>
+                                            </td>
+                                            <td>
+                                                <p:outputLabel  value="Pago Parcial " style="font-size: 12px;font-family: Arial;"/>
+                                            </td>
+                                            <td style="background: #F9AE6C !important;" >
+                                                <p:outputLabel  value="---- " style="font-size: 12px;font-family: Arial;color: #F9AE6C !important;"/>
+                                            </td>
+                                            <td>
+                                                <p:outputLabel  value="Saldos a Favor " style="font-size: 12px;font-family: Arial;"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <table cellpadding="5" cellspacing="5" border="0">
+                            <tr>
+                                <td colspan="3"><p:separator /></td>
+                            </tr>                  
+
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <b> <p:outputLabel value="Total de registros encontrados: #{fn:length(MBCartera.listaFactPagos)}" style="font-family: Arial;font-size: 13px;" /></b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br/>                      
+                                    <p:dataTable id="PendXCobrarTable" widgetVar="Pendiente" var="Carte" value="#{MBCartera.listaFactPagos}" style="width: auto;"  selection="#{MBCartera.selectFactPago}" 
+                                                 rowKey="#{Carte.codFactura}" scrollable="true" scrollWidth="1010"  emptyMessage="No hay facturas con pagos registrados"
+                                                 rowStyleClass="#{ Carte.estadoDias eq '30' ? 'highlight':
+                                                                   Carte.estadoDias eq '60' ? 'EstadoRadicadoOK':   
+                                                                   Carte.estadoDias eq '90' ? 'EstadoAnulado':
+                                                                   Carte.estadoDias eq '91+' ? 'FaltaInforma':     
+                                                                   null}">
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                        <p:column headerText="Factura N°"  filterBy="#{Carte.codFactura}"  filterStyle="width: 65px;" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 80px;">
+                                            <h:outputText value="#{Carte.codFactura}" />
+                                        </p:column>
+                                        <p:column headerText="Tipo"  filterBy="#{Carte.tipoFactura}" filterMatchMode="contains"  filterStyle="width: 60px;" style="font-family:Arial;font-size: 12px;width: 70px;">
+                                            <h:outputText value="#{Carte.tipoFactura}" />
+                                        </p:column>
+                                        <p:column headerText="Cliente"  filterBy="#{Carte.nombreEntidad} #{Carte.nombrecliente}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;" filterStyle="width: 90px;" >
+                                            <h:outputText value="#{Carte.nombreEntidad} #{Carte.nombrecliente}" />
+                                        </p:column>
+                                        <p:column headerText="Fecha Facturación"  filterBy="#{Carte.fechaFacturacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.fechaFacturacion}" />
+                                        </p:column>      
+                                        <p:column headerText="Abono"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="Abonos..." />
+                                        </p:column>     
+                                        <p:column headerText="Valor Factura"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.valorFactura}" >
+                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                            </h:outputText>
+                                        </p:column>  
+                                        <p:column headerText="Observación"  filterBy="#{Carte.valorFactura}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.valorFactura}" />
+                                        </p:column> 
+                                        <p:column headerText="Fecha Seguimiento"  filterBy="#{Carte.fechaFacturacion}" filterMatchMode="contains"  style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Carte.fechaFacturacion}" />
+                                        </p:column>    
+                                    </p:dataTable>
+                                </td>
+                            </tr>                      
+                        </table>
+                    </p:outputPanel>   
+                </p:panel>
+                <!--Informacion del cambio de impuesto a la factura-->
+                <p:outputPanel id="AnulaPagoPopUp" style="font-family: Arial;font-size: 12px;" autoUpdate="true">
+                    <p:dialog id="AnulaPago" header="Anular Pago" style="font-family: Arial; font-size: 12px" widgetVar="AnulaPagos" minHeight="100" resizable="true"  height="323px" width="744px"  closable="true">
+                        <p:tabView  id="TabAbonos" effect="fade" effectDuration="fast" cache="true" style="width: auto;font-family: Arial;font-size: 12px;border-radius: 5px;"  widgetVar="TabAbonos" >
+                            <p:tab title="Informacion General" >
+                                <table style="width:652px;font-family: Arial;font-size: 13px;position: relative;">
+                                    <tr>
+                                        <td><p:outputLabel value="» Persona a facturar" style="font-size: 13px;font-family: Arial; font-weight: bold;"/></td>
+                                    </tr>
+                                    <tr><td>
+                                            <p:separator />
+                                        </td></tr>
+                                </table>
+                                <center>
+                                    <table cellspacing="3" cellpadding="3">
+                                        <tr>
+                                            <td>
+                                                <b><p:outputLabel  value="Identificación: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                    
+                                            </td>
+                                            <td>
+                                                <p:outputLabel value="#{MBCartera.docCliente} #{MBCartera.nitEntidad}" style="font-size: 12px;font-family: Arial;" />                                                                                        
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b><p:outputLabel value="Nombre Completo: " style="font-size: 12px;font-family: Arial;" /></b>                                                                                      
+                                            </td>
+                                            <td>                                                                                        
+                                                <p:outputLabel value="#{MBCartera.nombEnt} #{MBCartera.nombreCliente}" style="font-size: 12px;font-family: Arial;" /> 
+                                            </td>
+                                            <td>
+                                                <b><p:outputLabel value="Telefono: " style="font-size: 12px;font-family: Arial;" /></b>                                                                       
+                                            </td>
+                                            <td>
+                                                <p:outputLabel value="#{MBCartera.telCliente} #{MBCartera.telEntidad}" style="font-size: 12px;font-family: Arial;" />                                                                                       
+                                            </td>                                                                              
+                                        </tr>
+                                    </table>
+
+                                    <table style="width:652px;font-family: Arial;font-size: 13px;position: relative;">
+                                        <br/>
+                                        <tr>
+                                            <td><p:outputLabel  style="font-size: 13px;font-family: Arial; font-weight: bold;"/></td>
+                                        </tr>
+                                        <tr><td>
+                                                <p:separator />
+                                            </td></tr>
+                                    </table>
+                                    <table>
+                                        <tr>    
+                                            <td>
+                                                <p:outputLabel value="Informacion del Pago" style="font-weight: bold; font-family: Arial; font-size: 13px; align-content: center; "/>
+                                                <p:separator style="width:100%;" />
+                                            </td>
+                                        </tr>
+                                        <tr> 
+                                            <td colspan="5"><b><p:outputLabel   value="Valor a facturar" style="font-size: 12px;font-family: Arial;"/></b>
+                                                <p:outputLabel   value="#{MBCartera.valorFactura}" style="float: right; font-size: 12px;font-family: Arial;">
+                                                    <f:convertNumber locale="en_US"/></p:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <b><p:outputLabel   value="Total a cancelar" style="font-size: 12px;font-family: Arial;"   rendered="#{MBCartera.tpagar!=0}" /></b>
+                                                <p:outputLabel   value="#{MBCartera.tpagar}" style="float: right ;font-size: 12px;font-family: Arial;"  rendered="#{MBCartera.tpagar!=0}"  >
+                                                    <f:convertNumber locale="en_US"/></p:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><b><p:outputLabel   value="Abonos " style="font-size: 12px;font-family: Arial;"  rendered="#{MBCartera.abonos!=0}"  /></b>
+                                                <p:outputLabel   value="#{MBCartera.abonos}" style="float: right ;font-size: 12px;font-family: Arial;" rendered="#{MBCartera.abonos!=0}"  >
+                                                    <f:convertNumber locale="en_US"/></p:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b><p:outputLabel   value="Saldo a Pagar" style="font-size: 12px;font-family: Arial;"  rendered="#{MBCartera.pendtPorPagar!=0}"  /></b></td>
+                                            <td><p:outputLabel   value="#{MBCartera.pendtPorPagar}" style="float: right ;font-size: 12px;font-family: Arial;" rendered="#{MBCartera.pendtPorPagar!=0}" >
+                                                    <f:convertNumber locale="en_US"/></p:outputLabel></td>
+                                        </tr>
+                                        <td>
+                                                <c:choose >
+                                                    <c:when test ="#{MBCartera.iva==0}">
+                                                        <tr><td><center><p:outputLabel value="Factura exenta de iva" style="font-weight: bold; font-family: Arial; font-size: 13px; align-content: center;color: red; "  /></center></td></tr>
+                                                        <br/>       
+                                                    </c:when>
+                                                    <c:otherwise >
+                                                        <tr>    
+                                                            <td>
+                                                                <p:outputLabel value="Detalle Impuestos" style="font-weight: bold; font-family: Arial; font-size: 13px; align-content: center; "/>
+                                                                <p:separator style="width:180px;" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!-- Iva -->
+                                                            <td colspan="2">
+                                                                <b><p:outputLabel   value="#{MBCartera.lblliva}"    rendered="#{MBCartera.iva!=0}"  style="font-size: 12px;font-family: Arial;"/></b>
+                                                                <p:outputLabel style="float: right; font-size: 12px;font-family: Arial;"  rendered="#{MBCartera.iva!=0}" value="#{MBCartera.iva}">
+                                                                    <f:convertNumber locale="en_US"/></p:outputLabel>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!-- Rtefuente -->
+                                                            <td colspan="2">
+                                                                <b><p:outputLabel   value="#{MBCartera.lblfuente}"  rendered="#{MBCartera.fuente!=0}" style="font-size: 12px;font-family: Arial;"/></b>
+                                                                <p:outputLabel style="float: right; font-size: 12px;font-family: Arial;" value="#{MBCartera.fuente}" rendered="#{MBCartera.fuente!=0}" >
+                                                                    <f:convertNumber locale="en_US"/></p:outputLabel>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!-- RtIca -->
+                                                            <td colspan="2">
+                                                                <b><p:outputLabel  value="#{MBCartera.lblica}"  style="font-size: 12px;font-family: Arial;" rendered="#{MBCartera.ica!=0}"/></b>
+                                                                <p:outputLabel style="float: right; font-size: 12px;font-family: Arial;" value="#{MBCartera.ica}"  rendered="#{MBCartera.ica!=0}">
+                                                                    <f:convertNumber locale="en_US"/></p:outputLabel>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!-- RtIva -->
+                                                            <td colspan="2">
+                                                                <b><p:outputLabel  value="#{MBCartera.lblreteIva}"  style="font-size: 12px;font-family: Arial;"  rendered="#{MBCartera.reteIva!=0}" /></b>
+                                                                <p:outputLabel style="float: right; font-size: 12px;font-family: Arial;" value="#{MBCartera.reteIva}" rendered="#{MBCartera.reteIva!=0}" >
+                                                                    <f:convertNumber locale="en_US"/></p:outputLabel>
+                                                                <p:separator style="width:180px;" />
+                                                            </td>
+                                                        </tr>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                        </td>
+                                    </table>
+                                </center>
+                            </p:tab>
+                            <p:tab title="Pagos asociados a la factura"  id="InfoPagoFact" >
+                                <p:outputPanel autoUpdate="true">
+                                    <table>
+                                        <center>
+                                            <td ><b><p:outputLabel value="A continuacion , el detalle de los pagos realizados a la factura." style="font-weight: normal; font-size: 12px; width: 5px;font-weight: bold;"/></b></td>
+                                        </center>
+                                    </table>
+                                    <center>    
+                                        <table style="width:652px;font-family: Arial;font-size: 13px;position: relative;">
+                                            <tr>    
+                                                <tr>
+                                                    <td><p:outputLabel value="» Detalle Pagos" style="font-size: 13px;font-family: Arial; font-weight: bold;"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <p:separator />
+                                                    </td>
+                                                </tr>
+                                                <p:spacer height="5"/>
+                                                <td>
+                                                    <!--Informacion de las Notas Creditos Asociadas a la Factura -->
+                                                    <br/>
+                                                    <!--Informacion de los abonos  agregados al numero de factura seleccionado-->
+                                                    <p:dataTable id="PagoFactura" var="Pago" value="#{MBCartera.listaDetallePago}" 
+                                                                 selection="#{MBCartera.factPago}" selectionMode="single"   rowKey="#{Pago.NPago}" 
+                                                                 emptyMessage="No hay regristros de pagos realizados para la factura"  
+                                                                 style=" width: 650px" >
+                                                        <p:column headerText="N°" style="font-family: Arial;font-size: 12px ;width:20px;" >
+                                                            <h:outputText value="#{Pago.codNota}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Factura" style="font-family: Arial;font-size: 12px ;width:30px;" >
+                                                            <h:outputText value="#{Pago.codFactura}"/>
+                                                        </p:column>
+                                                        <p:column headerText="N° Pago" style="font-family: Arial;font-size: 12px ;width:10px;"  rendered="false">
+                                                            <h:outputText value="#{Pago.NPago}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Fecha Pago" style="font-family: Arial;font-size: 12px ;width:50px;" >
+                                                            <h:outputText value="#{Pago.fechaFacturacion}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Consignacion" style="font-family: Arial;font-size: 12px ;width:50px;" >
+                                                            <h:outputText value="#{Pago.fechaConsig}">
+                                                            </h:outputText>
+                                                        </p:column>
+                                                        <p:column headerText="Cuenta " style="font-family: Arial;font-size: 12px ;width:50px;" >
+                                                            <h:outputText value="#{Pago.cuentaBanc}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Valor pago" style="font-family: Arial;font-size: 12px ;width:50px;" >
+                                                            <h:outputText value="#{Pago.valorFactPago}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Responsable" style="font-family: Arial;font-size: 12px ;width:100px;" >
+                                                            <h:outputText value="#{Pago.realizadoPor}"/>
+                                                        </p:column>
+                                                    </p:dataTable> 
+                                                    <!--Fin detalle de los abonos-->
+                                                    <br/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p:commandButton  icon="ui-icon-close" value="Remover" update=":contenedorGeneral:Contenedor:growl_General,InfoPagoFact"  action="#{MBCartera.quitarPago()}"
+                                                                      style="font-family: Arial;font-size: 12px;" ajax="true"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </center>
+                                    <table>
+                                        <center>
+                                            <tr>
+                                                <td> 
+                                                    <p:commandButton icon="ui-icon-cart" value="Aceptar Cambios"  style="font-size: 13px;font-family: Arial;" actionListener="#{MBCartera.aceptCambio()}"  ajax="true"  
+                                                                     update=":contenedorGeneral:Contenedor:growl_General"/>
+                                                </td>
+                                            </tr>
+                                        </center>
+                                    </table>
+                                </p:outputPanel>
+                            </p:tab>
+                        </p:tabView>
+                    </p:dialog>    
+                </p:outputPanel>
+
+            </center>
+        </h:form>
+    </h:body>
+</html>
+

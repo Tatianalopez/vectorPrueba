@@ -1,0 +1,144 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Cartera</title>
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/iconos/logo.ico"/>
+        <h:outputStylesheet name="./css/estilo.css"/>
+        <style type="text/css">
+            #wrapper {  
+                width: 220px;
+                font-size: 0.8125em;
+            }
+        </style>
+    </h:head> 
+    <h:body>
+        <h:form id="Menu_Pre_Radica">
+            <p:growl id="growl_Menu_Pre_Radica" showDetail="true" sticky="true" life="20000"/>
+            <div id="wrapper">
+                <p:commandButton 
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" 
+                    onmousemove="this.style.cssText = 'text-align: left;\n\
+                    background: #fff;\n\
+                    border: none;\n\
+                    font-size: 12px;\n\
+                    border-bottom: 2px solid #CECECE;\n\
+                    width: 100%; \n\
+                    border-radius: 0px;\n\
+                    color: #00427f;\n\
+                    font-family: Arial;\n\\n\
+                    font-weight : bold;\n\
+                    height: 2.75em;'"  
+                    ajax="false" value="Pendientes por cobrar" action="#{beanDireccionar.url_Menu_Cartera('PendientesxCobrar')}" icon="ui-icon-tag" />
+
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Saldos a Favor" action="#{beanDireccionar.url_Menu_Cartera('ConsulSadosAfavor')}" icon=" ui-icon-arrowthick-1-e" /> 
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Anular Pago" action="#{beanDireccionar.url_Menu_Cartera('FacturasPagos')}" icon="ui-icon-closethick" /> 
+
+                <p:commandButton  
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" ajax="false" value="Consulta Estado Cartera" action="#{beanDireccionar.url_Menu_Cartera('ConsulCartera')}" icon="ui-icon-search" /> 
+
+                <p:accordionPanel style="width:220px" dynamic="false" activeIndex="-1" >
+                    <p:tab titleStyle="text-align: left;
+                           background: #f4f4f4;
+                           border: none;
+                           border-bottom: 2px solid #CECECE;
+                           width: 100%; 
+                           border-radius: 0px;;
+                           font-family: Arial;
+                           color: #00427f;
+                           font-family: Arial;
+                           font-size: 12px;                                              
+                           "  title="Consultas Cartera"     >
+                        <h:panelGrid columns="1" cellpadding="0" cellspacing="0" style=" padding-left: 0em; width:180px" >
+                            <p:commandButton 
+                                style=" display:block; width: 180px; outline: none; text-decoration: none; border: solid 1px transparent;
+                                font-weight: normal; font-family: Arial; font-size: 10pt; line-height: 1.2; float: left;
+                                padding: 0; text-align: left; background: none; height: auto;"
+                                value="Estado Cartera" ajax="false"   action="#{beanDireccionar.url_Menu_Cartera('ConsulCartera')}" icon="ui-icon-search"/>
+                            <p:commandButton 
+                                style=" display:block; width: 180px; outline: none; text-decoration: none; border: solid 1px transparent;
+                                font-weight: normal; font-family: Arial; font-size: 10pt; line-height: 1.2; float: left;
+                                padding: 0; text-align: left; background: none; height: auto;"
+                                value="Resumen Cartera"  ajax="false"  icon="ui-icon-wrench" />
+                            <p:commandButton 
+                                style=" display:block; width: 180px; outline: none; text-decoration: none; border: solid 1px transparent;
+                                font-weight: normal; font-family: Arial; font-size: 10pt; line-height: 1.2; float: left;
+                                padding: 0; text-align: left; background: none; height: auto;"
+                                value="Cartera por Edades"  ajax="false"  icon="ui-icon-bookmark" />
+                            <p:commandButton 
+                                style=" display:block; width: 180px; outline: none; text-decoration: none; border: solid 1px transparent;
+                                font-weight: normal; font-family: Arial; font-size: 10pt; line-height: 1.2; float: left;
+                                padding: 0; text-align: left; background: none; height: auto;"
+                                value="Facturas por Pagar"  action="#{beanDireccionar.ConsulCartera('Xpagar', 'PorPagarPers')}"  ajax="false"  icon="ui-icon-bookmark" />
+                         <p:commandButton 
+                                style=" display:block; width: 180px; outline: none; text-decoration: none; border: solid 1px transparent;
+                                font-weight: normal; font-family: Arial; font-size: 10pt; line-height: 1.2; float: left;
+                                padding: 0; text-align: left; background: none; height: auto;"
+                                value="Por estracto"  action="#{beanDireccionar.ConsulCartera('Xpagar', 'PorPagarPers')}"  ajax="false"  icon="ui-icon-bookmark" />
+                    
+                        </h:panelGrid>
+                    </p:tab>
+                </p:accordionPanel>
+                <p:commandButton
+                    style="text-align: left;
+                    background: #f4f4f4;
+                    border: none;
+                    border-bottom: 2px solid #CECECE;
+                    width: 100%; 
+                    border-radius: 0px;;
+                    font-family: Arial;
+                    color: #00427f;
+                    font-family: Arial;
+                    font-size: 12px;                                              
+                    height: 2.75em;" value="Mis actividades (#{MBEntregaYRevision.numeroActividades})"  icon="ui-icon-suitcase" ajax="false" action="#{beanDireccionar.url_Menu_Entrega('MisActividades')}"/>
+
+
+
+            </div>
+        </h:form>
+    </h:body>
+</html>

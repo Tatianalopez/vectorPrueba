@@ -1,0 +1,114 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Consulta informacion de avaluos que se encuentran en entrega</title>
+        <style>
+            .FirstCol td:nth-child(1) {
+                width: 85px !important  ;
+                height: 50px !important ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form id="FRMAsigEntr">
+            <table style="width: 100%;">
+                <tr>
+                    <td><big><big><b><p class="Title">#{beanDireccionar.tituloMenu} > Asignación avalúos a analistas de Entrega </p></b></big></big></td>
+                </tr>
+                <tr>
+                    <td colspan="10" > <p:separator /></td>
+                </tr>
+            </table>           
+
+            <br/>
+            <!--DIALOG PARA LA INFORMACION DEL EMPLEADO QUE TIENE PERMISOS PARA REVISION JURIDICA-->
+            <p:dialog header="Analista Entrega" widgetVar="DlgAnalistaE" modal="false" height="450" width="500" showEffect="fade" hideEffect="fade" id="DlgEmpE">
+                <br/>
+                <p:outputPanel id="PNLAnalist">
+                    <p:dataTable var="EmpE" selectionMode="single" value="#{MBEntregaYRevision.listAnalistEntrega}" widgetVar="AnalistaE" 
+                                 rows="50" id="AnalistaJurTable" selection="#{MBEntregaYRevision.entrRevAvaluosPeritos}" 
+                                 rowKey="#{EmpE.codEmpl}" frozenRows="0" emptyMessage="No se encontraron Analistas relacionados con este Producto Entidad"  >
+                        <p:column headerText="Nombre" filterBy="#{EmpE.nomEmp}" filterMatchMode="contains" style="font-family:Arial;font-size: 12px;width: 100px;">
+                            <h:outputText value="#{EmpE.nomEmp}" />
+                        </p:column>
+                        <p:column headerText=" Asignados Hoy"  filterBy="#{EmpE.totalHoy}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                            <h:outputText value="#{EmpE.totalHoy}" />
+                        </p:column>
+                        <p:column headerText="Total Asignados"  filterBy="#{EmpE.total}" style="font-family:Arial;font-size: 12px;width: 100px;">
+                            <h:outputText value="#{EmpE.total}" />
+                        </p:column>                   
+                    </p:dataTable>
+                </p:outputPanel>
+                <br/>
+                <center>
+                    <p:commandButton  value="Seleccionar Analista" action="#{MBEntregaYRevision.AsignarAnalEntre(1)}"  onclick="PF('DlgAnalistaE').hide()"  icon="ui-icon-check" 
+                                      update=":contenedorGeneral:Contenedor:growl_General,PNLDatEnt" style="font-family:Arial;font-size: 13px;" /> 
+                </center>
+                <br/>
+            </p:dialog>
+            <p:outputPanel id="PNLAsigEnt">
+                <!--Selecciona el producto entidad con los cuales se desea buscar el avaluo-->
+                <table style="font-family: Arial;font-size: 12px;">
+                    <tr>
+                        <td><p:outputLabel value="Seleccione Producto Entidad:" /></td>
+                        <td> <p:selectOneMenu  style="font-family: Arial;font-size: 12px; width:210px;" value="#{MBEntregaYRevision.codProEnt}" id="CMBPE">
+                                <p:ajax listener="#{MBEntregaYRevision.consultaAsigEntrega(1)}" update="PNLDatEnt"/>
+                                <f:selectItem id="PrEnt" itemValue="" itemLabel="Seleccione.."/>
+                                <f:selectItems id="SelItemTDoc"  value="#{MBAdministacion.proEntAll}" />
+                            </p:selectOneMenu> </td>
+                    </tr>
+                </table>
+            </p:outputPanel>
+            <br/><br/>
+            <!--Consulta la informacion segun los avaluos que se encuentran en entrega o impresion-->
+            <p:outputPanel id="PNLDatEnt" autoUpdate="true">
+                <c:choose>
+                    <c:when test="#{MBEntregaYRevision.listAsigEntrega.size()>0}">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                    <p:dataTable id="AsigEntregaTable" widgetVar="AsigEntr" var="Ent" value="#{MBEntregaYRevision.listAsigEntrega}" 
+                                                 selection="#{MBEntregaYRevision.listSeleccAsigEntrega}" 
+                                                 rowKey="#{Ent.codAvaluo}" scrollable="true" scrollHeight="100%;" >
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/> 
+                                        <p:column headerText="N° Avaluos"     style="font-family:Arial;font-size: 12px;width: 20px;">
+                                            <h:outputText value="#{Ent.codAvaluo}" />
+                                        </p:column>
+                                        <p:column headerText="Producto Entidad"     style="font-family:Arial;font-size: 12px;width: 100px;">
+                                            <h:outputText value="#{Ent.producEntidAva}" />
+                                        </p:column>
+                                        <p:column headerText="Avaluos Perito"     style="font-family:Arial;font-size: 12px;width: 150px;">
+                                            <h:outputText value="#{Ent.nombreCPerito}" />
+                                        </p:column>
+                                        <p:column headerText="Nombre avaluador"  style="font-family:Arial;font-size: 12px;width: 150px;" rendered="false">
+                                            <h:outputText value="#{Ent.codPerito}" />
+                                        </p:column>
+                                        <p:column headerText="Analista Asignado de Entrega"  style="font-family:Arial;font-size: 12px;width: 100px;">
+                                            <h:outputText value="#{Ent.analistEntrega}" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <center>
+                            <table style="font-family: Arial;font-size: 13px;">
+                                <tr>
+                                    <td><p:commandButton value="Seleccionar Avaluos" action="#{MBEntregaYRevision.consultCambioAnalista(1)}" update=":contenedorGeneral:Contenedor:growl_General,PNLAnalist" icon="ui-icon-newwin" /></td>
+                                </tr>
+                            </table>
+                        </center>
+                    </c:when>
+                </c:choose>
+            </p:outputPanel>
+
+
+
+
+        </h:form>
+    </h:body>
+</html>
+
